@@ -1,0 +1,26 @@
+<div class="index-container">
+    <div>
+        <div class="logo"></div>
+
+        <section class="w40 ">
+        <h2 class="form-signin-heading">Rejoingnez une bubble</h2>
+
+                    <div class="form-error">
+                        <% if(flash && flash.err) { %>
+                        <ul class="alert alert-success">
+                        <% Object.keys(flash.err).forEach(function(error) { %>
+                            <li><%= flash.err[error].message %></li>
+                        <% }) %>
+                        </ul>
+                        <% } %>
+                    </div>
+
+        <form class="form-bubble" action="/mobile/playlist" method="post">
+                <input type="text" name="playlist_url" placeholder="Code de la bubble à rejoindre" autocomplete="off">
+                <input type='submit' class="btn btn-large" id="validinscription"  value="C'est parti !">
+                <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+        </form>
+
+        </section>
+    </div>
+</div>

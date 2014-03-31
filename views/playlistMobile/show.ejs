@@ -1,0 +1,155 @@
+<div class="wrapper" data-playlist-url="" >
+
+		<nav class="nav-top">
+			<div class="left">
+				<a class="left" id="displayMenu" href="javascript:void(0)"><i class="icon-menu"></i></a>
+			</div>
+			<div class="right">
+				<a id="searchSong" class="visible" href="javascript:void(0)"><i class="icon-loupe"></i></a>
+				<a id="editDiscovery" class="" href="javascript:void(0)"><i class="icon-poubelle"></i></a>
+			</div>
+			<div class="center" style="position: absolute; left: 50%;" >
+	        	<div class="pagination" style="position: relative; left: -50%;"></div>
+	      	</div>
+
+	    </nav>
+
+		<div class="swiper-container">
+
+		    <div class="swiper-wrapper">
+			    <div class="swiper-slide ">
+			      	<h1 class="title">Live Bubble</h1>
+
+						<section class="current-playlist">
+
+							<div id="current-player">
+								<input class="knob" data-width="200" data-fgColor="#fff" data-bgColor="rgba(255,255,255,0.7)" data-skin="tron" data-thickness=".1" data-displayInput="false" data-min="0" data-max="" value="" readOnly="true">
+								<div class="timer"></div>
+								<div class="animation">
+									<img src="/images/player_mobile.png" width="250px" alt="playerSequence"/>
+								</div>
+							</div>
+
+							<div class="current-song">
+								<strong></strong>
+								<span></span>
+							</div>
+							
+							<div class="current-interaction">
+
+								<i id="song-like" class="icon-coeursansombre"></i>
+								<i id="song-dislike" class="icon-thumb"></i>
+					
+							</div>
+
+
+							<div class="song">
+								<!--<?php require('partials/currentplaylist.html'); ?>-->
+							<div>
+						</section>
+
+					</div><!-- FIN PREMIER SLIDE -->
+
+				<div class="swiper-slide decouverte">
+			        <h1 class="title">Découvertes</h1>
+		        	<ul class="discoveries">
+		       			<!--<?php require('partials/discovery.html'); ?>-->
+		       		</ul>
+
+
+			    </div> <!-- FIN SLIDE MES DECOUVERTES -->
+
+	    		<div class="swiper-slide historique">
+			    	<div class="title">Historique</div>
+			    	<ul class="historic">
+			    		<!--<?php require('partials/historic.html'); ?>-->
+			    	</ul>
+
+			    	<form id="formHistoricPicture" method="post" enctype="multipart/form-data">
+						<input type="file" id="historicPicture" name="historicPicture" />
+						<input type="submit" name="submitHistoricPicture" value="Envoyer">
+					</form>
+			    </div><!-- FIN SLIDE HISTORIQUE -->
+		    </div> 
+		 </div> <!-- FIN SWIPER-CONTAINER -->
+
+      	</div>
+
+		<!-- PARTIE MENU - MON COMPTE -->
+
+      	<div class="menu menu-slidedown">
+			<a href="javascript:void(0)" class="menu-close"><i class="icon-croixclosesuppr"></i></a>
+			<h1 class="title">Réglages</h1>
+
+			<figure id="uploadPicture">
+				<!--<?php require('partials/upload.html'); ?>-->
+			</figure>
+
+			<form id="formProfilPicture" method="post" enctype="multipart/form-data">
+				<input type="file" id="profilPicture" name="profilPicture" />
+				<input type="submit" name="submitProfilPicture" value="Envoyer">
+			</form>
+
+			<div class="edition">
+				<label for="user-email">E-mail</label>
+				<span id="user-email"><?php echo $SESSION['user']['email'] ?></span>
+				<i id="edit-email" class="icon-croixclosesuppr"></i>
+				<hr/>
+				<label for="user-password">Mot de passe</label>
+				<span id="user-password">*********</span>
+				<i id="edit-password" class="icon-croixclosesuppr"></i>
+			</div>
+
+			<div class="tutoriel">
+				<h3>Tutoriel</h3>
+				<i class="icon-switchg"></i>
+				<i class="icon-switchd"></i>
+			</div>
+
+			<div class="deconnexion">
+				<h3>Déconnexion</h3>
+				<a href="/mobile/playlist/" title="Quitter la bulle">Quitter la bulle</a>
+				<a href="/logout" title="Se deconnecter">Se déconnecter</a>
+			</div>
+		</div>
+
+
+
+		<section class="search menu-slidedown">
+			<div class="serviceSelect">
+				<i class="icon-soundcloud active" data-service="souncloud"></i>
+				<i class="icon-youtube" data-service="youtube"></i>
+			</div>
+			<a href="javascript:void(0)" class="menu-close"><i class="icon-croixclosesuppr"></i></a>
+			<!-- <div>
+			  <button class="active">Soundcloud</button>
+			  <button class="">Youtube</button>
+			  <button class="">Grooveshark</button>  
+			  <div class="selector"></div>
+			</div> -->
+			<form action="search" method="post">
+		      <input type="text" name="search" placeholder="Recherche" autocomplete="off"/>
+		    </form>
+		    <ul class="results">
+		    	
+		    </ul>
+		    <!-- envoie de la cover de la musique -->
+		    <div id="sent">
+		    </div>
+		</section>
+
+		<div class="loader-overlay">
+			<div class="loader"></div>
+			<span>Chargement</span>			
+		</div>
+
+	</div><!-- FIN WRAPPER -->
+
+	<script>
+		var user = {
+			id : "",
+			email : "",
+			prenom :  "",
+			room : ""
+		};
+	</script>
