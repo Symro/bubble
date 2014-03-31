@@ -42,4 +42,5 @@ nbproject
 ########################
 # local config
 ########################
-config/local.js
+# on est pas encore en prod donc bon...
+#config/local.js
