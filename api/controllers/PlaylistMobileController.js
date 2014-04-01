@@ -58,10 +58,11 @@ module.exports = {
     },
 
     show:function(req,res,next){
+    	var playlistUrl = req.param('url');
 
-    	if(req.param('url')){
+    	if(playlistUrl){
 	        // Affichage de la playlist
-			PlaylistDesktop.findOneByUrl(req.param('url'),function foundPlaylistDesktop(err,playlist){
+			PlaylistDesktop.findOneByUrl(playlistUrl,function foundPlaylistDesktop(err,playlist){
 				if (err) return next(err);
 				if (!playlist){
 					req.session.flash={
@@ -71,6 +72,7 @@ module.exports = {
 			    }
 				res.view({
 					playlist: playlist,
+					room:playlistUrl,
 					layout: "layout_mobile"
 				});
 			});
