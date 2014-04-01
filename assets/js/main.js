@@ -35,13 +35,25 @@ $(document).ready(function(){
 	$('#test1').on('click', function(){
 
 		console.log('button clicked');
-		console.log('SOCKET___ socket request(/desktop/playlist/'+machine.room+'/joined); ');
+		console.log('SOCKET___ socket request(/desktop/playlist/'+machine.room+'/joinedUsers); ');
 
-		socket.get('/desktop/playlist/'+machine.room+'/joined', function(res){
+		socket.get('/desktop/playlist/'+machine.room+'/joinedUsers', function(res){
 			console.log(res);
 		});
 
 	});
+
+	// L'utilisateur vient d'arriver, il demande la liste des participants
+	socket.get('/desktop/playlist/'+machine.room+'/joinedUsers', function(res){
+		console.log(res);
+	});
+
+	// L'utilisateur vient d'arriver, il demande informe les autres participants
+	socket.get('/desktop/playlist/'+machine.room+'/joined', function(response) {
+	  // do something
+	  console.log(response);
+	});
+
 
 
 

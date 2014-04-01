@@ -18,7 +18,7 @@
 module.exports = {
 
 	// Chargement de la page inscription
-	'inscription':function(req,res){
+	inscription:function(req,res){
 
 		res.view();
 

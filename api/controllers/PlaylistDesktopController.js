@@ -9,13 +9,6 @@ module.exports = {
 
 	createRoom: function(req,res,next){
 
-		var device = req.device.type;
-
-		if(device == 'phone') {
-			console.log("REDIRECTON desktop > mobile ___ car device = "+device);
-			return res.redirect('/mobile/playlist');
-		}
-
 		//res.view(); // équivaut à res.view('playlistDesktop/index');
 		res.view('playlistDesktop/create_room');
 
@@ -26,6 +19,8 @@ module.exports = {
 		console.log('affichage de la playlist : '+req.param('url'));
 		//console.dir(req);
 		var playlistUrl = req.param('url');
+		var socket = req.socket;
+		var io = sails.io;
 
 		PlaylistDesktop.findOneByUrl(playlistUrl,function foundPlaylistDesktop(err,playlist){
 			if (err) return next(err);
@@ -40,19 +35,18 @@ module.exports = {
 			// Ajoute l'utilisateur à la collection (table) JOIN
 			// S'il n'est pas déjà présent
 			CheckJoined = Join.findOneByPlaylistUrl(playlistUrl);
-			CheckJoined.where({'userId':req.session.User.id});
+			CheckJoined.where({'user':req.session.User.id});
 			CheckJoined.exec(function callback(err,results){
 				if(err) return next(err);
 				if(!results){
 					Join.create({
-						userId:req.session.User.id,
+						user:req.session.User.id,
 						playlistUrl:playlistUrl
 					}).exec(function cb(err,created){
 					  console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
 					});
 				}
 			});
-
 
 			res.view('playlistDesktop/index',{
 				playlist: playlist,
@@ -63,11 +57,6 @@ module.exports = {
 	},
 
 	create: function(req,res,next){
-		console.log('req.param _____'+req.param('playlist_name'));
-		/*
-			TODO : si aucun nom n'est donné à la playlist > message erreur
-				   sinon création BDD et redirection
-		*/
 
 		if(req.param('playlist_name')==""){
 			console.log('playlist_name is empty');
@@ -105,16 +94,15 @@ module.exports = {
 
 				// Ajoute l'utilisateur à la collection (table) JOIN
 				Join.create({
-					userId:req.session.User.id,
+					user:req.session.User.id,
 					playlistUrl:temp
 				}).exec(function cb(err,created){
 				  console.log('User : '+created.user_id+' ( '+req.session.User.firstname+' ) --> Joined : '+created.playlist_url);
 				});
 
 				console.log('playlist added : '+playlistObj.name);
-				res.redirect('/desktop/playlist/'+playlistObj.url ,{
-					room:temp
-				});
+				console.log('url redirection : /desktop/playlist/'+temp);
+				return res.redirect('/desktop/playlist/'+temp);
 
 			});
 		}

@@ -82,11 +82,15 @@ module.exports.routes = {
     action: 'index'
   },
 
-  'get /desktop/playlist/:url/joined':{
+  'get /desktop/playlist/:url/joinedUsers':{
     controller:'join',
     action: 'joinedUsers'
-  }
+  },
 
+  'get /desktop/playlist/:url/joined':{
+    controller:'join',
+    action: 'joined'
+  }
 
 
 

@@ -5,8 +5,6 @@
  * http://sailsjs.org/#documentation
  */
 
-var device = require('express-device');
-
 module.exports.express = {
 
 	// Completely override Express middleware loading.  
@@ -34,9 +32,12 @@ module.exports.express = {
 
 
 
-	customMiddleware: function (app) {
+	customMiddleware: function (app , req) {
+		
 		var device = require('express-device');
 		app.use(device.capture());
+
+
 	}
 
 

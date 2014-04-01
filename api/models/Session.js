@@ -8,7 +8,6 @@
 
 module.exports = {
 
-	
     schema:true,
     adapter:'mongo',
 

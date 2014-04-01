@@ -9,13 +9,6 @@ module.exports = {
 
 	index:function(req,res,next){
 
-		var device = req.device.type;
-
-		if(device == 'desktop') {
-			console.log("REDIRECTON mobile > desktop ___ car device = "+device);
-			return res.redirect('/desktop/playlist');
-		}
-
 		// res.view({
 		// 	layout: "layout_mobile"
 		// }); // équivaut à res.view('playlistMobile/index');

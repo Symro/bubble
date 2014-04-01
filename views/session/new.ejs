@@ -3,14 +3,18 @@
 	<div class="logo"></div>
 
 	<section class="w50 large-w33 small-w75 tiny-w75 ">
-		<% if(flash && flash.err) { %>
-		<ul class="alert alert-success">
-		<% Object.keys(flash.err).forEach(function(error) { %>
-			<li><%- JSON.stringify(flash.err[error]) %></li>
-		<% }) %>
-		</ul>
-		<% } %>
+
 		<form class="form-signin" method='POST' action='/session/create'>
+			<div class="form-error">
+	            <% if(flash && flash.err) { %>
+	            <ul class="alert alert-success">
+	            <% Object.keys(flash.err).forEach(function(error) { %>
+	                <li><%= flash.err[error].message %></li>
+	            <% }) %>
+	            </ul>
+	            <% } %>
+	        </div>
+
 			<label for="mail"></label><input id="email" name='mail' type="email" class="input-block-level" value="" placeholder="Adresse mail" required><br />
 			<label for="password"></label><input id="mdp" name='password' type="password" class="input-block-level" placeholder="Mot de passe" required><br />
 			<button class="btn btn-large" type="submit">Connexion</button>
