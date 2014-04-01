@@ -20,6 +20,38 @@
 			    <div class="swiper-slide ">
 			      	<h1 class="title">Live Bubble</h1>
 
+						<% if(typeof(playlist) == "undefined") { %>
+				      	<div class="form-container">
+						    <div>
+						        <div class="logo"></div>
+
+						        <section class="w80 ">
+						        <h2>Rejoignez une bubble</h2>
+
+						                    <div class="form-error">
+						                        <% if(flash && flash.err) { %>
+						                        <ul class="alert alert-success">
+						                        <% Object.keys(flash.err).forEach(function(error) { %>
+						                            <li><%= flash.err[error].message %></li>
+						                        <% }) %>
+						                        </ul>
+						                        <% } %>
+						                    </div>
+
+						        <form class="form-join-playlist" action="/mobile/playlist" method="post">
+						                <input type="text" name="playlist_url" placeholder="Code de la bubble à rejoindre" autocomplete="off">
+						                <input type='submit' class="btn btn-large" id="validinscription"  value="C'est parti !">
+						                <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+						        </form>
+
+						        </section>
+						    </div>
+						</div>
+						<% 
+						}
+						else { 
+						%>
+
 						<section class="current-playlist">
 
 							<div id="current-player">
@@ -46,6 +78,9 @@
 							<div class="song">
 								<!--<?php require('partials/currentplaylist.html'); ?>-->
 							<div>
+
+							<% } %>
+
 						</section>
 
 					</div><!-- FIN PREMIER SLIDE -->
@@ -144,12 +179,13 @@
 		</div>
 
 	</div><!-- FIN WRAPPER -->
+	<% room = (typeof(playlist) == "undefined") ? false : "room"	%>
 
 	<script>
 		var user = {
-			id : "",
-			email : "",
-			prenom :  "",
-			room : ""
+			id : "<%= session.User.id %>",
+			email : "<%= session.User.mail %>",
+			prenom :  "<%= session.User.firstname %>",
+			room : <%= room %>
 		};
 	</script>

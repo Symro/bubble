@@ -722,17 +722,17 @@ header {
   padding-bottom: 25px;
 
 }
-.form-signin .form-error{
+.form-error{
 
 }
-.form-signin .form-error span{
+.form-error span{
   display:block;
   text-align:left;
 }
-.form-signin .form-error ul{
+.form-error ul{
   padding:0;
 }
-.form-signin .form-error li{
+.form-error li{
   list-style:none;
   text-align:left;
   color:#FFF;
@@ -751,9 +751,25 @@ header {
   padding-top: 50px;
 }
 
-.index-container section{
+.index-container section,
+.form-container section{
   margin: 0 auto;
 }
+
+.form-container{
+  padding-top:20px;
+}
+.form-container h2{
+  font-size:1.4em;
+}
+
+.form-join-playlist{
+}
+.form-join-playlist input[type="text"]{
+  font-size:1em;
+}
+
+
 
 .myFB {
   margin-top: 10px;

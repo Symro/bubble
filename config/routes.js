@@ -51,17 +51,17 @@ module.exports.routes = {
 
   'get /mobile/playlist':{
     controller: 'playlistMobile',
-    action: 'index'
+    action: 'show'
   },
 
-   'post /mobile/playlist':{
+  'post /mobile/playlist':{
     controller: 'playlistMobile',
     action: 'join'
   },
 
   '/mobile/playlist/:url':{
     controller:'playlistMobile',
-    action:'show'
+    action: 'show'
   },
 
 

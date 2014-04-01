@@ -26,13 +26,13 @@ module.exports.policies = {
 
 	playlistDesktop:{
 		'index':['device','flash','authenticated'],
-		'createRoom':['flash','authenticated'],
+		'createRoom':['device','flash','authenticated'],
 		'create': ['device','authenticated']
 	},
 
 	playlistMobile:{
 		'index':['device','flash','authenticated'],
-		'show':['device','authenticated']
+		'show':['device','flash','authenticated']
 	}
 
   // playlistMobile:{
