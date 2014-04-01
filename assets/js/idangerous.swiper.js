@@ -10,9 +10,11 @@ var mySwiper = new Swiper('.swiper-container', {
 					break;
 				case 1:
 					nav.children('a').removeClass('visible').filter(':nth-child(2)').addClass("visible");
-					// $.get( "./mobile/playlist/"+$('.wrapper').data('playlist-url')+"/discover", function( data ) {
-					// 	$('.discoveries').html(data);
-					// });
+					$.get( "/mobile/playlist/"+user.room+"/discover", {userId:user.id}, function( data ) {
+						console.log(data);
+						//$('.discoveries').html(data);
+					});
+					
 					break;
 				case 2:
 					nav.children('a').removeClass('visible');

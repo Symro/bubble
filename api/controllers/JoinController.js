@@ -15,7 +15,7 @@ module.exports = {
 			if (err) return next(err);
 			if (!users) return next();
 
-			console.log('on est là ! *findByPlaylistUrl* sur du : ');
+			console.log('on est là : JoinController.js > joinedUsers >> *findByPlaylistUrl*  ');
 
 			return res.json({joinedUsers:users});
 

@@ -64,6 +64,11 @@ module.exports.routes = {
     action: 'show'
   },
 
+  'get /mobile/playlist/:url/discover':{
+    controller:'Discover',
+    action: 'getDiscovery'
+  },
+
 
   // ROUTES DESKTOP
 
