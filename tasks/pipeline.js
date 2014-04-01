@@ -15,7 +15,11 @@
 // (if you're using LESS with the built-in default config, you'll want
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
-  'styles/**/*.css'
+    'linker/styles/style.css',
+
+    'linker/**/*.css',
+
+    'linker/styles/main.css',
 ];
 
 
@@ -23,25 +27,30 @@ var cssFilesToInject = [
 // (uses Grunt-style wildcard/glob/splat expressions)
 var jsFilesToInject = [
 
-  // Below, as a demonstration, you'll see the built-in dependencies
-  // linked in the proper order order
+    // Bring in the socket.io client
+    'linker/js/jquery.js',
+    'linker/js/validate.js',
+    'linker/js/socket.io.js',
 
-  // Bring in the socket.io client
-  'js/socket.io.js',
+    // then beef it up with some convenience logic for talking to Sails.js
+    'linker/js/sails.io.js',
 
-  // then beef it up with some convenience logic for talking to Sails.js
-  'js/sails.io.js',
+    'linker/js/soundcloud-sdk.js',
+    'linker/js/soundmanager2-jsmin.js',
+    'linker/js/jquery-editable-poshytip.min.js',
+    'linker/js/jquery.mCustomScrollbar.concat.min.js',
+    'linker/js/jquery.knob.js',
+    'linker/js/jquery.jcarousel.min.js',
 
-  // finally, include a simple boilerplate script that connects a socket
-  // to the Sails backend with some example code
-  'js/connection.example.js',
+    // A simpler boilerplate library for getting you up and running w/ an
+    // automatic listener for incoming messages from Socket.io.
+    //'linker/js/app.js',
 
-  //
-  // *->    you might put other dependencies like jQuery or Angular here   <-*
-  //
-
-  // All of the rest of your app scripts
-  'js/**/*.js'
+    // *->    put other dependencies here   <-*
+    
+    // All of the rest of your app scripts imported here
+    'linker/**/*.js'
+	
 ];
 
 

@@ -1,5 +1,5 @@
 {
-  "name": "Bubble2",
+  "name": "Bubble",
   "private": true,
   "version": "0.0.0",
   "description": "a Sails application",
@@ -22,7 +22,9 @@
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-less": "~0.9.0",
     "grunt-contrib-coffee": "~0.7.0",
-    "express-device": "^0.3.7"
+    "express-device": "^0.3.7",
+    "bcrypt-nodejs": "0.0.3",
+    "sails-mongo": "^0.10.0-rc2"
   },
   "scripts": {
     "start": "node app.js",
