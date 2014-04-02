@@ -34,10 +34,11 @@ module.exports = {
 	    	if(err){return res.redirect('/mobile/playlist');};
 	    	// Si la playlist n'existe pas, on s'arrête
 	    	if(!found){
+	    		console.log("join failed!");
 				req.session.flash = { err : [{name:'fieldRequired',message:'Please enter a valid code.'}] };
 				return res.redirect('/mobile/playlist');
 	    	}
-	    	
+
 	    	else{
 
 		    	// Ajoute l'utilisateur à la collection (table) JOIN
@@ -49,7 +50,8 @@ module.exports = {
 					if(!results){
 						Join.create({
 							user:req.session.User.id,
-							playlistUrl:playlistUrl
+							playlistUrl:playlistUrl,
+							playlist:playlistUrl
 						}).exec(function cb(err,created){
 						  console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
 

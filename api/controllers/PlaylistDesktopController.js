@@ -40,7 +40,8 @@ module.exports = {
 				if(!results){
 					Join.create({
 						user:req.session.User.id,
-						playlistUrl:playlistUrl
+						playlistUrl:playlistUrl,
+						playlist:playlistUrl
 					}).exec(function cb(err,created){
 						if(err) return next(err);
 					  	console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
@@ -124,7 +125,8 @@ module.exports = {
 				// Ajoute l'utilisateur à la collection (table) JOIN
 				Join.create({
 					user:req.session.User.id,
-					playlistUrl:temp
+					playlistUrl:temp,
+					playlist:temp
 				}).exec(function cb(err,created){
 				  console.log('User : '+created.user_id+' ( '+req.session.User.firstname+' ) --> Joined : '+created.playlist_url);
 				});

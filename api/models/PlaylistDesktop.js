@@ -16,6 +16,7 @@ module.exports = {
             required:true
         },
         url:{
+            primaryKey: true,
             type:'string'
         },
         host:{
