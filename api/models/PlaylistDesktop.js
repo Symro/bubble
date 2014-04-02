@@ -20,6 +20,10 @@ module.exports = {
         },
         host:{
             type:'string'
+        },
+        image:{
+            type:'string',
+            defaultsTo:'/images/default_historic.png'
         }
     }
 

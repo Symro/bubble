@@ -20,8 +20,6 @@ module.exports = {
 		//console.dir(req);
 		var playlistUrl = req.param('url');
 		var joinedUsers;
-		var socket = req.socket;
-		var io = sails.io;
 
 		PlaylistDesktop.findOneByUrl(playlistUrl,function foundPlaylistDesktop(err,playlist){
 			if (err) return next(err);

@@ -69,6 +69,11 @@ module.exports.routes = {
     action: 'getDiscovery'
   },
 
+  'get /mobile/playlist/:url/historic':{
+    controller:'Historic',
+    action: 'getHistoric'
+  },
+
 
   // ROUTES DESKTOP
 
