@@ -26,48 +26,54 @@ module.exports = {
 
 	    // Si le champ n'est pas remplit
 		if( playlistUrl == "" ){
-			console.log('url is empty');
-
-			var fieldRequired=[{name:'fieldRequired',message:'Please enter a url to join a playlist.'}];
-
-			req.session.flash={
-				err:fieldRequired
-			};
-
+			req.session.flash = { err : [{name:'fieldRequired',message:'Please enter a url to join a playlist.'}] };
 			return res.redirect('/mobile/playlist');
 	    }
 
-    	// Ajoute l'utilisateur à la collection (table) JOIN
-		// S'il n'est pas déjà présent
-		CheckJoined = Join.findOneByPlaylistUrl(playlistUrl);
-		CheckJoined.where({'user':req.session.User.id});
-		CheckJoined.exec(function callback(err,results){
-			if(err) return next(err);
-			if(!results){
-				Join.create({
-					user:req.session.User.id,
-					playlistUrl:playlistUrl
-				}).exec(function cb(err,created){
-				  console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
+	    PlaylistDesktop.findOneByUrl(playlistUrl).exec(function findCb(err, found){
+	    	if(err){return res.redirect('/mobile/playlist');};
+	    	// Si la playlist n'existe pas, on s'arrête
+	    	if(!found){
+				req.session.flash = { err : [{name:'fieldRequired',message:'Please enter a valid code.'}] };
+				return res.redirect('/mobile/playlist');
+	    	}
+	    	
+	    	else{
 
-				  	sails.sockets.broadcast(playlistUrl, 'message' , {
-				    	verb 	: "add",
-				    	device 	: "desktop",
-				    	info 	: "userJoined",
-				    	data 	: { firstname: req.session.User.firstname, image: req.session.User.image }
-				    });
+		    	// Ajoute l'utilisateur à la collection (table) JOIN
+				// S'il n'est pas déjà présent
+				CheckJoined = Join.findOneByPlaylistUrl(playlistUrl);
+				CheckJoined.where({'user':req.session.User.id});
+				CheckJoined.exec(function callback(err,results){
+					if(err) return next(err);
+					if(!results){
+						Join.create({
+							user:req.session.User.id,
+							playlistUrl:playlistUrl
+						}).exec(function cb(err,created){
+						  console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
 
-				    // Redirection vers l'affichage de la playlist
-       				res.redirect('/mobile/playlist/'+playlistUrl);
+						  	sails.sockets.broadcast(playlistUrl, 'message' , {
+						    	verb 	: "add",
+						    	device 	: "desktop",
+						    	info 	: "userJoined",
+						    	data 	: { firstname: req.session.User.firstname, image: req.session.User.image }
+						    });
+
+						    // Redirection vers l'affichage de la playlist
+		       				res.redirect('/mobile/playlist/'+playlistUrl);
+						});
+					}
+					else{
+						res.redirect('/mobile/playlist/'+playlistUrl);
+					}
 				});
-			}
-			else{
-				res.redirect('/mobile/playlist/'+playlistUrl);
-			}
-		});
-	    
-        // Redirection vers l'affichage de la playlist
-        // res.redirect('/mobile/playlist/'+playlistUrl);
+			    
+	    	}
+
+	   	});
+
+
     },
 
     show:function(req,res,next){

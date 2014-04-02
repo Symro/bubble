@@ -19,11 +19,6 @@ module.exports = {
         playlistUrl:{
             type:'string',
             required:true
-        },
-
-        playlist:{
-            collection:"playlistdesktop",
-            via:'url'
         }
 
     }

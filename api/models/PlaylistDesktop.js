@@ -25,6 +25,7 @@ module.exports = {
             type:'string',
             defaultsTo:'/images/default_historic.png'
         }
+
     }
 
 };
