@@ -23,21 +23,32 @@
     // Listen for Comet messages from Sails
     socket.on('message', function messageReceived(message) {
 
-      ///////////////////////////////////////////////////////////
-      // Replace the following with your own custom logic
-      // to run when a new message arrives from the Sails.js
-      // server.
-      ///////////////////////////////////////////////////////////
+      // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+      // /!\ A LIRE ! /!\
+      // .......................................................................................
+
+      // Un message arrivera d'un contrôleur avec les infos suivantes : 
+      // __ VERB doit être soit : get (obtenir), add (ajout), update (modifier), delete (supprimer)
+      // __ DEVICE doit être : desktop, mobile, all
+      // __ INFO : information de ce qu'il se passe (écrit en CamelCase please!)
+      // __ DATA : un JSON de préférence pour manipuler ensuite en jQuery et inserer dans le DOM
+
+      // EXEMPLE
+      // message =  {
+      //      verb    : "add",
+      //      device  : "desktop",
+      //      info    : "userJoined",
+      //      data    : { firstname: req.session.User.firstname, image: req.session.User.image }
+      // }
+
+
       log('New comet message received :: ', message);
-      //////////////////////////////////////////////////////
+
+      messageReceivedFromServer(message)
+
+
 
     });
-
-    
-
-    // socket lorsqu'on rejoint une playlist
-    // socket.get('/desktop/playlist/:url', function (response) { console.log(response); })
-
 
     ///////////////////////////////////////////////////////////
     // Here's where you'll want to add any custom logic for
@@ -75,3 +86,55 @@
   window.io
 
 );
+
+
+function messageReceivedFromServer(message){
+
+
+    if (message.verb === 'add') {
+      addInDom(message);
+    }
+
+
+
+}
+
+// FONCTON DE ROUTAGE DES AJOUTS DANS LE DOM
+function addInDom(message){
+    switch (message.device) {
+      case 'desktop': addInDesktopDom(message);
+                      break;
+      case 'mobile' : addInMobileDom(message);
+                      break;
+      case 'all'    : addInAllDom(message);
+                      break;
+    }
+}
+
+    function addInDesktopDom(message){
+      console.log("addInDesktopDom : ");
+      console.dir(message);
+
+      if(message.info == "userJoined"){
+
+        $('.listeParticipant ul')
+          .append('<li><img alt="'+message.data.firstname+'" src="'+message.data.image+'" /></li>')
+          .parents('.listeParticipant')
+          .jcarousel('reload');
+
+      }
+
+
+    }
+
+    function addInMobileDom(message){
+      console.log("addInMobileDom : ");
+      console.dir(message);
+      
+    }
+
+    function addInAllDom(message){
+      console.log("addInAllDom : ");
+      console.dir(message);
+      
+    }

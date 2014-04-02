@@ -1,11 +1,11 @@
 function carouselLast(){
 	$('.listeParticipant').jcarousel('reload');
-	$(' .listeParticipant').jcarousel('scroll', $('.wrapperParticipants .listeParticipant li:eq(-3)'));
+	$('.listeParticipant').jcarousel('scroll', $('.wrapperParticipants .listeParticipant li:eq(-3)'));
 }
 function carouselRefresh(){
 	// $('.listeParticipant').jcarousel('reload', {
  //    animation: 'slow'
- $(' .listeParticipant').jcarousel('reload', $('.wrapperParticipants .listeParticipant li'));
+ $('.listeParticipant').jcarousel('reload', $('.wrapperParticipants .listeParticipant li'));
 
 }
 

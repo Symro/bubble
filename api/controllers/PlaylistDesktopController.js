@@ -19,6 +19,7 @@ module.exports = {
 		console.log('affichage de la playlist : '+req.param('url'));
 		//console.dir(req);
 		var playlistUrl = req.param('url');
+		var joinedUsers;
 		var socket = req.socket;
 		var io = sails.io;
 
@@ -33,7 +34,7 @@ module.exports = {
 		    }
 
 			// Ajoute l'utilisateur à la collection (table) JOIN
-			// S'il n'est pas déjà présent
+			// (s'il n'est pas déjà présent)
 			CheckJoined = Join.findOneByPlaylistUrl(playlistUrl);
 			CheckJoined.where({'user':req.session.User.id});
 			CheckJoined.exec(function callback(err,results){
@@ -43,17 +44,47 @@ module.exports = {
 						user:req.session.User.id,
 						playlistUrl:playlistUrl
 					}).exec(function cb(err,created){
-					  console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
+						if(err) return next(err);
+					  	console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
+
+					  	// Récupère la liste des participants à la room pour transmettre à la vue
+					  	Join.findByPlaylistUrl( playlistUrl ).populate('user').exec(function foundJoinedUsers(err, users){
+							if (err) return next(err);
+							if (!users){ joinedUsers = {}	}
+							else{ joinedUsers = users;		}
+							console.log('on est là : PlaylistDesktopController.js > index >> *findByPlaylistUrl*  ');
+
+							res.view('playlistDesktop/index',{
+								playlist 	: playlist,
+								joinedUsers : joinedUsers,
+								room 		: playlistUrl
+							});
+
+						});
+
 					});
 				}
-			});
 
-			res.view('playlistDesktop/index',{
-				playlist: playlist,
-				room:playlistUrl
-			});
+				else{
 
-		});
+					// Récupère la liste des participants à la room pour transmettre à la vue
+					// ... bon ok ici on se répète..
+				  	Join.findByPlaylistUrl( playlistUrl ).populate('user').exec(function foundJoinedUsers(err, users){
+						if (err) return next(err);
+						if (!users){ joinedUsers = {}	}
+						else{ joinedUsers = users;		}
+
+						res.view('playlistDesktop/index',{
+							playlist 	: playlist,
+							joinedUsers : joinedUsers,
+							room 		: playlistUrl
+						});
+
+					});
+
+				}
+			}); // FIN -- CheckJoined.exec
+		}); // FIN -- PlaylistDesktop.findOneByUrl
 	},
 
 	create: function(req,res,next){

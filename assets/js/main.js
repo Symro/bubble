@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
 	isMobile = ($("body").hasClass('mobile')) ? true : false; 
+	isDesktop = ($("body").hasClass('desktop')) ? true : false; 
 
 	/* --------------------------------------------------------- */ 
 	//  PARTIE Formulaire inscription Bubble
@@ -32,29 +33,45 @@ $(document).ready(function(){
 
 	/* TEST */
 
-	$('#test1').on('click', function(){
+	if(isDesktop){
 
-		console.log('button clicked');
-		console.log('SOCKET___ socket request(/desktop/playlist/'+user.room+'/joinedUsers); ');
 
-		socket.get('/desktop/playlist/'+user.room+'/joinedUsers', function(res){
-			console.log(res);
+		$('#test1').on('click', function(){
+
+			console.log('button clicked');
+			console.log('SOCKET___ socket request(/desktop/playlist/'+user.room+'/joinedUsers); ');
+
+			socket.get('/desktop/playlist/'+user.room+'/joinedUsers', function(res){
+				console.log(res);
+			});
+
 		});
 
-	});
+		// L'utilisateur vient d'arriver, il demande la liste des participants
+		socket.get('/desktop/playlist/'+user.room+'/joinedUsers', function(data){
+			console.log(data);
+		});
 
-	// L'utilisateur vient d'arriver, il demande la liste des participants
-	socket.get('/desktop/playlist/'+user.room+'/joinedUsers', function(res){
-		console.log(res);
-	});
+		// L'utilisateur vient d'arriver, il demande informe les autres participants
+		socket.get('/desktop/playlist/'+user.room+'/joined', function(response) {
+		  // do something
+		  console.log(response);
+		});
 
-	// L'utilisateur vient d'arriver, il demande informe les autres participants
-	socket.get('/desktop/playlist/'+user.room+'/joined', function(response) {
-	  // do something
-	  console.log(response);
-	});
+		// Initialisation jCarousel 
+		$('.listeParticipant').jcarousel();
+		$('.listeParticipant-forward').jcarouselControl({
+                target: '+=1'
+        });
+        $('.listeParticipant-backward').jcarouselControl({
+                target: '-=1'
+        });
 
 
+		// Réception SOCKETS :
+		socket.on('message', function(data) {console.log(data)} );
+
+	}
 
 
 	/* --------------------------------------------------------- */ 

@@ -49,12 +49,25 @@ module.exports = {
 					playlistUrl:playlistUrl
 				}).exec(function cb(err,created){
 				  console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
+
+				  	sails.sockets.broadcast(playlistUrl, 'message' , {
+				    	verb 	: "add",
+				    	device 	: "desktop",
+				    	info 	: "userJoined",
+				    	data 	: { firstname: req.session.User.firstname, image: req.session.User.image }
+				    });
+
+				    // Redirection vers l'affichage de la playlist
+       				res.redirect('/mobile/playlist/'+playlistUrl);
 				});
+			}
+			else{
+				res.redirect('/mobile/playlist/'+playlistUrl);
 			}
 		});
 	    
         // Redirection vers l'affichage de la playlist
-        res.redirect('/mobile/playlist/'+playlistUrl);
+        // res.redirect('/mobile/playlist/'+playlistUrl);
     },
 
     show:function(req,res,next){
@@ -70,6 +83,17 @@ module.exports = {
 					}
 			     	return res.redirect('/mobile/playlist/');
 			    }
+			    // envoie d'une socket au desktop pour prévenir
+			    // de l'arrivée d'un nouveau participant
+			    console.log('envoie socket à la room !');
+
+			    // sails.sockets.broadcast(playlistUrl, 'message' , {
+			    // 	verb 	: "add",
+			    // 	device 	: "desktop",
+			    // 	info 	: "userJoined",
+			    // 	data 	: { firstname: req.session.User.firstname, image: req.session.User.image }
+			    // });
+
 				res.view({
 					playlist: playlist,
 					room:playlistUrl,
