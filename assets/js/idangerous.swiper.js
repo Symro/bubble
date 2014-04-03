@@ -19,8 +19,8 @@ var mySwiper = new Swiper('.swiper-container', {
 				case 2:
 					nav.children('a').removeClass('visible');
 					$.get( "/mobile/playlist/"+user.room+"/historic", {userId:user.id}, function( data ) {
-						console.log(data);
-						//$('.discoveries').html(data);
+						//console.log(data);
+						$('.historic').html(data);
 					});
 
 					break;

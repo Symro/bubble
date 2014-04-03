@@ -10,7 +10,7 @@ module.exports = {
 	getHistoric: function( req, res, next ){
 
 		// récupère les url playlist dans lequel il a participé
-		Join.find().populate('user').where({ 'user' : req.param('userId') }).populate('playlist').exec(function foundUserHistoric(err, historic){
+		Join.find().populate('user').populate('playlist').exec(function foundUserHistoric(err, historic){
 			var historic;
 
 			if (err) return next(err);
@@ -19,7 +19,14 @@ module.exports = {
 				historic = {};
 			}
 
-			return res.json({historic:historic});
+			
+
+			//return res.json({historic:historic});
+
+			return res.view('playlistMobile/partials/historic',{
+				historic:historic,
+				layout: null
+			});
 
 		});
 

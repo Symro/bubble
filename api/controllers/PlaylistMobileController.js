@@ -14,6 +14,7 @@ module.exports = {
 		// }); // équivaut à res.view('playlistMobile/index');
 
         //res.view(); // équivaut à res.view('playlistMobile/index');
+        console.log(playlist);
         res.view({
 			layout: "layout_mobile"
 		});

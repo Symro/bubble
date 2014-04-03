@@ -54,7 +54,7 @@ module.exports = {
 
         // If doesn't match
         if(!valid){
-          var mismatchError=[{name:'mismatchError',message:'Invalid username and password'}];
+          var mismatchError=[{name:'mismatchError',message:'Invalid email or password'}];
           req.session.flash={
             err:mismatchError
           }

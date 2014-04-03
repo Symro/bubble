@@ -50,7 +50,14 @@ module.exports = {
 	                }
 	                // création du compte :
 	                else{
-	                	User.create(req.params.all(),function userCreated(err,user){
+	                	params = {
+	                		firstname: req.param('firstname'),
+	                		mail : req.param('mail'),
+	                		password: req.param('password'),
+	                		confirmation : req.param('confirmation')
+	                	}
+
+	                	User.create( params ,function userCreated(err,user){
 	                		if (err){
 								var error=[{name:'error',message:'Please fill in all the fields'}];
 								req.session.flash={

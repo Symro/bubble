@@ -1,0 +1,57 @@
+<% if(typeof(historic) != "undefined") { %>
+
+<% if(historic.length > 0) { %>
+
+<% _.each(historic, function (histo) { %>
+
+		<?php foreach($historic['playlists'] as $playlist): ?>
+			<?php $i++; ?>
+			<li class="playlistHist" data-historic-url="<?php echo $playlist['playlist_url']; ?>">
+				<h4><a href="<?php echo $playlist['playlist_url']; ?>"><%= histo.playlist.name %></a></h4>
+				<span><%= histo.playlist.createdAt %></span>
+				<img src="<%= histo.playlist.image %>" alt="<%= histo.playlist.name %>" class="playlistImg">
+				<div class="wrapperUsers">
+					<i class="icon-flecheg listeUsers-backward"></i>
+					<div class="listeUsers" data-carousel="<?php echo $i; ?>">
+						<ul>
+							<?php foreach ($historic['users'] as $user): ?>
+								<?php if ($user[0]['playlist_url']==$playlist['playlist_url']): ?>
+									<?php foreach ($user as $img): ?>
+										<li class=""><img class="userImg" src="<?php echo($img['user_image']); ?>"></li>
+									<?php endforeach ?>
+								<?php endif ?>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+					<i class="icon-fleched listeUsers-forward"></i>
+				</div>
+				<div class="wrapperSongs custom-scroll">
+					<ul class="historics">
+					<?php foreach ($historic['songs'] as $songs): ?>
+						<?php if ($songs['playlist_url']==$playlist['playlist_url']): ?>
+							<li>
+								<div data-track-id="<?php echo $songs['song_track_id']; ?>" data-id="<?php echo $songs['song_id']; ?>">
+									<strong><?php echo $songs['song_track_name']; ?></strong>
+									<span><?php echo $songs['song_track_artist']; ?></span>
+								</div>
+								<div>
+									<a href="<?php echo $songs['song_permalink_url']; ?>" title="<?php echo $songs['song_track_name']; ?>"><i class="icon-<?php echo $songs['song_service']; ?>ecouter"></i></a>
+								</div>
+								<div>
+									<img src="<?php echo ($songs['user_image'] != 'public/img/default.png') ? $songs['user_image'] : "public/img/no_image.png" ; ?>" alt="<?php echo $songs['user_firstname']; ?>"/>
+								</div>
+								<div></div>
+							</li>
+						<?php endif ?>
+					<?php endforeach ?>
+					</ul>
+				</div>
+			</li>
+			<hr>
+
+<% 
+		}); 
+	}
+} 
+
+%>

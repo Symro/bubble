@@ -5,7 +5,12 @@
 				<a class="left" id="displayMenu" href="javascript:void(0)"><i class="icon-menu"></i></a>
 			</div>
 			<div class="right">
+				<% if(typeof(playlist) !== "undefined") { %>
 				<a id="searchSong" class="visible" href="javascript:void(0)"><i class="icon-loupe"></i></a>
+				<% }
+					else{ %>
+				<a id="" class="visible" href="javascript:void(0)"></a>
+				<% } %>
 				<a id="editDiscovery" class="" href="javascript:void(0)"><i class="icon-poubelle"></i></a>
 			</div>
 			<div class="center" style="position: absolute; left: 50%;" >
@@ -97,7 +102,7 @@
 	    		<div class="swiper-slide historique">
 			    	<div class="title">Historique</div>
 			    	<ul class="historic">
-			    		<!--<?php require('partials/historic.html'); ?>-->
+			    		<%- partial('partials/historic')%>
 			    	</ul>
 
 			    	<form id="formHistoricPicture" method="post" enctype="multipart/form-data">
