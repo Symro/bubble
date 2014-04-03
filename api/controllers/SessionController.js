@@ -87,5 +87,5 @@ module.exports = {
     res.redirect('/session/new');
 
   }
-  
+
 };
