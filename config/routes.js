@@ -74,6 +74,10 @@ module.exports.routes = {
     action: 'getHistoric'
   },
 
+  'post /mobile/playlist/:url/add':{
+    controller:'Song',
+    action:'add'
+  },
 
   // ROUTES DESKTOP
 

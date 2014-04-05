@@ -24,25 +24,28 @@ module.exports = {
         },
         songTrackArtist:{
             type:"string",
-            required:true            
+            required:true
         },
         songTrackName:{
             type:"string",
-            required:true            
+            required:true
         },
         songTrackDuration:{
             type:"integer",
-            notNull:true          
+            notNull:true
         },
         songPermalinkUrl:{
-            type:"string",
-            url:true          
+            type:"string"
         },
         songCounter:{
-            type:"integer"     
+            type:"integer",
+            defaultsTo: '0'
         },
         user:{
             model:"user"
+        },
+        url:{
+            type:"string"
         }
 
     }

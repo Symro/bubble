@@ -13,9 +13,9 @@ module.exports = {
 		// 	layout: "layout_mobile"
 		// }); // équivaut à res.view('playlistMobile/index');
 
-        //res.view(); // équivaut à res.view('playlistMobile/index');
-        console.log(playlist);
-        res.view({
+		//res.view(); // équivaut à res.view('playlistMobile/index');
+		console.log(playlist);
+			res.view({
 			layout: "layout_mobile"
 		});
 
@@ -71,12 +71,12 @@ module.exports = {
 						res.redirect('/mobile/playlist/'+playlistUrl);
 					}
 				});
-			    
+
 	    	}
 
 	   	});
 
-		
+
 
     },
 

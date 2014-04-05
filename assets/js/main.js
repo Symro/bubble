@@ -1,11 +1,11 @@
 $(document).ready(function(){
 
-	isMobile = ($("body").hasClass('mobile')) ? true : false; 
-	isDesktop = ($("body").hasClass('desktop')) ? true : false; 
+	isMobile = ($("body").hasClass('mobile')) ? true : false;
+	isDesktop = ($("body").hasClass('desktop')) ? true : false;
 
-	/* --------------------------------------------------------- */ 
+	/* --------------------------------------------------------- */
 	//  PARTIE Formulaire inscription Bubble
-	/* --------------------------------------------------------- */ 
+	/* --------------------------------------------------------- */
 
 	$('.form-signin').validate({
 		rules:{
@@ -58,7 +58,7 @@ $(document).ready(function(){
 		  console.log(response);
 		});
 
-		// Initialisation jCarousel 
+		// Initialisation jCarousel
 		$('.listeParticipant').jcarousel();
 		$('.listeParticipant-forward').jcarouselControl({
                 target: '+=1'
@@ -77,9 +77,9 @@ $(document).ready(function(){
 	});
 
 
-	/* --------------------------------------------------------- */ 
-	//  PARTIE DECOUVERTES  
-	/* --------------------------------------------------------- */ 
+	/* --------------------------------------------------------- */
+	//  PARTIE DECOUVERTES
+	/* --------------------------------------------------------- */
 
 	action = {
 
@@ -124,7 +124,7 @@ $(document).ready(function(){
 					console.log("On passe à la suivante plz");
 
 				}
-				
+
 				$('.current-interaction').off('click', '#song-dislike').children('#song-dislike').addClass('active');
 			});
 
@@ -165,9 +165,9 @@ $(document).ready(function(){
 	});
 
 
-	/* --------------------------------------------------------- */ 
+	/* --------------------------------------------------------- */
 	//  PARTIE MENU MON COMPTE
-	/* --------------------------------------------------------- */ 
+	/* --------------------------------------------------------- */
 
 
 	$('#displayMenu').on('click', function(e){
@@ -187,15 +187,15 @@ $(document).ready(function(){
 		});
 
 	});
-	
+
 
 	/* ------------------------------------------------- */
-	// GESTION UPLOAD 
+	// GESTION UPLOAD
 	/* ------------------------------------------------- */
 
 
 	/* Affichage Loader en cas d'upload */
-	
+
 	$(document)
 	.ajaxSend(function( event, jqxhr, settings ) {
 		if(settings.url.substring(0, 7) == "upload/"){
@@ -276,7 +276,7 @@ $(document).ready(function(){
 	    //turn to inline mode
 	    //$.fn.editable.defaults.mode = 'inline';
 	}
- 
+
     // $('#edit-email,#user-email').click(function() {
 
     // 	$('#user-email').editable({
@@ -291,9 +291,9 @@ $(document).ready(function(){
     // });
 
 
-   	/* --------------------------------------------------------- */ 
+   	/* --------------------------------------------------------- */
 	//  PARTIE HISTORIQUE
-	/* --------------------------------------------------------- */ 
+	/* --------------------------------------------------------- */
 
 
 	$(".custom-scroll").mCustomScrollbar();
@@ -301,9 +301,9 @@ $(document).ready(function(){
 
 
 
-   	/* --------------------------------------------------------- */ 
+   	/* --------------------------------------------------------- */
 	//  PARTIE BUBBLE LIVE
-	/* --------------------------------------------------------- */ 
+	/* --------------------------------------------------------- */
 
 	$player = $(".knob");
 	$timer  = $(".timer");
@@ -312,7 +312,7 @@ $(document).ready(function(){
 	if($player.length != 0){
 		// Initialisation
 		$player.knob({
-			"release" : function (value) { 
+			"release" : function (value) {
 				var minutes = Math.floor(value / 60);
 				var secondes = value - minutes * 60;
 				var zero = (secondes < 10)? "0" : "";
@@ -344,20 +344,55 @@ $(document).ready(function(){
 
 		var animation = setInterval(function(){
 		    var position =  -1 * (cont*imgHeight);
-			
+
 		    if(cont == numImgs){
-		    	
+
 		    	//if(img == 1){img++;}
 		    	//else if(img == 2){img++;}
 		    	//else{img = 1;}
 		    	console.log(img);
 		    	cont = 0;
 		    }
-		    anim.filter(':nth-child('+img+')').css({'margin-top': position, 'opacity' : 1});    
+		    anim.filter(':nth-child('+img+')').css({'margin-top': position, 'opacity' : 1});
 		    cont++;
 		},100);
 	}
 
+	// Ajout d'un son
+	$('.search').on('click', '.results li', function(e){
+		e.preventDefault();
 
+		// Pop-up confirmation
+		$popup = confirm("Ajouter à la playlist ?");
+
+		// Conversion du temps en minutes
+		// $temps = String($(this).data("songduration") / 60000);
+		// $temps = (Math.round( $temps * 100 )/100 );
+		// $temps = $temps.toFixed(2).toString();
+		// $temps = $temps.replace(".","'");
+
+		// console.log($temps);
+
+		if($popup){
+
+		// Récupération des datas
+			$datas={
+				songTrackId:$(this).data("songid"),
+				songTrackName:$(this).data("song"),
+				songService:$(this).data("songservice"),
+				songTrackArtist:$(this).data("songartist"),
+				songTrackDuration:$(this).data("songduration"),
+				songPermalinkUrl:$(this).data("permalink")
+			}
+
+			console.dir($datas);
+
+			// Envoi des datas au controller
+			socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas} ,function( datas ) {
+				// console.log(datas);
+			});
+		}
+
+	});
 
 });
