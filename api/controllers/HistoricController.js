@@ -10,8 +10,9 @@ module.exports = {
 	getHistoric: function( req, res, next ){
 
 		// récupère les url playlist dans lequel il a participé
-		Join.find().populate('user').where({ 'user' : req.param('userId') }).populate('playlist').exec(function foundUserHistoric(err, historic){
+		Join.find().populate('user').where({ 'user' : req.param('userId') }).populate('playlist').sort('playlistUrl ASC').exec(function foundUserHistoric(err, historic){
 			var historic;
+			var fullHistoric = historic;
 
 			if (err) return next(err);
 
@@ -19,12 +20,38 @@ module.exports = {
 				historic = {};
 			}
 
-			//return res.json({historic:historic});
+			results = [];
 
-			return res.view('playlistMobile/partials/historic',{
-				historic:historic,
-				layout: null
-			});
+			// récupère les utilisateurs de chaque playlist
+			historic.forEach(function (doc, i){
+				// récupère les utilisateurs ayant rejoint les mêmes playlist que l'utilisateur connecté
+                Join.find({
+                    'playlistUrl' : doc.playlistUrl
+                }).populate('user').sort('playlistUrl ASC').exec( function foundUsersHistoric(err,users){
+                	// Pour chaque utilisateur on l'ajoute au JSON dans la bonne playlist
+                    fullHistoric[i].users = users;
+                    // Quand tout est fini, on retourne le JSON final
+                    if(i == historic.length-1){
+						// return res.json({
+						// 	historic:fullHistoric
+						// });
+						return res.view('playlistMobile/partials/historic',{
+							historic:fullHistoric,
+							layout: null
+						});
+	               	}
+               	});
+
+            });
+
+			// return res.json({
+			// 	historic:historic
+			// });
+
+			// return res.view('playlistMobile/partials/historic',{
+			// 	historic:historic,
+			// 	layout: null
+			// });
 
 		});
 

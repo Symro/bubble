@@ -15,16 +15,14 @@ module.exports = {
         user:{
             model:'user'
         },
-
         playlistUrl:{
             type:'string',
             required:true
         },
-
         playlist:{
             model:'playlistDesktop'
         }
 
     }
-
+    
 };

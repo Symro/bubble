@@ -14,19 +14,20 @@
 					<i class="icon-flecheg listeUsers-backward"></i>
 					<div class="listeUsers" data-carousel="<?php echo $i; ?>">
 						<ul>
-							<?php foreach ($historic['users'] as $user): ?>
-								<?php if ($user[0]['playlist_url']==$playlist['playlist_url']): ?>
-									<?php foreach ($user as $img): ?>
-										<li class=""><img class="userImg" src="<?php echo($img['user_image']); ?>"></li>
-									<?php endforeach ?>
-								<?php endif ?>
-							<?php endforeach; ?>
+							<% _.each(histo.users, function (users) { %>
+								<li class=""><img class="userImg" src="<%= users.user.image %>" alt="<%= users.user.firstname %>"></li>
+							<% }); %>
 						</ul>
 					</div>
 					<i class="icon-fleched listeUsers-forward"></i>
 				</div>
 				<div class="wrapperSongs custom-scroll">
 					<ul class="historics">
+					<!-- 
+					**********************
+					TO DO : 
+					**********************
+					-->
 					<?php foreach ($historic['songs'] as $songs): ?>
 						<?php if ($songs['playlist_url']==$playlist['playlist_url']): ?>
 							<li>
@@ -52,6 +53,12 @@
 <% 
 		}); 
 	}
-} 
 
-%>
+}else { %>
+
+	<br/>
+	<p>Votre historique est vide. </p>
+	<p>Et si vous rejoignez une Bubble ? :) </p>
+
+
+<% } %>
