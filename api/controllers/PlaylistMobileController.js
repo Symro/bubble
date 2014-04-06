@@ -85,32 +85,40 @@ module.exports = {
 
     	if(playlistUrl){
 	        // Affichage de la playlist
-			PlaylistDesktop.findOneByUrl(playlistUrl,function foundPlaylistDesktop(err,playlist){
-				if (err) return next(err);
-				if (!playlist){
-					req.session.flash={
-						err:[{name:'playlistDoesntExist',message:'This playlist doesn\'t exist. Please try again.'}]
-					}
-			     	return res.redirect('/mobile/playlist/');
-			    }
-			    // envoie d'une socket au desktop pour prévenir
-			    // de l'arrivée d'un nouveau participant
-			    console.log('envoie socket à la room !');
+				PlaylistDesktop.findOneByUrl(playlistUrl,function foundPlaylistDesktop(err,playlist){
+					if (err) return next(err);
+					if (!playlist){
+						req.session.flash={
+							err:[{name:'playlistDoesntExist',message:'This playlist doesn\'t exist. Please try again.'}]
+						}
+				     	return res.redirect('/mobile/playlist/');
+				    }
+				    // envoie d'une socket au desktop pour prévenir
+				    // de l'arrivée d'un nouveau participant
+				    console.log('envoie socket à la room !');
 
-			    // sails.sockets.broadcast(playlistUrl, 'message' , {
-			    // 	verb 	: "add",
-			    // 	device 	: "desktop",
-			    // 	info 	: "userJoined",
-			    // 	data 	: { firstname: req.session.User.firstname, image: req.session.User.image }
-			    // });
+				    PlaylistDesktop.find({url:playlist.url}).populate('songs').exec(function getSongs(err,songs){
+			    		console.dir(songs);
 
-				res.view({
-					playlist: playlist,
-					room:playlistUrl,
-					layout: "layout_mobile"
+			    		res.view({
+								playlist: playlist,
+								songs:songs,
+								room:playlistUrl,
+								layout: "layout_mobile"
+							});
+				    });
+
+				    // console.dir(playlist);
+				    // sails.sockets.broadcast(playlistUrl, 'message' , {
+				    // 	verb 	: "add",
+				    // 	device 	: "desktop",
+				    // 	info 	: "userJoined",
+				    // 	data 	: { firstname: req.session.User.firstname, image: req.session.User.image }
+				    // });
+
+
 				});
-			});
-		}
+			}
 
 		else{
 			res.view({

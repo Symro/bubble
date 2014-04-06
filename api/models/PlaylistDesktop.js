@@ -25,6 +25,10 @@ module.exports = {
         image:{
             type:'string',
             defaultsTo:'/images/default_historic.png'
+        },
+        songs:{
+            collection:'song',
+            via:'url'
         }
 
     }

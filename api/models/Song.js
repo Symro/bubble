@@ -45,7 +45,7 @@ module.exports = {
             model:"user"
         },
         url:{
-            type:"string"
+            model:"playlistDesktop"
         }
 
     }

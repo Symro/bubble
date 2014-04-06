@@ -1,0 +1,15 @@
+<% if(typeof(songs) != "undefined") { %>
+
+	<% if(songs.length > 0) { %>
+
+		<% _.each(songs, function (song) { %>
+			<% _.each(song, function (track) { %>
+
+				<p><%= track.name %></p>
+
+			<% }); %>
+		<% }); %>
+
+	<% } %>
+
+<% } %>

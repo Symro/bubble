@@ -52,9 +52,9 @@
 						        </section>
 						    </div>
 						</div>
-						<% 
+						<%
 						}
-						else { 
+						else {
 						%>
 
 						<section class="current-playlist">
@@ -71,17 +71,17 @@
 								<strong></strong>
 								<span></span>
 							</div>
-							
+
 							<div class="current-interaction">
 
 								<i id="song-like" class="icon-coeursansombre"></i>
 								<i id="song-dislike" class="icon-thumb"></i>
-					
+
 							</div>
 
 
 							<div class="song">
-								<!--<?php require('partials/currentplaylist.html'); ?>-->
+								<%- partial('partials/currentPlaylist')%>
 							<div>
 
 							<% } %>
@@ -110,7 +110,7 @@
 						<input type="submit" name="submitHistoricPicture" value="Envoyer">
 					</form>
 			    </div><!-- FIN SLIDE HISTORIQUE -->
-		    </div> 
+		    </div>
 		 </div> <!-- FIN SWIPER-CONTAINER -->
 
       	</div>
@@ -164,14 +164,14 @@
 			<!-- <div>
 			  <button class="active">Soundcloud</button>
 			  <button class="">Youtube</button>
-			  <button class="">Grooveshark</button>  
+			  <button class="">Grooveshark</button>
 			  <div class="selector"></div>
 			</div> -->
 			<form action="search" method="post">
 		      <input type="text" name="search" placeholder="Recherche" autocomplete="off"/>
 		    </form>
 		    <ul class="results">
-		    	
+
 		    </ul>
 		    <!-- envoie de la cover de la musique -->
 		    <div id="sent">
@@ -180,7 +180,7 @@
 
 		<div class="loader-overlay">
 			<div class="loader"></div>
-			<span>Chargement</span>			
+			<span>Chargement</span>
 		</div>
 
 	</div><!-- FIN WRAPPER -->
