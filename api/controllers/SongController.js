@@ -26,31 +26,16 @@ module.exports = {
           console.dir(added)
         });
 
-        // Song.create({songTrackName:params.songTrackName}).exec(function songAdded(err, song){
-        //     if (err){
-        //         var error=[{name:'error',message:'try again'}];
-        //         req.session.flash={
-        //             err:error
-        //         };
-        //         return res.redirect('/mobile/playlist');
-        //     }
-        //     console.log('son ajouté');
-        //     res.redirect('/mobile/playlist');
-        // });
-
-        // User.create({name:'Walter Jr'}).exec(function createCB(err,created){
-        //   console.log('Created user with name '+created.name);
-        //   });
     },
 
     remove:function(req,res,next){
-        songId=req.param('song');
 
-        // console.dir(songId);
+        // Récupération id song
+        songId=Number(req.param('song'));
 
-        Song.remove({url:route.params.url},1);
-
-        Song.findOneBySoundTrackId(songId,function getSong(err,song){
+        // Suprresion du son ciblé
+        Song.destroy({songTrackId:songId,url:req.route.params.url}).exec(function getSong(err,song){
+            console.log("song supprimé !");
             console.dir(song);
         });
     }
