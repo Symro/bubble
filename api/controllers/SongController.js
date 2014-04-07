@@ -24,7 +24,7 @@ module.exports = {
           console.dir(err);
           console.dir('Created song with name ');
           console.dir(added)
-          });
+        });
 
         // Song.create({songTrackName:params.songTrackName}).exec(function songAdded(err, song){
         //     if (err){
@@ -41,6 +41,18 @@ module.exports = {
         // User.create({name:'Walter Jr'}).exec(function createCB(err,created){
         //   console.log('Created user with name '+created.name);
         //   });
+    },
+
+    remove:function(req,res,next){
+        songId=req.param('song');
+
+        // console.dir(songId);
+
+        Song.remove({url:route.params.url},1);
+
+        Song.findOneBySoundTrackId(songId,function getSong(err,song){
+            console.dir(song);
+        });
     }
 
 };

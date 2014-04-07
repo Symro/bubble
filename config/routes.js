@@ -78,6 +78,10 @@ module.exports.routes = {
     controller:'Song',
     action:'add'
   },
+  'post /mobile/playlist/:url/remove':{
+    controller:'Song',
+    action:'remove'
+  },
 
   // ROUTES DESKTOP
 

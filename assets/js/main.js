@@ -358,7 +358,7 @@ $(document).ready(function(){
 		},100);
 	}
 
-	// Ajout d'un son
+	// Ajout d'un son à une playlist
 	$('.search').on('click', '.results li', function(e){
 		e.preventDefault();
 
@@ -392,6 +392,18 @@ $(document).ready(function(){
 				// console.log(datas);
 			});
 		}
+
+	});
+
+	// Supression d'un son ajouté par sois-même
+	$('body').on('click','.current-playlist .song .remove',function(event){
+		event.stopPropagation();
+		$songId=$(this).parent().data("id");
+		// $playlist=$(".wrapper").data('playlist-url');
+
+		socket.post( "/mobile/playlist/"+user.room+"/remove",{song:$songId} ,function( datas ) {
+			// console.log(datas);
+		});
 
 	});
 

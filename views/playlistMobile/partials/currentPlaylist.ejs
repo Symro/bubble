@@ -1,5 +1,7 @@
 <% if(typeof(songs) != "undefined") { %>
 
+	<ul>
+
 	<% if(songs.length > 0) { %>
 
 		<% _.each(songs, function (playlist) { %>
@@ -8,16 +10,41 @@
 
 			<% _.each(playlist.songs, function (song) { %>
 
-				<p><%= song.songTrackName %></p>
+			<li data-id="<%= song.songTrackId %>">
+
+				<% if (session.User.id == song.user) { %>
+					<div class="action remove">
+						<i class="icon-croixclosesuppr"></i>
+					</div>
+				<% } %>
+
+
+				<div>
+					<strong><%= song.songTrackName %></strong>
+					<span><%= song.songTrackArtist %></span>
+				</div>
+				<%
+					temps = String(song.songTrackDuration / 60000);
+					temps = (Math.round( temps * 100 )/100 );
+					temps = temps.toFixed(2).toString();
+					temps = temps.replace(".","'");
+				%>
+				<div>
+					<span><%= temps %></span>
+				</div>
+
+			</li>
 
 			<% }); %>
 
 		<% }); %>
 
+	<% }else{ %>
+
+		<p>la Playlist est vide, ajoutez de la musique !</p>
+
 	<% } %>
 
-<% }else{ %>
-
-	<p>la Playlist est vide, ajoutez de la musique !</p>
+	</ul>
 
 <% } %>
