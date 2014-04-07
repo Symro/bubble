@@ -100,6 +100,8 @@ module.exports = {
 				    PlaylistDesktop.find({url:playlist.url}).populate('songs').exec(function getSongs(err,songs){
 			    		console.dir(songs);
 
+			    		// return res.json({playlist:songs});
+
 			    		res.view({
 								playlist: playlist,
 								songs:songs,

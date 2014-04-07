@@ -2,14 +2,22 @@
 
 	<% if(songs.length > 0) { %>
 
-		<% _.each(songs, function (song) { %>
-			<% _.each(song, function (track) { %>
+		<% _.each(songs, function (playlist) { %>
 
-				<p><%= track.name %></p>
+		<%= playlist.name %>
+
+			<% _.each(playlist.songs, function (song) { %>
+
+				<p><%= song.songTrackName %></p>
 
 			<% }); %>
+
 		<% }); %>
 
 	<% } %>
+
+<% }else{ %>
+
+	<p>la Playlist est vide, ajoutez de la musique !</p>
 
 <% } %>
