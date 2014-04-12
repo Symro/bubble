@@ -216,15 +216,20 @@ $(document).ready(function(){
 		datas.append( "fileInput", $("#profilPicture")[0].files[0]);
 
 		$.ajax({
-			url:'upload/profil',
+			url:'/upload/user',
 			type:'POST',
 			data:datas,
 			processData:false,
 			contentType:false
 		})
-		.success(function(datas){
-			$('#uploadPicture').html(datas);
-			carouselRefresh();
+		.fail(function(jqXHR, textStatus){
+			$('#uploadPicture .error').html(jqXHR.responseJSON.message);
+		})
+		.success(function(data){
+			$('#uploadPicture .error').empty();
+			$('#uploadPicture img').attr('src', '/'+data.path);
+			console.log(data);
+			
 		})
 
 	});

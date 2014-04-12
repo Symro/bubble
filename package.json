@@ -24,7 +24,11 @@
     "grunt-contrib-coffee": "~0.7.0",
     "express-device": "^0.3.7",
     "bcrypt-nodejs": "0.0.3",
-    "sails-mongo": "^0.10.0-rc2"
+    "sails-mongo": "^0.10.0-rc2",
+    "shortid": "^2.0.0",
+    "mkdirp": "^0.3.5",
+    "express-resizer": "0.0.6",
+    "gm": "^1.14.2"
   },
   "scripts": {
     "start": "node app.js",

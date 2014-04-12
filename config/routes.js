@@ -108,6 +108,13 @@ module.exports.routes = {
   'get /desktop/playlist/:url/joined':{
     controller:'join',
     action: 'joined'
+  },
+
+  // ROUTES DIVERSES
+
+  'get /public/user/*': {
+    controller: 'FileController',
+    action: 'get'
   }
 
 

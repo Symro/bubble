@@ -123,9 +123,13 @@
 
 			<figure id="uploadPicture">
 				<!--<?php require('partials/upload.html'); ?>-->
+				
+				<img src="<%= session.User.image %>" alt="<%= session.User.firstname %>" />
+				<figcaption><%= session.User.firstname %></figcaption>
+				<div class="error"></div>
 			</figure>
 
-			<form id="formProfilPicture" method="post" enctype="multipart/form-data">
+			<form id="formProfilPicture" action="/upload/user" method="post" enctype="multipart/form-data">
 				<input type="file" id="profilPicture" name="profilPicture" />
 				<input type="submit" name="submitProfilPicture" value="Envoyer">
 			</form>

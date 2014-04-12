@@ -33,6 +33,9 @@ module.exports.policies = {
 	playlistMobile:{
 		'index':['device','flash','authenticated'],
 		'show':['device','flash','authenticated']
+	},
+	upload:{
+		'*':['flash','authenticated']
 	}
 
   // playlistMobile:{
