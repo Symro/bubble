@@ -198,12 +198,12 @@ $(document).ready(function(){
 
 	$(document)
 	.ajaxSend(function( event, jqxhr, settings ) {
-		if(settings.url.substring(0, 7) == "upload/"){
+		if(settings.url.substring(0, 7) == "/upload"){
 			$('body').addClass("ajax");
 		}
 	})
 	.ajaxComplete(function( event, jqxhr, settings ){
-		if(settings.url.substring(0, 7) == "upload/"){
+		if(settings.url.substring(0, 7) == "/upload"){
 			$('body').removeClass("ajax");
 		}
 	});
@@ -228,7 +228,6 @@ $(document).ready(function(){
 		.success(function(data){
 			$('#uploadPicture .error').empty();
 			$('#uploadPicture img').attr('src', '/'+data.path);
-			console.log(data);
 			
 		})
 

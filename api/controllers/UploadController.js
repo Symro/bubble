@@ -11,7 +11,8 @@
 var sid = require('shortid');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
-var gm = require('gm');
+var gm = require('gm').subClass({ imageMagick: true });
+
 
 var UPLOAD_USER_PATH = 'public/user';
 var UPLOAD_PLAYLIST_PATH = 'public/playlist';
@@ -72,8 +73,6 @@ module.exports = {
       dirPath = UPLOAD_USER_PATH + '/' + req.session.User.id,
       filePath = dirPath + '/' + fileName;
 
-      console.log(filePath);
-
     try {
       mkdirp.sync(dirPath, 0755);
     } catch (e) {
@@ -93,17 +92,42 @@ module.exports = {
                 return res.json(err);
               } else {
 
-                // resize and remove EXIF profile data
+                // resize l'image
+                gm(filePath)
+                .autoOrient()
+                .resize(300, 300, "^>")
+                .gravity('Center')
+                .extent(300, 300)
+                .write(filePath, function (err) {
+                  if (!err){
+                    // màj url de l'image en BDD
+                    User.findOne(req.session.User.id).done(function(err, user) {
+                      if(err){
+                        return res.json(err);
+                      }
 
-                /*
-                    gm(filePath)
-                    .resize(250, 250)
-                    .write(filePath, function (err) {
-                      console.log(err);
-                      if (!err) console.log('done');
+                      user.image = "/"+filePath;
+
+                      // Update l'URL de l'image de la session en cours de l'utilisateur
+                      req.session.User.id = user.image;
+
+                      user.save(function(err) {
+                        // value has been saved
+                      });
 
                     });
-                */
+
+                    return res.json(data);
+                  }
+                  // une erreur est survenue..
+                  else{
+                    return res.forbidden('Internal Error');
+                  }
+
+                });
+                
+
+                /*
 
                 User.findOne(req.session.User.id).done(function(err, user) {
                   if(err){
@@ -122,6 +146,8 @@ module.exports = {
                 });
 
                 return res.json(data);
+
+                */
 
               }
             });
