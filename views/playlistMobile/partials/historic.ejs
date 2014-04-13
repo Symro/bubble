@@ -4,18 +4,16 @@
 
 <% _.each(historic, function (histo) { %>
 
-		<?php foreach($historic['playlists'] as $playlist): ?>
-			<?php $i++; ?>
-			<li class="playlistHist" data-historic-url="<?php echo $playlist['playlist_url']; ?>">
-				<h4><a href="<?php echo $playlist['playlist_url']; ?>"><%= histo.playlist.name %></a></h4>
+			<li class="playlistHist" data-historic-url="<%= histo.playlist.url %>">
+				<h4><a href="<%= histo.playlist.url %>"><%= histo.playlist.name %></a></h4>
 				<span><%= histo.playlist.createdAt %></span>
 				<img src="<%= histo.playlist.image %>" alt="<%= histo.playlist.name %>" class="playlistImg">
 				<div class="wrapperUsers">
 					<i class="icon-flecheg listeUsers-backward"></i>
-					<div class="listeUsers" data-carousel="<?php echo $i; ?>">
+					<div class="listeUsers">
 						<ul>
 							<% _.each(histo.users, function (users) { %>
-								<li class=""><img class="userImg" src="<%= users.user.image %>" alt="<%= users.user.firstname %>"></li>
+								<li class=""><img class="userImg" src="<%= users.user.image %>" alt="<%= users.user.firstname %>"><div class="error"></div></li>
 							<% }); %>
 						</ul>
 					</div>

@@ -252,15 +252,19 @@ $(document).ready(function(){
 		datas.append( "fileInput", $("#historicPicture")[0].files[0]);
 
 		$.ajax({
-			url:'upload/historic/'+playlist,
+			url:'/upload/historic/'+playlist,
 			type:'POST',
 			data:datas,
 			processData:false,
 			contentType:false
 		})
-		.success(function(datas){
-			historicPicture.attr('src', datas);
+		.success(function(data){
+			historicPicture.attr('src', '/'+data.path);
 		})
+		// .fail(function(jqXHR, textStatus){
+		// 	$('#uploadPicture .error').html(jqXHR.responseJSON.message);
+		// })
+
 
 	});
 

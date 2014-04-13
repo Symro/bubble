@@ -120,7 +120,17 @@ module.exports.routes = {
   'get /public/user/*': {
     controller: 'FileController',
     action: 'get'
-  }
+  },
+  
+  'get /public/playlist/*': {
+    controller: 'FileController',
+    action: 'get'
+  },
+
+  'post /upload/historic/:id':{
+    controller: 'upload',
+    action: 'playlist'
+  },
 
 
 

@@ -3,7 +3,6 @@
 //    TO DO : 
 //    '''''''
 // 
-//    - redimensionner les images uploadées
 //    - informer les utilisateurs de la màj de la photo
 //    - màj en temps réél des images dans les playlists desktop/mobile
 
@@ -65,8 +64,6 @@ module.exports = {
       return res.forbidden('Please upload an image');
     }
 
-    //console.dir(req.files);
-
     var file = req.files.fileInput,
       id = sid.generate(),
       fileName = id + "." + fileExtension(safeFilename(file.name)),
@@ -127,28 +124,6 @@ module.exports = {
                 });
                 
 
-                /*
-
-                User.findOne(req.session.User.id).done(function(err, user) {
-                  if(err){
-                    return res.json(err);
-                  }
-
-                  user.image = "/"+filePath;
-
-                  // Update l'URL de l'image de la session en cours de l'utilisateur
-                  req.session.User.id = user.image;
-
-                  user.save(function(err) {
-                    // value has been saved
-                  });
-
-                });
-
-                return res.json(data);
-
-                */
-
               }
             });
           }
@@ -158,12 +133,21 @@ module.exports = {
   },
 
 
-  playlist: function (req, res) {
-    console.dir(req.files);
+playlist: function (req, res, next) {
+    var allowedFiles = ["image/jpeg","image/png","image/gif"];
+    var allowFile = isInArray(req.files.fileInput.type, allowedFiles);
+
+    if(!allowFile){
+      return res.forbidden('Please upload an image');
+    }
+    if(!req.params['id']){
+      return res.forbidden('Upload error');
+    }
+
     var file = req.files.fileInput,
       id = sid.generate(),
       fileName = id + "." + fileExtension(safeFilename(file.name)),
-      dirPath = UPLOAD_USER_PATH + '/' + req.session.User.id,
+      dirPath = UPLOAD_PLAYLIST_PATH + '/' + req.params['id'],
       filePath = dirPath + '/' + fileName;
 
     try {
@@ -174,17 +158,49 @@ module.exports = {
 
     fs.readFile(file.path, function (err, data) {
       if (err) {
-        res.json({'error': 'could not read file'});
+        return res.json({'error': 'could not read file'});
       } else {
         fs.writeFile(filePath, data, function (err) {
           if (err) {
-            res.json({'error': 'could not write file to storage'});
+            return res.json({'error': 'could not write file to storage'});
           } else {
             processImage(id, fileName, filePath, function (err, data) {
               if (err) {
-                res.json(err);
+                return res.json(err);
               } else {
-                res.json(data);
+
+                // resize l'image
+                gm(filePath)
+                .autoOrient()
+                .resize(300, 300, "^>")
+                .gravity('Center')
+                .extent(300, 300)
+                .write(filePath, function (err) {
+                  if (!err){
+
+                    // màj url de l'image en BDD
+                    
+                    PlaylistDesktop.findOneByUrl(req.params['id']).done(function(err, playlist) {
+                      if(err){
+                        return res.json(err);
+                      }
+
+                      playlist.image = "/"+filePath;
+                      playlist.save();
+
+                    });
+                    
+
+                    return res.json(data);
+                  }
+                  // une erreur est survenue..
+                  else{
+                    return res.forbidden('Internal Error');
+                  }
+
+                });
+                
+                
               }
             });
           }
