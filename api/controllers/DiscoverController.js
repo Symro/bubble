@@ -28,51 +28,40 @@ module.exports = {
 	showDiscovery: function (req, res, next) {
 		Discover.find({user: req.session.User.id}).populate('song').exec(function discoveryDisplay(err,discoveries){
 			if(err) return next(err);
-			console.dir(discoveries);
-			// res.view({
-			// 	discoveries: discoveries,
-			// 	layout:"layout_mobile"
-			// });
-			return res.view('playlistMobile/partials/discovery',{
-				discoveries:discoveries,
-				layout: null
-			});
+
+			var discoveries;
+			var fullDiscoveries = discoveries;
+
+			if (err) return next(err);
+
+			if (!discoveries){
+				discoveries = {};
+			}
+
+			results = [];
+
+			// récupère les info d'utilisateur qui avait ajouté le morceau
+			discoveries.forEach(function (doc, i){
+                User.find({
+                    'id' : doc.song.user
+                }).exec( function foundUsersHistoric(err,users){
+                	// Pour chaque utilisateur on l'ajoute au JSON
+                    fullDiscoveries[i].song.userInfo = users[0];
+                    // Quand tout est fini, on retourne le JSON final
+                    if(i == discoveries.length-1){
+						return res.view('playlistMobile/partials/discovery',{
+							discoveries:fullDiscoveries,
+							layout: null
+						});
+	               	}
+               	});
+
+            });
+
 		});
 	}
 
 
-
-	// // Retourne la liste des participants à une playlist Bubble
-	// joinedUsers: function(req, res, next){
-
-	// 	Join.findByPlaylistUrl( req.param('url') ).populate('user').exec(function foundJoinedUsers(err, users){
-
-	// 		if (err) return next(err);
-	// 		if (!users) return next();
-
-	// 		console.log('on est là ! *findByPlaylistUrl* sur du : ');
-
-	// 		return res.json({joinedUsers:users});
-
-	// 	});
-
-	// },
-
-
-	// // Un participant vient d'arriver sur une room
-	// joined: function(req, res, next){
-
-	// 	var playlistUrl = req.param('url');
-
-	// 	req.socket.join(playlistUrl);
-	// 	req.socket.broadcast.to(playlistUrl).emit('message', {thisIs: 'Hey Im new !! _______theMessage'});
-
-	// 	res.json({
-	// 		joined:true,
-	//     	success: true
-	//     });
-
-	// }
 
 
 };

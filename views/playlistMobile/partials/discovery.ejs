@@ -1,5 +1,7 @@
 
 <% if(typeof(discoveries) != "undefined") { %>
+
+<% if(discoveries.length > 0) { %>
 	<ul>
 
 		<% _.each(discoveries, function (discover){ %>
@@ -14,12 +16,18 @@
 					<a href="<%= discover.song.songPermalinkUrl %>" target="_blank" title="<%= discover.song.songTrackName %>"><i class="icon-<%= discover.song.songService %>ecouter"></i></a>
 				</div>
 				<div>
-					<img src="<?php echo ($songs['user_image'] != 'public/img/default.png') ? $songs['user_image'] : "public/img/no_image.png" ; ?>" alt="<?php echo $songs['user_firstname']; ?>"/>
+					<img src="<%= discover.song.userInfo.image %>" alt="<%= discover.song.userInfo.firstname %>"/>
 				</div>
 			</li>
  
 		<% }); %>
 	</ul>
+
+<% } else { %>
+	
+	<p> Aucune découverte pour le moment </p>
+
+<% } %>
 
 <% } %>
  
