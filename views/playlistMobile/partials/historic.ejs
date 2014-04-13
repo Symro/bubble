@@ -6,7 +6,18 @@
 
 			<li class="playlistHist" data-historic-url="<%= histo.playlist.url %>">
 				<h4><a href="<%= histo.playlist.url %>"><%= histo.playlist.name %></a></h4>
-				<span><%= histo.playlist.createdAt %></span>
+				<%
+					var playlistDate = dateFormat(histo.playlist.createdAt);
+
+					function dateFormat(date) {
+					    var d = date.getDate();
+					    var m = date.getMonth() + 1;
+					    var y = date.getFullYear();
+					    return (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y;
+					}
+
+				%>
+				<span><%= playlistDate %></span>
 				<img src="<%= histo.playlist.image %>" alt="<%= histo.playlist.name %>" class="playlistImg">
 				<div class="wrapperUsers">
 					<i class="icon-flecheg listeUsers-backward"></i>

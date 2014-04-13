@@ -44,3 +44,6 @@ nbproject
 ########################
 # on est pas encore en prod donc bon...
 #config/local.js
+
+public/playlist/*
+public/user/*
