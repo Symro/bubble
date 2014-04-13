@@ -18,6 +18,7 @@ module.exports = {
             in: ['soundcloud', 'deezer', 'spotify']
         },
         songTrackId:{
+            primaryKey: true,
             type:"integer",
             required:true,
             maxLength:11

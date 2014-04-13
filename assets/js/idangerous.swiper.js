@@ -11,8 +11,8 @@ var mySwiper = new Swiper('.swiper-container', {
 				case 1:
 					nav.children('a').removeClass('visible').filter(':nth-child(2)').addClass("visible");
 					$.get( "/mobile/playlist/"+user.room+"/discover", {userId:user.id}, function( data ) {
-						console.log(data);
-						//$('.discoveries').html(data);
+						console.dir(data);
+						$('.discoveries').html(data);
 					});
 					
 					break;
@@ -27,4 +27,4 @@ var mySwiper = new Swiper('.swiper-container', {
 			}
 
 	}
-})
+}) 

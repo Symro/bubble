@@ -1,0 +1,18 @@
+
+<% if(typeof(discoveries) != "undefined") { %>
+	<ul>
+		<p>Test2</p>
+
+		<% _.each(discoveries, function (discover){ %>
+
+				<li>
+
+					<strong><%= discover.song.songTrackName %></strong>
+					<strong><%= discover.song.songTrackArtist %></strong>
+				</li>
+
+ 
+		<% }); %>
+	</ul>
+	<% } %>
+ 
