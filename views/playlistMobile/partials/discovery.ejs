@@ -1,18 +1,25 @@
 
 <% if(typeof(discoveries) != "undefined") { %>
 	<ul>
-		<p>Test2</p>
 
 		<% _.each(discoveries, function (discover){ %>
 
-				<li>
-
-					<strong><%= discover.song.songTrackName %></strong>
+			<li>
+				<a class="action-delete" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
+				<div data-track-id="<%= discover.song.songTrackId %>" data-id="<%= discover.id %>">
 					<strong><%= discover.song.songTrackArtist %></strong>
-				</li>
-
+					<span><%= discover.song.songTrackName %></span>
+				</div>
+				<div>
+					<a href="<%= discover.song.songPermalinkUrl %>" target="_blank" title="<%= discover.song.songTrackName %>"><i class="icon-<%= discover.song.songService %>ecouter"></i></a>
+				</div>
+				<div>
+					<img src="<?php echo ($songs['user_image'] != 'public/img/default.png') ? $songs['user_image'] : "public/img/no_image.png" ; ?>" alt="<?php echo $songs['user_firstname']; ?>"/>
+				</div>
+			</li>
  
 		<% }); %>
 	</ul>
-	<% } %>
+
+<% } %>
  
