@@ -411,4 +411,17 @@ $(document).ready(function(){
 
 	});
 
+	$('body').on('click','.addDiscovery' ,function(event){ //Alex
+		event.preventDefault();
+		$song={song:$(this).parent().data("id")};
+		console.log($song)
+		// $playlist=$(".wrapper").data('playlist-url');
+
+		socket.post( "/mobile/playlist/"+user.room+"/discovery",{song:$song} ,function( datas ) {
+			// console.log(datas);
+		});
+
+	});
+
+
 });

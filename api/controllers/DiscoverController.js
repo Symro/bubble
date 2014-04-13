@@ -3,17 +3,44 @@
  *
  * @description ::
  * @docs        :: http://sailsjs.org/#!documentation/controllers
- */
+ */ 
 
 module.exports = {
 
 	getDiscovery: function( req, res, next ){
+			Discover.find({user:req.session.User.id}).populate('song').exec(function getDiscoveries(err,songs){
+            console.dir(songs);
+        });
 
-		return res.json({
-			discoveries: "coming soon !"
+	},
+
+	addDiscovery: function (req, res, next) { //Alex
+		song=req.param('song');
+        song["user"]=req.session.User.id;
+        console.dir(song);
+
+        Discover.create(song).exec(function discoveryAdded(err, song){
+        	console.log(err);
+        	console.log(song);
+        });
+	},
+
+	showDiscovery: function (req, res, next) {
+		Discover.find({user: req.session.User.id}).populate('song').exec(function discoveryDisplay(err,discoveries){
+			if(err) return next(err);
+			console.dir(discoveries);
+			// res.view({
+			// 	discoveries: discoveries,
+			// 	layout:"layout_mobile"
+			// });
+			return res.view('playlistMobile/partials/discovery',{
+				discoveries:discoveries,
+				layout: null
+			});
 		});
-
 	}
+
+
 
 	// // Retourne la liste des participants à une playlist Bubble
 	// joinedUsers: function(req, res, next){
