@@ -18,12 +18,20 @@ module.exports = {
         song["user"]=req.session.User.id;
         song["url"]=req.route.params.url;
 
-        console.dir(song);
+        // console.dir(song);
 
         Song.create(song).exec(function songAdded(err,added){
-          console.dir(err);
-          console.dir('Created song with name ');
-          console.dir(added)
+          // console.dir(err);
+          console.dir('Song ajouté');
+          // console.dir(added)
+
+          // Ajout DOM
+          sails.sockets.broadcast(req.route.params.url,'message',{
+            verb:'add',
+            device:'mobile',
+            info:'songAdded',
+            datas:{song:song}
+          });
         });
 
     },
@@ -36,7 +44,15 @@ module.exports = {
         // Suprresion du son ciblé
         Song.destroy({songTrackId:songId,url:req.route.params.url}).exec(function getSong(err,song){
             console.log("song supprimé !");
-            console.dir(song);
+            // console.dir(song);
+
+            // Suppression DOM
+            sails.sockets.broadcast(req.route.params.url,'message',{
+                verb:'delete',
+                device:'mobile',
+                info:'songRemoved',
+                datas:{songTrackId:songId}
+            });
         });
     }
 

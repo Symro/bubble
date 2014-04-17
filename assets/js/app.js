@@ -27,7 +27,7 @@
       // /!\ A LIRE ! /!\
       // .......................................................................................
 
-      // Un message arrivera d'un contrôleur avec les infos suivantes : 
+      // Un message arrivera d'un contrôleur avec les infos suivantes :
       // __ VERB doit être soit : get (obtenir), add (ajout), update (modifier), delete (supprimer)
       // __ DEVICE doit être : desktop, mobile, all
       // __ INFO : information de ce qu'il se passe (écrit en CamelCase please!)
@@ -92,7 +92,12 @@ function messageReceivedFromServer(message){
 
 
     if (message.verb === 'add') {
+      console.log('envoi message');
       addInDom(message);
+    }
+    if (message.verb === 'delete') {
+      console.log('envoi suppression message');
+      removeInDom(message);
     }
 
 
@@ -110,31 +115,89 @@ function addInDom(message){
                       break;
     }
 }
+function removeInDom(message){
+    switch (message.device) {
+      case 'desktop': removeInDesktopDom(message);
+                      break;
+      case 'mobile' : removeInMobileDom(message);
+                      break;
+      case 'all'    : removeInAllDom(message);
+                      break;
+    }
+}
 
-    function addInDesktopDom(message){
-      console.log("addInDesktopDom : ");
-      console.dir(message);
+function addInDesktopDom(message){
+  console.log("addInDesktopDom : ");
+  console.dir(message);
 
-      if(message.info == "userJoined"){
+  if(message.info == "userJoined"){
 
-        $('.listeParticipant ul')
-          .append('<li><img alt="'+message.data.firstname+'" src="'+message.data.image+'" /></li>')
-          .parents('.listeParticipant')
-          .jcarousel('reload');
+    $('.listeParticipant ul')
+      .append('<li><img alt="'+message.data.firstname+'" src="'+message.data.image+'" /></li>')
+      .parents('.listeParticipant')
+      .jcarousel('reload');
 
-      }
+  }
 
 
+}
+
+function addInMobileDom(message){
+  console.log("addInMobileDom : ");
+  console.dir(message);
+
+  if (message.info=="songAdded") {
+
+    // Calcul duree en secondes
+    $duree=String((message.datas.song.songTrackDuration / 60000).toFixed(2)).replace(".","'");
+
+    // Si c'est l'user qui a ajouté il peut supprimer
+    if (message.datas.song.user==user.id) {
+      $i="<i class='icon-croixclosesuppr'></i>";
+    }else{
+      $i='';
     }
 
-    function addInMobileDom(message){
-      console.log("addInMobileDom : ");
-      console.dir(message);
-      
-    }
+    // affichage DOM
+    $('.song ul').append('<li data-id="'+message.datas.song.songTrackId+'"><div class="action remove">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>');
+  }
 
-    function addInAllDom(message){
-      console.log("addInAllDom : ");
-      console.dir(message);
-      
-    }
+}
+
+function addInAllDom(message){
+  console.log("addInAllDom : ");
+  console.dir(message);
+
+}
+
+
+function removeInDesktopDom(message){
+  console.log("removeInDesktopDom : ");
+  console.dir(message);
+
+}
+
+function removeInMobileDom(message){
+  console.log("removeInMobileDom : ");
+  console.dir(message);
+
+  if (message.info=='songRemoved') {
+
+    // cible la musique à supprimer
+    var deleteSong = $('.current-playlist .song ul > li').filter('[data-id='+message.datas.song.songTrackId+']');
+
+    // récupère la position par rapport aux autres li
+    console.log("Index :songTrackId"+deleteSong.index());
+    var indexSong = deleteSong.index();
+
+    // disparition de la div (suppression visuelle)
+    deleteSong.slideUp();
+  }
+
+}
+
+function removeInAllDom(message){
+  console.log("removeInAllDom : ");
+  console.dir(message);
+
+}
