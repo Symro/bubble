@@ -7,8 +7,9 @@
 		<% _.each(discoveries, function (discover){ %>
 
 			<li>
-				<a class="action-delete" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
+				<a class="action deleteDiscovery" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
 				<div data-track-id="<%= discover.song.songTrackId %>" data-id="<%= discover.id %>">
+
 					<strong><%= discover.song.songTrackArtist %></strong>
 					<span><%= discover.song.songTrackName %></span>
 				</div>

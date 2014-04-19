@@ -59,9 +59,16 @@ module.exports = {
             });
 
 		});
+	},
+
+	deleteDiscovery: function (req,res,next){
+		Song=req.song.id;
+		console.log(songId);
+		Song.destroy(req.param('id'), function discoveryDestroyed(err,song) {
+        	if (err) return next(err);
+        });
+
+
 	}
-
-
-
 
 };

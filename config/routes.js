@@ -74,6 +74,11 @@ module.exports.routes = {
     action:'addDiscovery'
   },
 
+  'post /mobile/playlist/:url/discovery':{
+    controller:'Discover',
+    action:'deleteDiscovery'
+  },
+
   'get /mobile/playlist/:url/historic':{
     controller:'Historic',
     action: 'getHistoric'

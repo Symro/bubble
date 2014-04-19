@@ -427,5 +427,15 @@ $(document).ready(function(){
 
 	});
 
+	$('body').on('click','.deleteDiscovery' ,function(event){ //Alex
+		event.preventDefault();
+		$song={song:$(this).parent().data("id")};
+
+		socket.post( "/mobile/playlist/"+user.room+"/discovery",{song:$song} ,function( datas ) {
+			// console.log(datas);
+		});
+
+	});
+
 
 });
