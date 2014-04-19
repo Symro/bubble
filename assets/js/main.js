@@ -143,26 +143,6 @@ $(document).ready(function(){
 		$('ul.discoveries li a').toggleClass('active');
 	});
 
-	$('body').on('click', 'ul.discoveries li > a', function(e){
-		e.preventDefault();
-		$playlist = $('.wrapper').data('playlist-url') || 0;
-		$this = $(this);
-
-		$.ajax({
-			url:'./mobile/playlist/'+$playlist+'/discover?'+$.param({ "data-id" : $(this).next().data('id') }),
-			type:"DELETE",
-			data:{
-				"data-id" : $(this).next().data('id')
-			}
-		})
-		.success(function(data){
-			$this.parent().slideUp(300, function(){
-				$(this).remove();
-			});
-			//$('.discoveries').html(data);
-		});
-
-	});
 
 
 	/* --------------------------------------------------------- */
@@ -429,11 +409,19 @@ $(document).ready(function(){
 
 	$('body').on('click','.deleteDiscovery' ,function(event){ //Alex
 		event.preventDefault();
+		var $this = $(this);
 		var id = $(this).next().data("id");
 		console.log("id : "+id);
 
-		socket.post( "/mobile/discovery/"+id ,{},function( datas ) {
+		socket.post( "/mobile/discovery/"+id ,function( datas ) {
 			console.log(datas);
+			console.log("on va delete");
+
+			$this.parent().slideUp(300, function(){
+				console.log('ca delete !');
+				$this.remove();
+			});
+
 		});
 
 	});

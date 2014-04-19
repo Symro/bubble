@@ -222,12 +222,13 @@ function removeInMobileDom(message){
   console.log("removeInMobileDom : ");
   console.dir(message.datas.songTrackId);
 
+  // Suppression d'un morceau de la playlist en lecture
   if (message.info=='songRemoved') {
 
     // cible la musique à supprimer
     var deleteSong = $('.current-playlist .song ul > li').filter('[data-id='+message.datas.songTrackId+']');
 
-    console.log(deleteSong);
+    //console.log(deleteSong);
 
     // récupère la position par rapport aux autres li
     // console.log("Index :songTrackId"+deleteSong.index());
@@ -239,18 +240,18 @@ function removeInMobileDom(message){
       $(this).remove();
     });
   }
-  if(message.info=='discoveryRemoved') {
 
-    var deleteDiscovery = $('.discoveries ul > li').filter('[data-id='+message.datas.discoveryRemoved+']');
+  // Suppression d'une découverte
+  if(message.info == 'discoveryRemoved') {
 
-    console.log(deleteDiscovery);
+      var deleteDiscovery = $('.discoveries ul > li div').filter('[data-id='+message.datas.discoveryId+']');
+      var li = deleteDiscovery.parent();
 
-    deleteDiscovery.slideUp(function(){
-      console.log($(this));
-      $(this).remove();
-    });
+      li.slideUp(function(){
+        li.remove();
+      });
 
-    }
+  }
 
 }
 

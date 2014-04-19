@@ -31,8 +31,15 @@ module.exports = {
 
 			var fullDiscoveries = discoveries;
 
-			if (err) return next(err);
+			var nbDiscoveries1 = discoveries.length;
+			var nbDiscoveries2 = nbDiscoveries1-1;
 
+			// Somme du nombre d'itération dans la boucle
+			var addition = (nbDiscoveries1*nbDiscoveries2)/2;
+			var additionBoucle = 0;
+
+
+			if (err) return next(err);
 
 			if (discoveries.length == 0){
 				return res.view('playlistMobile/partials/discovery',{
@@ -41,16 +48,20 @@ module.exports = {
 				});
 			}
 
+
 			// récupère les info d'utilisateur qui avait ajouté le morceau
 			discoveries.forEach(function (doc, i){
 
                 User.find({
                     id : doc.song.user
                 }).exec( function foundUsersHistoric(err,users){
+                	if(err) return next(err);
+
                 	// Pour chaque utilisateur on l'ajoute au JSON
                     fullDiscoveries[i].song.userInfo = users[0];
+                    additionBoucle += i;
                     // Quand tout est fini, on retourne le JSON final
-                    if(i == discoveries.length-1){
+                    if(additionBoucle == addition){
 						return res.view('playlistMobile/partials/discovery',{
 							discoveries:fullDiscoveries,
 							layout: null
@@ -78,6 +89,7 @@ module.exports = {
                 info:'discoveryRemoved',
                 datas:{discoveryId:discoveryId}
             });
+
         });
 	}
 
