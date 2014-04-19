@@ -144,6 +144,17 @@ function addInDesktopDom(message){
     console.dir(datas);
 
   }
+  else if (message.info=="songAdded") {
+
+    // affichage DOM
+    $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.songTrackId+'"><strong>'+message.datas.songTrackName+'</strong><span>'+message.datas.songTrackArtist+'</span></div><div><img src="'+message.datas.user+'" alt="Fred"></div></li>');
+    console.log('j"affiche '+message.datas.song.songTrackName);
+
+    // Actualisation de la scroll bar
+    // $('#playlistencours').mCustomScrollbar("update");
+    // $('#playlistencours').mCustomScrollbar("scrollTo","li:last",{scrollInertia:1000,scrollEasing:"easeInOutQuad"});
+
+  }
 
 
 }

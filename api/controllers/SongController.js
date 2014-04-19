@@ -11,6 +11,7 @@ module.exports = {
         // Log son à ajouter
         // console.dir(req.params.all());
         // console.dir(req.param('song'));
+        console.log(req.param('url'));
 
         // req.sessoin.id
         // req.param.url
@@ -40,12 +41,20 @@ module.exports = {
           });
 
 
-          // Ajout DOM
-          sails.sockets.broadcast(req.route.params.url,'message',{
+          // Ajout DOM mobile
+          sails.sockets.broadcast(req.param('url'),'message',{
             verb:'add',
             device:'mobile',
             info:'songAdded',
             datas:{song:song}
+          });
+
+          // Ajout DOM desktop
+          sails.sockets.broadcast(req.param('url'),'message',{
+            verb:'add',
+            device:'desktop',
+            info:'songAdded',
+            datas:{song:song,id:added.id}
           });
         });
 

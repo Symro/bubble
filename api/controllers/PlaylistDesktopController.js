@@ -58,14 +58,14 @@ module.exports = {
 									console.log("Nb de song dans la playlist : "+songs);
 									// S'il n'y a aucun morceau, on informe le desktop que songs est null
 									console.log(typeof(songs));
-									
+
 								    return res.view('playlistDesktop/index',{
 										playlist 	: playlist,
 										joinedUsers : joinedUsers,
 										room 		: playlistUrl,
 										songs 		: songs
 									});
-									
+
 
 								});
 
@@ -89,14 +89,14 @@ module.exports = {
 								console.log("Nb de song dans la playlist : "+songs);
 								// S'il n'y a aucun morceau, on informe le desktop que songs est null
 								console.log(typeof(songs));
-								
+
 							    return res.view('playlistDesktop/index',{
 									playlist 	: playlist,
 									joinedUsers : joinedUsers,
 									room 		: playlistUrl,
 									songs 		: songs
 								});
-								
+
 
 							});
 
