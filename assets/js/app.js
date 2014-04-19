@@ -87,6 +87,8 @@
 
 );
 
+var currentPlaylist = [];
+
 
 function messageReceivedFromServer(message){
 
@@ -139,9 +141,16 @@ function addInDesktopDom(message){
 
   }
   else if(message.info == "startPlaying"){
-    
+
+    currentPlaylist.push(message.datas);
+
+    var player = $('.desktop-container .player');
+
+    player.removeClass('invisible');
+
     console.log("Lancer la musique !");
-    console.dir(datas);
+    console.dir(message.datas);
+
 
   }
 

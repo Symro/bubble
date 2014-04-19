@@ -28,25 +28,25 @@ module.exports = {
           Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
             console.log("Nb de song dans la playlist : "+found);
             // Si c'est le premier morceau, on informe le desktop qu'il doit lancer le player
-            if(found == 0){
+            if(found == 1){
                 sails.sockets.broadcast(req.route.params.url,'message',{
                     verb:'add',
                     device:'desktop',
                     info:'startPlaying',
-                    datas:{song:song}
+                    datas:song
                 });
             }
 
           });
 
-
-          // Ajout DOM
+          // Ajout DOM sur mobile
           sails.sockets.broadcast(req.route.params.url,'message',{
             verb:'add',
             device:'mobile',
             info:'songAdded',
             datas:{song:song}
           });
+
         });
 
     },
