@@ -138,6 +138,12 @@ function addInDesktopDom(message){
       .jcarousel('reload');
 
   }
+  else if(message.info == "startPlaying"){
+    
+    console.log("Lancer la musique !");
+    console.dir(datas);
+
+  }
 
 
 }

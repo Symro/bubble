@@ -32,8 +32,9 @@
 	<div class="playlistContent" id="playlistencours" >
 		<h4 class="form-signin-heading txtcenter">Playlist en cours</h4>
 		<ul class="liPlaylist" data-playlist="">
-		<!--<ul class="liPlaylist" data-playlist="<?php echo $PARAMS['id']; ?>">
+			<!--<ul class="liPlaylist" data-playlist="<?php echo $PARAMS['id']; ?>">
 			<?php require('partials/playlist.html'); ?>-->
+			<%- partial('partials/currentPlaylist')%>
 		</ul>
 	</div>
 
@@ -41,7 +42,8 @@
 
 	<section class="w60 player center col-right">
 
-		<button id="test1">Test 1 - Socket </button>
+	<% if(typeof(songs) != "undefined") { %>
+		<% if(songs.length > 0) { %>
 
 		<div class="ui360 ui360-vis">
 			<a type="audio/mp3" href="http://api.soundcloud.com/tracks/136515969/stream?client_id=933d179a29049bde6dd6f1c2db106eeb"></a>
@@ -50,7 +52,12 @@
 			<div class="player_track_dislike"><span></span><i class="icon-thumbalone"></i></div> 
 			<div class="player_track_like"><span></span><i class="icon-coeuralone"></i></div> 
 		</div>
+
+		<% } %>
+	<% } %>
+
 	</section>
+
 
 	<!-- reception de la cover de la musique -->
 	<div id="reception">

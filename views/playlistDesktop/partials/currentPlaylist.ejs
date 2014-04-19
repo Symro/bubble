@@ -1,0 +1,28 @@
+<% if(typeof(songs) != "undefined") { %>
+
+	<% if(songs.length > 0) { %>
+
+		<% _.each(songs, function (song){ %>
+			
+			<li data-id="<%= song.songTrackId %>" data-db-id="<%= song.id %>">
+				<div data-songService="<%= song.songService %>" data-songId="<%= song.songTrackId %>">
+					<strong><%= song.songTrackName %></strong>
+					<span><%= song.songTrackArtist %></span>
+				</div>
+				<div>
+					<img src="<%= song.user.image %>" alt="<%= song.user.firstname %>">
+				</div>
+			</li>
+
+		<% }); %>
+
+	<% }else{ %>
+
+			Aucun morceau n'est présent pour le moment...
+
+	<% } %>
+
+<% } %>
+
+
+

@@ -14,9 +14,9 @@ module.exports = {
 
         // req.sessoin.id
         // req.param.url
-        song=req.param('song');
-        song["user"]=req.session.User.id;
-        song["url"]=req.route.params.url;
+        var song     = req.param('song');
+        song["user"] = req.session.User.id;
+        song["url"]  = req.route.params.url;
 
         // console.dir(song);
 
@@ -24,6 +24,21 @@ module.exports = {
           // console.dir(err);
           console.dir('Song ajouté');
           // console.dir(added)
+
+          Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
+            console.log("Nb de song dans la playlist : "+found);
+            // Si c'est le premier morceau, on informe le desktop qu'il doit lancer le player
+            if(found == 0){
+                sails.sockets.broadcast(req.route.params.url,'message',{
+                    verb:'add',
+                    device:'desktop',
+                    info:'startPlaying',
+                    datas:{song:song}
+                });
+            }
+
+          });
+
 
           // Ajout DOM
           sails.sockets.broadcast(req.route.params.url,'message',{

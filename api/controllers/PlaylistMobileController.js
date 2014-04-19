@@ -54,7 +54,7 @@ module.exports = {
 							playlistUrl:playlistUrl,
 							playlist:playlistUrl
 						}).exec(function cb(err,created){
-						  console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
+						  	console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
 
 						  	sails.sockets.broadcast(playlistUrl, 'message' , {
 						    	verb 	: "add",
@@ -68,6 +68,7 @@ module.exports = {
 						});
 					}
 					else{
+						console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
 						res.redirect('/mobile/playlist/'+playlistUrl);
 					}
 				});
