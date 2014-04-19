@@ -194,16 +194,18 @@ function removeInDesktopDom(message){
 
 function removeInMobileDom(message){
   console.log("removeInMobileDom : ");
-  console.dir(message);
+  console.dir(message.datas.songTrackId);
 
   if (message.info=='songRemoved') {
 
     // cible la musique à supprimer
-    var deleteSong = $('.current-playlist .song ul > li').filter('[data-id='+message.datas.song.songTrackId+']');
+    var deleteSong = $('.current-playlist .song ul > li').filter('[data-id='+message.datas.songTrackId+']');
+
+    console.log(deleteSong);
 
     // récupère la position par rapport aux autres li
-    console.log("Index :songTrackId"+deleteSong.index());
-    var indexSong = deleteSong.index();
+    // console.log("Index :songTrackId"+deleteSong.index());
+    // var indexSong = deleteSong.index();
 
     // disparition de la div (suppression visuelle)
     deleteSong.slideUp();
