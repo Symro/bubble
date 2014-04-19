@@ -46,18 +46,28 @@ module.exports = {
 						if(err) return next(err);
 					  	console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
 
-					  	// Récupère la liste des participants à la room pour transmettre à la vue
+						// Récupère la liste des participants à la room pour transmettre à la vue
 					  	Join.findByPlaylistUrl( playlistUrl ).populate('user').exec(function foundJoinedUsers(err, users){
 							if (err) return next(err);
 							if (!users){ joinedUsers = {}	}
 							else{ joinedUsers = users;		}
-							console.log('on est là : PlaylistDesktopController.js > index >> *findByPlaylistUrl*  ');
 
-							res.view('playlistDesktop/index',{
-								playlist 	: playlist,
-								joinedUsers : joinedUsers,
-								room 		: playlistUrl
-							});
+							// On compte le nombre de morceaux présents dans la playlist qu'on vient de rejoindre
+							// (en cas d'url direct)
+			        Song.find().populate('url').where({url:playlistUrl}).populate('user').exec(function countSongs(err, songs){
+								console.log("Nb de song dans la playlist : "+songs);
+								// S'il n'y a aucun morceau, on informe le desktop que songs est null
+								console.log(typeof(songs));
+
+						    return res.view('playlistDesktop/index',{
+									playlist 	: playlist,
+									joinedUsers : joinedUsers,
+									room 		: playlistUrl,
+									songs 		: songs
+								});
+
+
+								});
 
 						});
 
@@ -73,11 +83,22 @@ module.exports = {
 						if (!users){ joinedUsers = {}	}
 						else{ joinedUsers = users;		}
 
-						res.view('playlistDesktop/index',{
-							playlist 	: playlist,
-							joinedUsers : joinedUsers,
-							room 		: playlistUrl
-						});
+							// On compte le nombre de morceaux présents dans la playlist qu'on vient de rejoindre
+							// (en cas d'url direct)
+					        Song.find().populate('url').where({url:playlistUrl}).populate('user').exec(function countSongs(err, songs){
+								console.log("Nb de song dans la playlist : "+songs);
+								// S'il n'y a aucun morceau, on informe le desktop que songs est null
+								console.log(typeof(songs));
+
+							    return res.view('playlistDesktop/index',{
+									playlist 	: playlist,
+									joinedUsers : joinedUsers,
+									room 		: playlistUrl,
+									songs 		: songs
+								});
+
+
+							});
 
 					});
 

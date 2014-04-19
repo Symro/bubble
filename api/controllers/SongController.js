@@ -14,9 +14,9 @@ module.exports = {
 
         // req.sessoin.id
         // req.param.url
-        song=req.param('song');
-        song["user"]=req.session.User.id;
-        song["url"]=req.route.params.url;
+        var song     = req.param('song');
+        song["user"] = req.session.User.id;
+        song["url"]  = req.route.params.url;
 
         // console.dir(song);
 
@@ -25,13 +25,36 @@ module.exports = {
           console.dir('Song ajouté');
           // console.dir(added)
 
-          // Ajout DOM
-          sails.sockets.broadcast(req.route.params.url,'message',{
+          Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
+            console.log("Nb de song dans la playlist : "+found);
+            // Si c'est le premier morceau, on informe le desktop qu'il doit lancer le player
+            if(found == 1){
+                sails.sockets.broadcast(req.route.params.url,'message',{
+                    verb:'add',
+                    device:'desktop',
+                    info:'startPlaying',
+                    datas:song
+                });
+            }
+
+          });
+
+          // Ajout DOM mobile
+          sails.sockets.broadcast(req.param('url'),'message',{
             verb:'add',
             device:'mobile',
             info:'songAdded',
             datas:{song:song}
           });
+
+          // Ajout DOM desktop
+          sails.sockets.broadcast(req.param('url'),'message',{
+            verb:'add',
+            device:'desktop',
+            info:'songAdded',
+            datas:{song:song,id:added.id}
+          });
+
         });
 
     },
@@ -46,13 +69,22 @@ module.exports = {
             console.log("song supprimé !");
             // console.dir(song);
 
-            // Suppression DOM
+            // Suppression DOM^mobile
             sails.sockets.broadcast(req.route.params.url,'message',{
                 verb:'delete',
                 device:'mobile',
                 info:'songRemoved',
                 datas:{songTrackId:songId}
             });
+
+            // Supression DOM desktop
+            sails.sockets.broadcast(req.route.params.url,'message',{
+                verb:'delete',
+                device:'desktop',
+                info:'songRemoved',
+                datas:{songTrackId:songId}
+            });
+
         });
     }
 

@@ -29,21 +29,23 @@ module.exports = {
 		Discover.find({user: req.session.User.id}).populate('song').exec(function discoveryDisplay(err,discoveries){
 			if(err) return next(err);
 
-			var discoveries;
 			var fullDiscoveries = discoveries;
 
 			if (err) return next(err);
 
-			if (!discoveries){
-				discoveries = {};
-			}
 
-			results = [];
+			if (discoveries.length == 0){
+				return res.view('playlistMobile/partials/discovery',{
+					discoveries:{},
+					layout: null
+				});
+			}
 
 			// récupère les info d'utilisateur qui avait ajouté le morceau
 			discoveries.forEach(function (doc, i){
+
                 User.find({
-                    'id' : doc.song.user
+                    id : doc.song.user
                 }).exec( function foundUsersHistoric(err,users){
                 	// Pour chaque utilisateur on l'ajoute au JSON
                     fullDiscoveries[i].song.userInfo = users[0];

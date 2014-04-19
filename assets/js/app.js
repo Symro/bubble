@@ -87,6 +87,8 @@
 
 );
 
+var currentPlaylist = [];
+
 
 function messageReceivedFromServer(message){
 
@@ -138,6 +140,30 @@ function addInDesktopDom(message){
       .jcarousel('reload');
 
   }
+  else if(message.info == "startPlaying"){
+
+    currentPlaylist.push(message.datas);
+
+    var player = $('.desktop-container .player');
+
+    player.removeClass('invisible');
+
+    console.log("Lancer la musique !");
+    console.dir(message.datas);
+
+
+  }
+  else if (message.info=="songAdded") {
+
+    // affichage DOM
+    $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.song.songTrackId+'"><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><img src="'+message.datas.song.user+'" alt="Fred"></div></li>');
+    console.log('j"affiche '+message.datas.song.songTrackName);
+
+    // Actualisation de la scroll bar
+    $('#playlistencours').mCustomScrollbar("update");
+    $('#playlistencours').mCustomScrollbar("scrollTo","li:last",{scrollInertia:1000,scrollEasing:"easeInOutQuad"});
+
+  }
 
 
 }
@@ -175,23 +201,43 @@ function removeInDesktopDom(message){
   console.log("removeInDesktopDom : ");
   console.dir(message);
 
+  if (message.info=='songRemoved') {
+
+    // cible la musique à supprimer
+    var deleteSong = $('#playlistencours ul > li').filter('[data-id='+message.datas.songTrackId+']');
+
+    console.log(deleteSong);
+
+    // slide up + suppression DOM
+    deleteSong.slideUp(function(){
+      console.log($(this));
+      $(this).remove();
+    });
+
+  }
+
 }
 
 function removeInMobileDom(message){
   console.log("removeInMobileDom : ");
-  console.dir(message);
+  console.dir(message.datas.songTrackId);
 
   if (message.info=='songRemoved') {
 
     // cible la musique à supprimer
-    var deleteSong = $('.current-playlist .song ul > li').filter('[data-id='+message.datas.song.songTrackId+']');
+    var deleteSong = $('.current-playlist .song ul > li').filter('[data-id='+message.datas.songTrackId+']');
+
+    console.log(deleteSong);
 
     // récupère la position par rapport aux autres li
-    console.log("Index :songTrackId"+deleteSong.index());
-    var indexSong = deleteSong.index();
+    // console.log("Index :songTrackId"+deleteSong.index());
+    // var indexSong = deleteSong.index();
 
-    // disparition de la div (suppression visuelle)
-    deleteSong.slideUp();
+    // slide up + suppression DOM
+    deleteSong.slideUp(function(){
+      console.log($(this));
+      $(this).remove();
+    });
   }
 
 }
