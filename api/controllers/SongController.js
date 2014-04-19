@@ -11,7 +11,6 @@ module.exports = {
         // Log son à ajouter
         // console.dir(req.params.all());
         // console.dir(req.param('song'));
-        console.log(req.param('url'));
 
         // req.sessoin.id
         // req.param.url
@@ -29,17 +28,16 @@ module.exports = {
           Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
             console.log("Nb de song dans la playlist : "+found);
             // Si c'est le premier morceau, on informe le desktop qu'il doit lancer le player
-            if(found == 0){
+            if(found == 1){
                 sails.sockets.broadcast(req.route.params.url,'message',{
                     verb:'add',
                     device:'desktop',
                     info:'startPlaying',
-                    datas:{song:song}
+                    datas:song
                 });
             }
 
           });
-
 
           // Ajout DOM mobile
           sails.sockets.broadcast(req.param('url'),'message',{
@@ -56,6 +54,7 @@ module.exports = {
             info:'songAdded',
             datas:{song:song,id:added.id}
           });
+
         });
 
     },
@@ -70,13 +69,22 @@ module.exports = {
             console.log("song supprimé !");
             // console.dir(song);
 
-            // Suppression DOM
+            // Suppression DOM^mobile
             sails.sockets.broadcast(req.route.params.url,'message',{
                 verb:'delete',
                 device:'mobile',
                 info:'songRemoved',
                 datas:{songTrackId:songId}
             });
+
+            // Supression DOM desktop
+            sails.sockets.broadcast(req.route.params.url,'message',{
+                verb:'delete',
+                device:'desktop',
+                info:'songRemoved',
+                datas:{songTrackId:songId}
+            });
+
         });
     }
 

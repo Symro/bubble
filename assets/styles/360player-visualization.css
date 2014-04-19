@@ -121,14 +121,14 @@
 .ui360-vis,
 .ui360-vis .sm2-360ui.sm2_paused .sm2-360btn,
 .ui360-vis .sm2-360btn-default {
- background:transparent url(../img/player_sprite.png) no-repeat -0px 1px;
+ background:transparent url(../images/player_sprite.png) no-repeat -0px 1px;
  cursor:pointer;
 }
 
 .ui360-vis .sm2-360btn-default:hover,
 .ui360-vis .sm2-360ui.sm2_playing .pause:hover,
 .ui360-vis .sm2-360ui.sm2_paused .sm2-360btn:hover {
- background:transparent url(../img/player_sprite.png) no-repeat -0px -45px;
+ background:transparent url(../images/player_sprite.png) no-repeat -0px -45px;
  cursor:pointer;
 }
 
@@ -137,25 +137,25 @@
 
 .ui360-vis .sm2-360btn-playing:hover,
 .ui360-vis .sm2-360btn-playing.pause {
- background:transparent url(../img/player_sprite.png) no-repeat -0px -45px;
+ background:transparent url(../images/player_sprite.png) no-repeat -0px -45px;
  cursor:pointer;
 }
 .ui360-vis .sm2-360ui .sm2-360btn.pause{
- background:transparent url(../img/player_sprite.png) no-repeat -0px -91px;
+ background:transparent url(../images/player_sprite.png) no-repeat -0px -91px;
 }
 .ui360-vis .sm2-360ui .sm2-360btn.pause:hover{
- background:transparent url(../img/player_sprite.png) no-repeat -0px -137px;
+ background:transparent url(../images/player_sprite.png) no-repeat -0px -137px;
 }
 
 .ui360-vis {
  /* non-JS / before-loaded state */
  background-position: 21% 50%;
- _background:transparent url(../img/player_play.png) no-repeat 21% 50%; /* IE 6-only: special crap GIF */
+ _background:transparent url(../images/player_play.png) no-repeat 21% 50%; /* IE 6-only: special crap GIF */
 }
 
 .ui360-vis .sm2-360btn-default {
  /* real button, post-loaded state */
- _background:transparent url(../img/player_play.png) no-repeat 50% 50%; /* IE 6-only: special crap GIF */
+ _background:transparent url(../images/player_play.png) no-repeat 50% 50%; /* IE 6-only: special crap GIF */
 }
 
 /*.ui360-vis .sm2-360ui.sm2_dragging .sm2-360btn {

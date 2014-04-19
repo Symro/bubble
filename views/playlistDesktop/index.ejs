@@ -39,12 +39,10 @@
 	</div>
 
 	</section>
+	<%= songs.length %>
 
-	<section class="w60 player center col-right">
-
-	<% if(typeof(songs) != "undefined") { %>
-		<% if(songs.length > 0) { %>
-
+	<section class="w60 player center col-right <% if(typeof(songs) != 'undefined' && songs.length == 0) { %>invisible<% } %>">
+		
 		<div class="ui360 ui360-vis">
 			<a type="audio/mp3" href="http://api.soundcloud.com/tracks/136515969/stream?client_id=933d179a29049bde6dd6f1c2db106eeb"></a>
 			<div class="player_track_artist"></div> 
@@ -52,9 +50,6 @@
 			<div class="player_track_dislike"><span></span><i class="icon-thumbalone"></i></div> 
 			<div class="player_track_like"><span></span><i class="icon-coeuralone"></i></div> 
 		</div>
-
-		<% } %>
-	<% } %>
 
 	</section>
 

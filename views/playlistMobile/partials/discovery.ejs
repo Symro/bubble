@@ -1,33 +1,33 @@
 
 <% if(typeof(discoveries) != "undefined") { %>
 
-<% if(discoveries.length > 0) { %>
-	<ul>
+	<% if(discoveries.length > 0) { %>
+		<ul>
 
-		<% _.each(discoveries, function (discover){ %>
+			<% _.each(discoveries, function (discover){ %>
 
-			<li>
-				<a class="action-delete" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
-				<div data-track-id="<%= discover.song.songTrackId %>" data-id="<%= discover.id %>">
-					<strong><%= discover.song.songTrackArtist %></strong>
-					<span><%= discover.song.songTrackName %></span>
-				</div>
-				<div>
-					<a href="<%= discover.song.songPermalinkUrl %>" target="_blank" title="<%= discover.song.songTrackName %>"><i class="icon-<%= discover.song.songService %>ecouter"></i></a>
-				</div>
-				<div>
-					<img src="<%= discover.song.userInfo.image %>" alt="<%= discover.song.userInfo.firstname %>"/>
-				</div>
-			</li>
- 
-		<% }); %>
-	</ul>
+				<li>
+					<a class="action-delete" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
+					<div data-track-id="<%= discover.song.songTrackId %>" data-id="<%= discover.id %>">
+						<strong><%= discover.song.songTrackArtist %></strong>
+						<span><%= discover.song.songTrackName %></span>
+					</div>
+					<div>
+						<a href="<%= discover.song.songPermalinkUrl %>" target="_blank" title="<%= discover.song.songTrackName %>"><i class="icon-<%= discover.song.songService %>ecouter"></i></a>
+					</div>
+					<div>
+						<img src="<%= discover.song.userInfo.image %>" alt="<%= discover.song.userInfo.firstname %>"/>
+					</div>
+				</li>
+	 
+			<% }); %>
+		</ul>
 
-<% } else { %>
-	
-	<p> Aucune découverte pour le moment </p>
+	<% } else { %>
+		
+		<p> Aucune découverte pour le moment </p>
 
-<% } %>
+	<% } %>
 
 <% } %>
  

@@ -1013,6 +1013,11 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
 }
 .player{
   float:right;
+  
+  -webkit-transition:opacity 1000ms linear;
+  -moz-transition:opacity 1000ms linear;
+  -ms-transition:opacity 1000ms linear;
+  transition:opacity 1000ms linear;
 
 }
 
