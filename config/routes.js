@@ -64,17 +64,17 @@ module.exports.routes = {
     action: 'show'
   },
 
-  'get /mobile/playlist/:url/discover':{
+  'get /mobile/discover':{
     controller:'Discover',
     action: 'showDiscovery'
   },
 
-  'post /mobile/playlist/:url/discovery':{
+  'post /mobile/discovery':{
     controller:'Discover',
     action:'addDiscovery'
   },
 
-  'post /mobile/playlist/:url/discovery':{
+  'post /mobile/discovery/:id':{
     controller:'Discover',
     action:'deleteDiscovery'
   },

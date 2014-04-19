@@ -64,13 +64,22 @@ module.exports = {
 	},
 
 	deleteDiscovery: function (req,res,next){
-		Song=req.song.id;
-		console.log(songId);
-		Song.destroy(req.param('id'), function discoveryDestroyed(err,song) {
+		console.log("on est ds deleteDiscovery");
+		var discoveryId= req.param('id');
+
+		Discover.destroy({ id:discoveryId }).exec(function discoveryDestroyed(err,song) {
         	if (err) return next(err);
+        	console.log("suppression de : " );
+        	console.dir(song);
+
+        	sails.sockets.broadcast(req.route.params.url,'message',{
+                verb:'delete',
+                device:'mobile',
+                info:'discoveryRemoved',
+                datas:{discoveryId:discoveryId}
+            });
         });
-
-
 	}
+
 
 };

@@ -421,7 +421,7 @@ $(document).ready(function(){
 		console.log($song)
 		// $playlist=$(".wrapper").data('playlist-url');
 
-		socket.post( "/mobile/playlist/"+user.room+"/discovery",{song:$song} ,function( datas ) {
+		socket.post( "/mobile/discovery",{song:$song} ,function( datas ) {
 			// console.log(datas);
 		});
 
@@ -429,10 +429,11 @@ $(document).ready(function(){
 
 	$('body').on('click','.deleteDiscovery' ,function(event){ //Alex
 		event.preventDefault();
-		$song={song:$(this).parent().data("id")};
+		var id = $(this).next().data("id");
+		console.log("id : "+id);
 
-		socket.post( "/mobile/playlist/"+user.room+"/discovery",{song:$song} ,function( datas ) {
-			// console.log(datas);
+		socket.post( "/mobile/discovery/"+id ,{},function( datas ) {
+			console.log(datas);
 		});
 
 	});

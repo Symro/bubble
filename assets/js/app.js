@@ -239,6 +239,18 @@ function removeInMobileDom(message){
       $(this).remove();
     });
   }
+  if(message.info=='discoveryRemoved') {
+
+    var deleteDiscovery = $('.discoveries ul > li').filter('[data-id='+message.datas.discoveryRemoved+']');
+
+    console.log(deleteDiscovery);
+
+    deleteDiscovery.slideUp(function(){
+      console.log($(this));
+      $(this).remove();
+    });
+
+    }
 
 }
 
