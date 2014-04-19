@@ -17,16 +17,7 @@
 					<a href="<%= discover.song.songPermalinkUrl %>" target="_blank" title="<%= discover.song.songTrackName %>"><i class="icon-<%= discover.song.songService %>ecouter"></i></a>
 				</div>
 				<div>
-					<%  if(typeof(discover.song.userInfo) != "undefined" ){
-							var img = discover.song.userInfo.image;
-						}
-						else{
-							var img = "PASPHOTO";
-						}
-
-					%>
-
-					<img src="<%= img %>" alt="<%= discover.song.userInfo.firstname %>"/>
+					<img src="<%= discover.song.userInfo.image %>" alt="<%= discover.song.userInfo.firstname %>"/>
 				</div>
 			</li>
  

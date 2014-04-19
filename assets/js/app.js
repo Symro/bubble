@@ -87,6 +87,7 @@
 
 );
 
+var currentSongIndex = 0;
 var currentPlaylist = [];
 
 
@@ -150,6 +151,8 @@ function addInDesktopDom(message){
 
     console.log("Lancer la musique !");
     console.dir(message.datas);
+
+    play_player(currentPlaylist[currentSongIndex].songTrackId);
 
 
   }

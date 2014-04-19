@@ -99,8 +99,6 @@ threeSixtyPlayer.config = {
 
 // Création des callback
 
-var currentSongIndex = 0;
-
 threeSixtyPlayer.events.pause = function(){ 
 	$('.sm2-360btn').addClass('pause');
 }
@@ -108,13 +106,16 @@ threeSixtyPlayer.events.resume = function(){
 	$('.sm2-360btn').removeClass('pause');
 }
 
+/*
 threeSixtyPlayer.events.finish = function(){ 
 	currentSongIndex++;
 	get_info_new_track(); // L'autre appel de get_info_new_track() est dans 360player.js
 	play_player(track_info.id);
 }
+*/
 
 function play_player(new_track){
+	console.log("new_track : "+new_track);
 	// Change l'url dynamiquement et joue le morceau
 	$(".ui360 a").attr("href","http://api.soundcloud.com/tracks/"+new_track+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb");
     threeSixtyPlayer.handleClick({target:threeSixtyPlayer.links[0],preventDefault:function(){}});

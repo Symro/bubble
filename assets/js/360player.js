@@ -315,7 +315,7 @@ function ThreeSixtyPlayer() {
       pl.addClass(this._360data.oUIBox,this._360data.className);
       self.fanOut(this);
       // AJOUT CUSTOM FLO
-      get_info_new_track();
+      // get_info_new_track();
     },
 
     stop: function() {
