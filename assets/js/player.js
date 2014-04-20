@@ -106,13 +106,26 @@ threeSixtyPlayer.events.resume = function(){
 	$('.sm2-360btn').removeClass('pause');
 }
 
-/*
 threeSixtyPlayer.events.finish = function(){ 
-	currentSongIndex++;
-	get_info_new_track(); // L'autre appel de get_info_new_track() est dans 360player.js
-	play_player(track_info.id);
+
+	// socket.emit('songEnded', {
+	// 	room	: user.room,
+	// 	id		: currentPlaylist[currentSongIndex].id
+	// });
+
+	console.log("Envoie socket.put avec id = "+currentPlaylist[currentSongIndex].id);
+	socket.put('/desktop/playlist/'+user.room ,{id: "monID"}, function (response) {
+		console.log("Reponse : ");
+		console.dir(response);
+	});
+
+	//currentSongIndex++;
+	//play_player(track_info.id);
+
+	//get_info_new_track(); // L'autre appel de get_info_new_track() est dans 360player.js
+
+
 }
-*/
 
 function play_player(new_track){
 	console.log("new_track : "+new_track);

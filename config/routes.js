@@ -105,7 +105,12 @@ module.exports.routes = {
     action: 'create'
   },
 
-  '/desktop/playlist/:url':{
+  'get /desktop/playlist/:url':{
+    controller:'playlistDesktop',
+    action: 'index'
+  },
+
+  'post /desktop/playlist/:url':{
     controller:'playlistDesktop',
     action: 'index'
   },
@@ -118,6 +123,11 @@ module.exports.routes = {
   'get /desktop/playlist/:url/joined':{
     controller:'join',
     action: 'joined'
+  },
+
+  'put /desktop/playlist/:url':{
+    controller:'SongController',
+    action: 'nextSong'
   },
 
   // ROUTES DIVERSES

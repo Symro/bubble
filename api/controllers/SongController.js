@@ -23,18 +23,27 @@ module.exports = {
         Song.create(song).exec(function songAdded(err,added){
           // console.dir(err);
           console.dir('Song ajouté');
-          // console.dir(added)
+          console.dir(added)
+          var songId = added.id;
 
           Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
             console.log("Nb de song dans la playlist : "+found);
             // Si c'est le premier morceau, on informe le desktop qu'il doit lancer le player
             if(found == 1){
-                sails.sockets.broadcast(req.route.params.url,'message',{
-                    verb:'add',
-                    device:'desktop',
-                    info:'startPlaying',
-                    datas:song
+                // mais avant on met à jour le status du morceau
+                Song.update({songStatus:"waiting"},{songStatus:"playing"}).where({id: songId}).exec(function statusUpdated(err, song){
+                    if(err) return next(err);
+
+                    sails.sockets.broadcast(req.route.params.url,'message',{
+                        verb:'add',
+                        device:'desktop',
+                        info:'startPlaying',
+                        datas:song
+                    });
+
                 });
+
+
             }
 
           });
@@ -86,6 +95,18 @@ module.exports = {
             });
 
         });
+    },
+
+
+    nextSong:function(req, res, next){
+        var test = { "test":'test'};
+
+        console.log("ROOM URL : "+req.param('url'));
+        console.dir(req.params);
+
+        return res.json(test); 
+
+
     }
 
 };
