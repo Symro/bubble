@@ -87,8 +87,8 @@
 
 );
 
-var currentSongIndex = 0;
-var currentPlaylist = [];
+
+var currentPlaylist;
 
 
 function messageReceivedFromServer(message){
@@ -142,26 +142,25 @@ function addInDesktopDom(message){
 
   }
   else if(message.info == "startPlaying"){
+    console.log("Lancer la musique !");
+    console.dir(message.datas);
 
     // Ajoute le morceau au tableau de lecture
-    currentPlaylist.push(message.datas);
+    currentPlaylist = message.datas;
 
     // Apparition du player
     var player = $('.desktop-container .player');
     player.removeClass('invisible');
 
-    console.log("Lancer la musique !");
-    console.dir(message.datas);
-
     // Lancement musique
-    play_player(currentPlaylist[currentSongIndex].songTrackId);
+    play_player(currentPlaylist.songTrackId);
 
 
   }
   else if (message.info=="songAdded") {
 
     // Ajoute le morceau au tableau de lecture
-    currentPlaylist.push(message.datas.song);
+    //currentPlaylist.push(message.datas.song);
 
     // affichage DOM
     $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.song.songTrackId+'"><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><img src="'+message.datas.song.user+'" alt="Fred"></div></li>');
@@ -214,7 +213,7 @@ function removeInDesktopDom(message){
     // cible la musique à supprimer
     var deleteSong = $('#playlistencours ul > li').filter('[data-id='+message.datas.songTrackId+']');
 
-    console.log(deleteSong);
+    //console.log(deleteSong);
 
     // slide up + suppression DOM
     deleteSong.slideUp(function(){

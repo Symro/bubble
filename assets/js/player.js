@@ -110,25 +110,26 @@ threeSixtyPlayer.events.finish = function(){
 
 	// socket.emit('songEnded', {
 	// 	room	: user.room,
-	// 	id		: currentPlaylist[currentSongIndex].id
+	// 	id		: currentPlaylist[0].id
 	// });
 
-	console.log("Envoie socket.put avec id = "+currentPlaylist[currentSongIndex].id);
-	socket.put('/desktop/playlist/'+user.room ,{id: "monID"}, function (response) {
+	console.log("Envoie socket.put avec id = "+currentPlaylist.id);
+	socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
 		console.log("Reponse : ");
 		console.dir(response);
+		currentPlaylist = response;
+
+		// Lancement musique suivante
+    	play_player(currentPlaylist.songTrackId);
+
 	});
 
-	//currentSongIndex++;
-	//play_player(track_info.id);
-
 	//get_info_new_track(); // L'autre appel de get_info_new_track() est dans 360player.js
-
 
 }
 
 function play_player(new_track){
-	console.log("new_track : "+new_track);
+	console.log("Lecture d'un nouveau morceau : "+new_track);
 	// Change l'url dynamiquement et joue le morceau
 	$(".ui360 a").attr("href","http://api.soundcloud.com/tracks/"+new_track+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb");
     threeSixtyPlayer.handleClick({target:threeSixtyPlayer.links[0],preventDefault:function(){}});
@@ -136,8 +137,8 @@ function play_player(new_track){
 
 function get_info_new_track(){
 	// Récupère l'id de la musique soundcloud + id bdd
-	var new_track 	= currentPlaylist[currentSongIndex];
-	var track_db_id = $('.liPlaylist li:eq('+currentSongIndex+')').data('db-id');
+	var new_track 	= currentPlaylist[0];
+	var track_db_id = $('.liPlaylist li:eq(0)').data('db-id');
 
 	// Récupère les infos la concernant
 	$.getJSON("http://api.soundcloud.com/tracks/"+new_track+".json?client_id=933d179a29049bde6dd6f1c2db106eeb", function(data){

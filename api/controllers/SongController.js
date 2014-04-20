@@ -38,7 +38,7 @@ module.exports = {
                         verb:'add',
                         device:'desktop',
                         info:'startPlaying',
-                        datas:song
+                        datas:song[0]
                     });
 
                 });
@@ -99,14 +99,42 @@ module.exports = {
 
 
     nextSong:function(req, res, next){
-        var test = { "test":'test'};
 
-        console.log("ROOM URL : "+req.param('url'));
-        console.dir(req.params);
+        var songId = req.params.all().id;
+        var room   = req.param('url');
+        console.log("SongId : "+songId+" room : "+room);
 
-        return res.json(test); 
+        Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId}).exec(function statusUpdated(err, song){
+            if(err) return next(err);
 
+            Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').limit(1).done(function(err, song) {
+                // Error handling
+                if (err) return next(err);
+
+                console.log("Le morceau suivant est : ", song);
+              
+                song.songStatus = "playing";
+                song.save(function(err) { 
+                    if(err) return next(err);
+
+                    return res.json(song);
+                    // sails.sockets.broadcast(room,'message',{
+                    //     verb:'add',
+                    //     device:'desktop',
+                    //     info:'startPlaying',
+                    //     datas:song
+                    // });
+                });
+
+
+            });
+
+        });
+
+        //return res.json(test); 
 
     }
+
+
 
 };
