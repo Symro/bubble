@@ -426,5 +426,16 @@ $(document).ready(function(){
 
 	});
 
+	$('body').on('click', '#dropdown', function(){
+		$('.discoveryAction').slideToggle();
+	});
+
+
+ 
+   
+ 
+
+
+
 
 });
