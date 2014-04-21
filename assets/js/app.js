@@ -42,7 +42,7 @@
       // }
 
 
-      log('New comet message received :: ', message);
+      // log('New comet message received :: ', message);
 
       messageReceivedFromServer(message)
 
@@ -94,18 +94,15 @@ function messageReceivedFromServer(message){
 
 
     if (message.verb === 'add') {
-
       // console.log('envoi message');
       addInDom(message);
     }
-
     if (message.verb === 'delete') {
       //console.log('envoi suppression message');
-
       removeInDom(message);
     }
     if (message.verb === 'update') {
-      console.log("message recu pour de l'update");
+      //console.log("message recu pour de l'update");
       updateInDom(message);
     }
 
@@ -146,7 +143,7 @@ function updateInDom(message){
 }
 
 // --------------------------------------
-// PARTIE AJOUT DANS LE DOM 
+// PARTIE AJOUT DANS LE DOM
 // --------------------------------------
 
 function addInDesktopDom(message){
@@ -174,7 +171,6 @@ function addInDesktopDom(message){
 
     // Lancement musique
     play_player(currentPlaylist.songTrackId);
-
 
   }
   else if (message.info=="songAdded") {
@@ -276,7 +272,7 @@ function removeInDesktopDom(message){
 }
 
 // --------------------------------------
-// PARTIE SUPPRESSION DANS LE DOM 
+// PARTIE SUPPRESSION DANS LE DOM
 // --------------------------------------
 
 function removeInMobileDom(message){
@@ -324,10 +320,10 @@ function removeInAllDom(message){
 
 
 // --------------------------------------
-// PARTIE MISE A JOUR DANS LE DOM 
+// PARTIE MISE A JOUR DANS LE DOM
 // --------------------------------------
 
-  // 'FAKE' PLAYER MOBILE - PROGRESSION 
+  // 'FAKE' PLAYER MOBILE - PROGRESSION
 
   var $player = $(".knob");
   var $timer  = $(".timer");
@@ -359,6 +355,8 @@ function removeInAllDom(message){
   }
 
 function updateInMobileDom(message){
+  // Variable globale "currentPlaylist" présente en temps réél sur Mobile
+  currentPlaylist = message.datas.currentPlaylist;
 
   $player.val(parseInt(message.datas.position)).trigger("change");
   setDuration(message.datas.duration);

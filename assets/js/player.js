@@ -147,8 +147,7 @@ function send_player_position(){
 	socket.post('/desktop/playlist/'+user.room+'/playerPosition' , {
 			position : (threeSixtyPlayer.sounds.length != 0) ? Math.floor(threeSixtyPlayer.sounds[threeSixtyPlayer.sounds.length-1].position/1000) : 0,
 			duration : (threeSixtyPlayer.sounds.length != 0) ? Math.floor(threeSixtyPlayer.sounds[threeSixtyPlayer.sounds.length-1].durationEstimate/1000) : 0,
-			songTrackArtist : currentPlaylist.songTrackArtist,
-			songTrackName 	: currentPlaylist.songTrackName
+			currentPlaylist : currentPlaylist
 		}, function(response){
 			console.log(response);
 	});
@@ -170,26 +169,10 @@ function play_player(new_track){
 	$(".ui360 a").attr("href","http://api.soundcloud.com/tracks/"+new_track+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb");
     threeSixtyPlayer.handleClick({target:threeSixtyPlayer.links[0],preventDefault:function(){}});
 
-}
-
-function get_info_new_track(){
-	// Récupère l'id de la musique soundcloud + id bdd
-	var new_track 	= currentPlaylist[0];
-	var track_db_id = $('.liPlaylist li:eq(0)').data('db-id');
-
-	// Récupère les infos la concernant
-	$.getJSON("http://api.soundcloud.com/tracks/"+new_track+".json?client_id=933d179a29049bde6dd6f1c2db106eeb", function(data){
-
-		$('.player_track_name').html(data.title);
-		$('.player_track_artist').html(data.user.username);
-
-
-	});
+	$('.player_track_name').html(currentPlaylist.songTrackName);
+	$('.player_track_artist').html(currentPlaylist.songTrackArtist);
 
 }
-
-
-
 
 
 

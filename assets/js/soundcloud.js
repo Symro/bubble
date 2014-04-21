@@ -28,12 +28,12 @@ search.init({
 	searchedSouncloud:function(query){
 
 		$('.results').empty();
-		SC.get('/tracks', query , function(tracks) {
+		SC.get('/tracks', {q:query,limit:20}, function(tracks) {
 			$(tracks).each(function(index, track) {
 				if(track.streamable === true){
 					console.log(track);
 					$img=track.artwork_url;
-					// Vérification si la musique possède une cover
+						// Vérification si la musique possède une cover
 					if ($img==null) {
 						$img="/images/icon_music.png"
 					}
@@ -72,11 +72,9 @@ $( document ).ready(function() {
 		console.log(recherche);
 
 		// On récupère la saisie
-		var query = {
-			q: recherche
-		}
+		var query = recherche;
 
-		search.getQuery(query);
+		search.getQuery(recherche);
 
 	});
 

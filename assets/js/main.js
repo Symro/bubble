@@ -84,21 +84,22 @@ $(document).ready(function(){
 	action = {
 
 		addToDiscovery:function(){
-			console.log("Ajouté !");
-			$playlist = $('.wrapper').data('playlist-url') || 0;
-			$this = $(this);
+			var $btn = $('#song-like');
 
-			$.ajax({
-				url:'./mobile/playlist/'+$playlist+'/discover',
-				type:"POST",
-				data:{
-					"data-id" : $('#song-like').attr('data-id')
-				}
-			})
-			.success(function(data){
-				$('.current-interaction').off('click', '#song-like').children('#song-like').addClass('active');
-			});
+			if($btn.hasClass('active') == false){
+
+				socket.post( "/mobile/discovery",{song: currentPlaylist.songTrackId} ,function( datas ) {
+					console.log("Ajouté aux découvertes !");
+
+					if(!datas.error){
+						$btn.addClass('active');
+					}
+					
+				});
+			}
+
 		},
+
 		addToDislike:function(){
 
 			$playlist = $('.wrapper').data('playlist-url') || 0;
@@ -216,7 +217,7 @@ $(document).ready(function(){
 		.success(function(data){
 			$('#uploadPicture .error').empty();
 			$('#uploadPicture img').attr('src', '/'+data.path);
-			
+
 		})
 
 	});
@@ -371,6 +372,12 @@ $(document).ready(function(){
 
 		if($popup){
 
+		// Design d'interaction
+ 		var $this = $(this);
+ 		var $img = $this.children('img');
+ 		var $left = $img.offset().left;
+ 		var $top = e.currentTarget.offsetTop+10;
+
 		// Récupération des datas
 			$datas={
 				songTrackId:$(this).data("songid"),
@@ -384,15 +391,46 @@ $(document).ready(function(){
 			console.dir($datas);
 
 			// Envoi des datas au controller
-			socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas} ,function( datas ) {
-				// console.log(datas);
-			});
+			// socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas,img:$img.attr('src')} ,function( datas ) {
+ 		// 		console.log(datas);
+			// });
+
+			$img
+ 				.addClass('invisible')
+ 				.clone()
+ 				.appendTo('#sent')
+ 				.toggleClass('invisible rond')
+ 				.css({
+ 					'position':'absolute',
+ 					'left':$left,
+ 					'top':$top,
+ 					'display':'block'
+ 				})
+ 				.animate({
+ 					'left':'45vw'
+ 				}, 1000, function(){
+ 					$this.slideUp();
+ 					$(this).animate({
+ 						'top':e.currentTarget.offsetTop-$(window).height()
+ 					}, 200, function(){
+ 						// socket.emit('new_track', {
+ 						// 	"track_name" : track,
+ 						// 	"track_image" : $img.attr('src'),
+ 						// 	"room" : user.room
+ 						// });
+ 						// $(this).remove();
+ 						// Envoi des datas au controller
+						socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas,img:$img.attr('src')} ,function( datas ) {
+			 				console.log(datas);
+						});
+ 					});
+ 				});
 		}
 
 	});
 
 	// Supression d'un son ajouté par sois-même
-	$('body').on('click','.current-playlist .song .remove',function(event){
+	$('body').on('click','.current-playlist .song .delete',function(event){
 		event.stopPropagation();
 		$songId=$(this).parent().data("id");
 		// $playlist=$(".wrapper").data('playlist-url');
@@ -403,17 +441,6 @@ $(document).ready(function(){
 
 	});
 
-	$('body').on('click','.addDiscovery' ,function(event){ //Alex
-		event.preventDefault();
-		$song={song:$(this).parent().data("id")};
-		console.log($song)
-		// $playlist=$(".wrapper").data('playlist-url');
-
-		socket.post( "/mobile/discovery",{song:$song} ,function( datas ) {
-			// console.log(datas);
-		});
-
-	});
 
 	$('body').on('click','.deleteDiscovery' ,function(event){ //Alex
 		event.preventDefault();
@@ -437,9 +464,9 @@ $(document).ready(function(){
 
 
 
- 
-   
- 
+
+
+
 
 
 

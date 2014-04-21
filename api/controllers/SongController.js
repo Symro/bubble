@@ -105,7 +105,7 @@ module.exports = {
         var room   = req.param('url');
         console.log("SongId : "+songId+" room : "+room);
 
-        Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId}).exec(function statusUpdated(err, song){
+        Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId, url: room}).exec(function statusUpdated(err, song){
             if(err) return next(err);
 
             Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').limit(1).done(function(err, song) {
@@ -140,10 +140,12 @@ module.exports = {
     playerPosition:function(req, res, next){
         var position           = req.params.all().position;
         var duration           = req.params.all().duration;
-        var songTrackArtist    = req.params.all().songTrackArtist;
-        var songTrackName      = req.params.all().songTrackName;
+        var songTrackArtist    = req.params.all().currentPlaylist.songTrackArtist;
+        var songTrackName      = req.params.all().currentPlaylist.songTrackName;
+        var songTrackId        = req.params.all().currentPlaylist.songTrackId;
+        var songTrackDbId      = req.params.all().currentPlaylist.songTrackDbId;
+        var currentPlaylist    = req.params.all().currentPlaylist;
         var room               = req.param('url');
-
 
         sails.sockets.broadcast(room,'message',{
 
@@ -153,8 +155,11 @@ module.exports = {
             datas:{
                 position:position,
                 duration:duration,
-                songTrackArtist:songTrackArtist,
-                songTrackName:songTrackName
+                songTrackArtist : songTrackArtist,
+                songTrackName   : songTrackName,
+                songTrackId     : songTrackId,
+                songTrackDbId   : songTrackDbId,
+                currentPlaylist : currentPlaylist
             }
 
         });
