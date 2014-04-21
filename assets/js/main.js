@@ -146,8 +146,9 @@ $(document).ready(function(){
 
 	$('body').on('click', '.dropDown', function(){
 		var $this = $(this);
-		$(this).parents('.headDiscovery').toggleClass('active');
-		$(this).parents('.headDiscovery').next().slideToggle();
+		$div=$this.parents('.headDiscovery').next();
+		$this.parents('.headDiscovery').next().slideToggle();
+		$('.headDiscovery').next().not($div).slideUp();
 	});
 
 
