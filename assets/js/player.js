@@ -146,14 +146,6 @@ function get_info_new_track(){
 		$('.player_track_name').html(data.title);
 		$('.player_track_artist').html(data.user.username);
 
-		// Variable global JS transmise au mobile pour les interactions ("ajout découverte" et "musique suivante")
-
-		track_info = {
-			id 	  : new_track,
-			id_db : track_db_id,
-			title : data.title,
-			artist: data.user.username			
-		}
 
 	});
 

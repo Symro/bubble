@@ -90,7 +90,6 @@
 
 var currentPlaylist;
 
-
 function messageReceivedFromServer(message){
 
 
