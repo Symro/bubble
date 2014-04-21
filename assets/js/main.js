@@ -143,6 +143,14 @@ $(document).ready(function(){
 		$('ul.discoveries li a').toggleClass('active');
 	});
 
+	$('body').on('click', '.dropDown', function(){
+		var $this = $(this);
+		$(this).parents('.headDiscovery').toggleClass('active');
+		$(this).parents('.headDiscovery').next().slideToggle();
+	});
+
+
+//Cibler ds le dom 
 
 
 	/* --------------------------------------------------------- */
@@ -426,9 +434,7 @@ $(document).ready(function(){
 
 	});
 
-	$('body').on('click', '#dropdown', function(){
-		$('.discoveryAction').slideToggle();
-	});
+
 
 
  
