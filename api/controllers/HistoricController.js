@@ -25,24 +25,30 @@ module.exports = {
 			// récupère les utilisateurs de chaque playlist
 			historic.forEach(function (doc, i){
 				// récupère les utilisateurs ayant rejoint les mêmes playlist que l'utilisateur connecté
-                Join.find({
-                    'playlistUrl' : doc.playlistUrl
-                }).populate('user').sort('playlistUrl ASC').exec( function foundUsersHistoric(err,users){
-                	// Pour chaque utilisateur on l'ajoute au JSON dans la bonne playlist
-                    fullHistoric[i].users = users;
-                    // Quand tout est fini, on retourne le JSON final
-                    if(i == historic.length-1){
-						// return res.json({
-						// 	historic:fullHistoric
-						// });
-						return res.view('playlistMobile/partials/historic',{
-							historic:fullHistoric,
-							layout: null
-						});
-	               	}
-               	});
+        Join.find({
+            'playlistUrl' : doc.playlistUrl
+	      }).populate('user').sort('playlistUrl ASC').exec( function foundUsersHistoric(err,users){
+        	// Pour chaque utilisateur on l'ajoute au JSON dans la bonne playlist
+            fullHistoric[i].users = users;
 
+            // On récupère les songs de chaque playlist
+            Song.find({'url':doc.playlistUrl}).populate('user').exec(function foundPlaylistSongs(err,song){
+          		fullHistoric[i].songs=song;
+          		// Quand tout est fini, on retourne le JSON final
+	            if(i == historic.length-1){
+								// return res.json({
+								// 	historic:fullHistoric
+								// });
+								return res.view('playlistMobile/partials/historic',{
+									historic:fullHistoric,
+									layout: null
+								});
+           		}
             });
+
+       	});
+
+      });
 
 			// return res.json({
 			// 	historic:historic

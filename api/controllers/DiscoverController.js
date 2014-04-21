@@ -15,13 +15,23 @@ module.exports = {
 	},
 
 	addDiscovery: function (req, res, next) { //Alex
+        var room = req.param('room');
         var ajout = {};
         ajout.song = req.param('song');
         ajout.user = req.session.User.id;
 
         Discover.create(ajout).exec(function discoveryAdded(err, song){
         	if(err) return res.json({error:true, message:err});
+
+            sails.sockets.broadcast(room,'message',{
+                verb:'update',
+                device:'desktop',
+                info:'songLiked',
+                datas:{}
+            });
+
         	return res.json({error:false, message:"ok"});
+            
         });
 	},
 

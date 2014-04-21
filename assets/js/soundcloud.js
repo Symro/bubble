@@ -78,19 +78,6 @@ $( document ).ready(function() {
 
 	});
 
-	// Afficher les sons d'une playlist dans l'historique
-	$(document).on('click','li.playlistHist h4, li.playlistHist span',function(e){
-		e.preventDefault();
-		//console.log($(this));
-		$wrapperSongs = $(this).siblings('.wrapperSongs');
-		if($wrapperSongs.is(':visible')){
-			$wrapperSongs.slideUp();
-		}
-		else{
-			$wrapperSongs.slideDown();
-		}
-	});
-
 	// Affichage de la recherche
 	$("#searchSong").on('click',function(e){
 		e.preventDefault();

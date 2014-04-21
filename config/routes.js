@@ -93,6 +93,11 @@ module.exports.routes = {
     action:'remove'
   },
 
+  'post /mobile/playlist/:url/dislike':{
+    controller:'Song',
+    action:'dislikeSong'
+  },
+
   // ROUTES DESKTOP
 
   'get /desktop/playlist':{

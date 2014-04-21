@@ -109,7 +109,8 @@ threeSixtyPlayer.events.resume = function(){
 }
 
 threeSixtyPlayer.events.finish = function(){ 
-
+	var likeContainer 	 = $('.player_track_like span');
+	var dislikeContainer = $('.player_track_dislike span');
 
 	console.log("Envoie socket.put avec id = "+currentPlaylist.id);
 	socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
@@ -117,8 +118,16 @@ threeSixtyPlayer.events.finish = function(){
 		console.dir(response);
 		if(response.songStatus != "undefined"){
 			currentPlaylist = response;
+
+			// Remet le compteur de like & dislike à zéro
+			currentLike = 0;
+			currentDislike = 0;
+			likeContainer.text(0);
+			dislikeContainer.text(0);
+
 			// Lancement musique suivante
 	    	play_player(currentPlaylist.songTrackId);
+
 	    }
 	    else{
 	    	// Pas de son à lire dans la playlist

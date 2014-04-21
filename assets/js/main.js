@@ -88,8 +88,25 @@ $(document).ready(function(){
 
 			if($btn.hasClass('active') == false){
 
-				socket.post( "/mobile/discovery",{song: currentPlaylist.songTrackId} ,function( datas ) {
+				socket.post( "/mobile/discovery",{ song: currentPlaylist.songTrackId, room: user.room } ,function( datas ) {
 					console.log("Ajouté aux découvertes !");
+
+					if(!datas.error){
+						$btn.addClass('active');
+					}
+
+				});
+			}
+
+		},
+
+		addToDislike:function(){
+			var $btn = $('#song-dislike');
+
+			if($btn.hasClass('active') == false){
+
+				socket.post( "/mobile/playlist/"+user.room+"/dislike",{ song: currentPlaylist.id, room: user.room } ,function( datas ) {
+					console.log("Morceau Disliké !");
 
 					if(!datas.error){
 						$btn.addClass('active');
@@ -97,37 +114,6 @@ $(document).ready(function(){
 					
 				});
 			}
-
-		},
-
-		addToDislike:function(){
-
-			$playlist = $('.wrapper').data('playlist-url') || 0;
-			$this = $(this);
-
-			$.ajax({
-				url:'./mobile/playlist/'+$playlist+'/dislike',
-				type:"POST",
-				data:{
-					"data-id" 		: $('#song-dislike').attr('data-id'),
-					"playlist-url"	: $playlist
-				}
-			})
-			.success(function(data){
-
-				//dislike_song = data.nb_dislike;
-				dislike_song++;
-
-				if(data.skip_song == 1){
-
-					skip_song = true;
-					// on passe à la musique suivante
-					console.log("On passe à la suivante plz");
-
-				}
-
-				$('.current-interaction').off('click', '#song-dislike').children('#song-dislike').addClass('active');
-			});
 
 		}
 
@@ -152,7 +138,7 @@ $(document).ready(function(){
 	});
 
 
-//Cibler ds le dom 
+//Cibler ds le dom
 
 
 	/* --------------------------------------------------------- */
@@ -296,7 +282,18 @@ $(document).ready(function(){
 
 	$(".custom-scroll").mCustomScrollbar();
 
-
+	// Afficher les sons d'une playlist dans l'historique
+	$(document).on('click','li.playlistHist h4, li.playlistHist span',function(e){
+		e.preventDefault();
+		//console.log($(this));
+		$wrapperSongs = $(this).siblings('.wrapperSongs');
+		if($wrapperSongs.is(':visible')){
+			$wrapperSongs.slideUp();
+		}
+		else{
+			$wrapperSongs.slideDown();
+		}
+	});
 
 
    	/* --------------------------------------------------------- */
