@@ -90,24 +90,35 @@
 
 var currentPlaylist;
 
-
 function messageReceivedFromServer(message){
 
 
     if (message.verb === 'add') {
+<<<<<<< HEAD
       // console.log('envoi message');
       addInDom(message);
     }
     if (message.verb === 'delete') {
       // console.log('envoi suppression message');
+=======
+      //console.log('envoi message');
+      addInDom(message);
+    }
+    if (message.verb === 'delete') {
+      //console.log('envoi suppression message');
+>>>>>>> fda97daff9843ba9591ba2b679aa0a78aab37fcd
       removeInDom(message);
+    }
+    if (message.verb === 'update') {
+      console.log("message recu pour de l'update");
+      updateInDom(message);
     }
 
 
 
 }
 
-// FONCTON DE ROUTAGE DES AJOUTS DANS LE DOM
+// FONCTON DE ROUTAGE DU DOM
 function addInDom(message){
     switch (message.device) {
       case 'desktop': addInDesktopDom(message);
@@ -128,6 +139,20 @@ function removeInDom(message){
                       break;
     }
 }
+function updateInDom(message){
+    switch (message.device) {
+      case 'desktop': updateInDesktopDom(message);
+                      break;
+      case 'mobile' : updateInMobileDom(message);
+                      break;
+      case 'all'    : updateInAllDom(message);
+                      break;
+    }
+}
+
+// --------------------------------------
+// PARTIE AJOUT DANS LE DOM 
+// --------------------------------------
 
 function addInDesktopDom(message){
   console.log("addInDesktopDom : ");
@@ -255,6 +280,10 @@ function removeInDesktopDom(message){
 
 }
 
+// --------------------------------------
+// PARTIE SUPPRESSION DANS LE DOM 
+// --------------------------------------
+
 function removeInMobileDom(message){
   console.log("removeInMobileDom : ");
   console.dir(message.datas.songTrackId);
@@ -297,3 +326,49 @@ function removeInAllDom(message){
   console.dir(message);
 
 }
+
+
+// --------------------------------------
+// PARTIE MISE A JOUR DANS LE DOM 
+// --------------------------------------
+
+  // 'FAKE' PLAYER MOBILE - PROGRESSION 
+
+  var $player = $(".knob");
+  var $timer  = $(".timer");
+  var $currentArtist  = $('.current-song strong');
+  var $currentSong    = $('.current-song span');
+
+  if($player.length != 0){
+    // Initialisation
+    $player.knob({
+      "release" : function (value) {
+        var minutes = Math.floor(value / 60);
+        var secondes = value - minutes * 60;
+        var zero = (secondes < 10)? "0" : "";
+        $timer.html(minutes+"'"+zero+secondes);
+        //console.log("minutes "+minutes+" Secondes :"+zero+secondes);
+      }
+    });
+  }
+
+  // Définir la durée du morceau
+  function setDuration(val){
+      $player.trigger(
+          'configure',
+          {
+            "min":0,
+            "max":val
+          }
+      );
+  }
+
+function updateInMobileDom(message){
+
+  $player.val(parseInt(message.datas.position)).trigger("change");
+  setDuration(message.datas.duration);
+
+  $currentArtist.text(message.datas.songTrackArtist);
+  $currentSong.text(message.datas.songTrackName);
+
+};

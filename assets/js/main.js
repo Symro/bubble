@@ -293,34 +293,34 @@ $(document).ready(function(){
 	//  PARTIE BUBBLE LIVE
 	/* --------------------------------------------------------- */
 
-	$player = $(".knob");
-	$timer  = $(".timer");
-	$music_duration = 180;
+	// $player = $(".knob");
+	// $timer  = $(".timer");
+	// $music_duration = 180;
 
-	if($player.length != 0){
-		// Initialisation
-		$player.knob({
-			"release" : function (value) {
-				var minutes = Math.floor(value / 60);
-				var secondes = value - minutes * 60;
-				var zero = (secondes < 10)? "0" : "";
-				$timer.html(minutes+"'"+zero+secondes);
-				//console.log("minutes "+minutes+" Secondes :"+zero+secondes);
-			}
-		});
-	}
+	// if($player.length != 0){
+	// 	// Initialisation
+	// 	$player.knob({
+	// 		"release" : function (value) {
+	// 			var minutes = Math.floor(value / 60);
+	// 			var secondes = value - minutes * 60;
+	// 			var zero = (secondes < 10)? "0" : "";
+	// 			$timer.html(minutes+"'"+zero+secondes);
+	// 			//console.log("minutes "+minutes+" Secondes :"+zero+secondes);
+	// 		}
+	// 	});
+	// }
 
-	// Définir la durée du morceau
-	setDuration($music_duration);
-	function setDuration(val){
-	    $player.trigger(
-	        'configure',
-	        {
-		        "min":0,
-		        "max":val
-	        }
-	    );
-	}
+	// // Définir la durée du morceau
+	// setDuration($music_duration);
+	// function setDuration(val){
+	//     $player.trigger(
+	//         'configure',
+	//         {
+	// 	        "min":0,
+	// 	        "max":val
+	//         }
+	//     );
+	// }
 
 	// Animation des ondes sur mobile
 	if(isMobile){

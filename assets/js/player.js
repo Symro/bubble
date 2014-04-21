@@ -101,26 +101,30 @@ threeSixtyPlayer.config = {
 
 threeSixtyPlayer.events.pause = function(){ 
 	$('.sm2-360btn').addClass('pause');
+	stop_send_player_position();
 }
 threeSixtyPlayer.events.resume = function(){
 	$('.sm2-360btn').removeClass('pause');
+	get_player_position();
 }
 
 threeSixtyPlayer.events.finish = function(){ 
 
-	// socket.emit('songEnded', {
-	// 	room	: user.room,
-	// 	id		: currentPlaylist[0].id
-	// });
 
 	console.log("Envoie socket.put avec id = "+currentPlaylist.id);
 	socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
 		console.log("Reponse : ");
 		console.dir(response);
-		currentPlaylist = response;
-
-		// Lancement musique suivante
-    	play_player(currentPlaylist.songTrackId);
+		if(response.songStatus != "undefined"){
+			currentPlaylist = response;
+			// Lancement musique suivante
+	    	play_player(currentPlaylist.songTrackId);
+	    }
+	    else{
+	    	// Pas de son à lire dans la playlist
+	    	console.log(" AUCUN SONG A LIRE ");
+	    	stop_send_player_position();
+	    }
 
 	});
 
@@ -128,11 +132,44 @@ threeSixtyPlayer.events.finish = function(){
 
 }
 
+/* LIVE BUBBLE - PLAYER POSITION */
+
+var get_player_position_timer;
+
+// Lance le Timer d'envoie de la position du lecteur
+function get_player_position(){
+	stop_send_player_position(); // on clear le timer avant de le relancer
+	get_player_position_timer = setInterval(function(){ send_player_position() }, 1000);
+}
+
+// Envoie par socket l'instant ds le morceau en lecture, et la durée totale du morceau
+function send_player_position(){
+	socket.post('/desktop/playlist/'+user.room+'/playerPosition' , {
+			position : (threeSixtyPlayer.sounds.length != 0) ? Math.floor(threeSixtyPlayer.sounds[threeSixtyPlayer.sounds.length-1].position/1000) : 0,
+			duration : (threeSixtyPlayer.sounds.length != 0) ? Math.floor(threeSixtyPlayer.sounds[threeSixtyPlayer.sounds.length-1].durationEstimate/1000) : 0,
+			songTrackArtist : currentPlaylist.songTrackArtist,
+			songTrackName 	: currentPlaylist.songTrackName
+		}, function(response){
+			console.log(response);
+	});
+}
+
+// Arrêter l'envoie de la position du player desktop au mobile chaque seconde
+function stop_send_player_position(){
+	clearInterval(get_player_position_timer);
+}
+
+
+
+
 function play_player(new_track){
+	get_player_position(); // Lancement du timer
+
 	console.log("Lecture d'un nouveau morceau : "+new_track);
 	// Change l'url dynamiquement et joue le morceau
 	$(".ui360 a").attr("href","http://api.soundcloud.com/tracks/"+new_track+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb");
     threeSixtyPlayer.handleClick({target:threeSixtyPlayer.links[0],preventDefault:function(){}});
+
 }
 
 function get_info_new_track(){
@@ -146,14 +183,6 @@ function get_info_new_track(){
 		$('.player_track_name').html(data.title);
 		$('.player_track_artist').html(data.user.username);
 
-		// Variable global JS transmise au mobile pour les interactions ("ajout découverte" et "musique suivante")
-
-		track_info = {
-			id 	  : new_track,
-			id_db : track_db_id,
-			title : data.title,
-			artist: data.user.username			
-		}
 
 	});
 

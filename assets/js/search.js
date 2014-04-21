@@ -1,4 +1,4 @@
-var search={
+var search = {
 
 	defaults:{
 		engine:'Soundcloud'
@@ -22,12 +22,12 @@ var search={
 		// console.log(query);
 
 		// on effectue une requête de recherche si cette requête est > à 4 caractères
-		if (query.length>9) {
+		if (query.q.length >= 3) {
 
 			// Execution de la requête selon le moteur de recherche
 			if (this.params.engine=='Soundcloud') {
 				// Recherche Souncloud
-				search.params.searchedSouncloud.call(this);				
+				search.params.searchedSouncloud.call(this, query);				
 			}else {
 				// Recherche Youtube
 				search.params.searchedYoutube.call(this);
