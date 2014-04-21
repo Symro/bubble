@@ -1337,7 +1337,15 @@ input[type="text"]:focus,input[type="text"]:active{
 .discoveries{
   padding:0 5%;
 }
+
+.discoveries ul{
+  list-style: none;
+}
 .discoveries li{
+  border-bottom:solid 1px rgba(238,226,226,0.5);
+  
+}
+.discoveries li .headDiscovery{
   position: relative;
   overflow:hidden;
   display:-webkit-flex;
@@ -1346,25 +1354,30 @@ input[type="text"]:focus,input[type="text"]:active{
   width: 100%;
   padding:10px 0;
   list-style:none;
-  border-bottom:solid 1px rgba(238,226,226,0.5);
-
 
 }
-.discoveries li .icon-croixclosesuppr:before{
+
+.headDiscovery{
+  list-style: none;
+
+}
+
+
+.discoveries li .headDiscovery .icon-croixclosesuppr:before{
   font-size:2.2em;
   vertical-align:-0.5em;
   text-align:left;
   margin:0;
 }
-.discoveries li .icon-soundcloudecouter:before,
-.discoveries li .icon-youtubeecouter:before{
+.discoveries li .headDiscovery .icon-soundcloudecouter:before,
+.discoveries li .headDiscovery .icon-youtubeecouter:before{
   font-size:2.8em;
   margin:1px 0 0 0;
   text-shadow:0 1px 1px rgba(0,0,0,0.3);
   opacity:0.7;
 }
 
-.discoveries li > a:first-child{
+.discoveries li .headDiscovery > a:first-child{
   display:inline-block;
   float:left;
   width:0%;
@@ -1374,7 +1387,7 @@ input[type="text"]:focus,input[type="text"]:active{
   -moz-transition:all 200ms ease-out;
   transition:all 200ms ease-out;
 }
-.discoveries li > a.active:first-child{
+.discoveries li .headDiscovery > a.active:first-child{
   width:7%;
   margin-right:10px;
   opacity:1;
@@ -1382,23 +1395,23 @@ input[type="text"]:focus,input[type="text"]:active{
   -webkit-flex: none;
   flex: none;
 }
-.discoveries li div{
+.discoveries li .headDiscovery div{
   display:inline-block;
   float:left;
 }
-.discoveries li div:nth-of-type(1){
+.discoveries li .headDiscovery div:nth-of-type(1){
   line-height:1.1;
   text-align:left;
   text-transform:uppercase;
   -webkit-flex: 1;
   flex: 1;
 }
-.discoveries li div:nth-of-type(1) strong{
+.discoveries li .headDiscovery div:nth-of-type(1) strong{
   display:block;
   width:100%;
   font-size:18px;
 }
-.discoveries li div:nth-of-type(1) span{
+.discoveries li .headDiscovery div:nth-of-type(1) span{
   display:block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1406,23 +1419,45 @@ input[type="text"]:focus,input[type="text"]:active{
   width: 100%;
   font-size:16px;
 }
-.discoveries li div:nth-of-type(2) {
+.discoveries li .headDiscovery div:nth-of-type(2) {
   width:50px;
   -webkit-flex: none;
   flex: none;
 }
-.discoveries li div:nth-of-type(3) {
+.discoveries li .headDiscovery div:nth-of-type(3) {
   width:40px;
   margin-left:10px;
   -webkit-flex: none;
   flex: none;
 }
-.discoveries li div:nth-of-type(3) img{
+.discoveries li .headDiscovery div:nth-of-type(3) img{
   border:solid 1px rgba(255,255,255,0.7);
   border-radius:50%;
   width:35px;
   height:35px;
 }
+.discoveries li .headDiscovery div:nth-of-type(4) {
+  width:40px;
+  margin-left:10px;
+  -webkit-flex: none;
+  flex: none;
+}
+
+.discoveries li div:nth-of-type(5) {
+  display: inline-block;
+  clear:right;
+  width:40px;
+  margin-left:10px;
+  -webkit-flex: none;
+  flex: none;
+}
+.discoveryAction{
+  display:none;
+}
+
+
+
+
 
 
 /* MOBILE - MON COMPTE */

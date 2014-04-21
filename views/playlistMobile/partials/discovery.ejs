@@ -1,4 +1,3 @@
-
 <% if(typeof(discoveries) != "undefined") { %>
 
 	<% if(discoveries.length > 0) { %>
@@ -7,18 +6,33 @@
 			<% _.each(discoveries, function (discover){ %>
 
 			<li>
-				<a class="action deleteDiscovery" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
-				<div data-track-id="<%= discover.song.songTrackId %>" data-id="<%= discover.id %>">
+				<div class="headDiscovery">
+					<a class="action deleteDiscovery" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
 
-					<strong><%= discover.song.songTrackArtist %></strong>
-					<span><%= discover.song.songTrackName %></span>
+					<div data-track-id="<%= discover.song.songTrackId %>" data-id="<%= discover.id %>">
+						<strong><%= discover.song.songTrackArtist %></strong>
+						<span><%= discover.song.songTrackName %></span>
+					</div>
+					<div>
+						<a href="<%= discover.song.songPermalinkUrl %>" target="_blank" title="<%= discover.song.songTrackName %>"><i class="icon-<%= discover.song.songService %>ecouter"></i></a>
+					</div>
+					<div>
+						<img src="<%= discover.song.userInfo.image %>" alt="<%= discover.song.userInfo.firstname %>"/>
+					</div>
+					<div id="dropdown">
+						<a  class="dropDown"  href="javascript:void(0)" title="Discover Action"><i class="icon-fleched iconRotate"></i></a>
+					</div>
 				</div>
-				<div>
-					<a href="<%= discover.song.songPermalinkUrl %>" target="_blank" title="<%= discover.song.songTrackName %>"><i class="icon-<%= discover.song.songService %>ecouter"></i></a>
+				<div class="discoveryAction">
+					<a class="" href="" title="Add to the playslist"><i class="icon-croixclosesuppr"></i></a>
+					<a class="action deleteDiscovery" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
+					<a class="action deleteDiscovery" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
 				</div>
-				<div>
-					<img src="<%= discover.song.userInfo.image %>" alt="<%= discover.song.userInfo.firstname %>"/>
-				</div>
+
+
+
+
+
 			</li>
  
 		<% }); %>
@@ -26,10 +40,9 @@
 
 
 	<% } else { %>
-		
+
 		<p> Aucune découverte pour le moment </p>
 
 	<% } %>
 
 <% } %>
- 
