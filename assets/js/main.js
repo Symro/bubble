@@ -208,7 +208,7 @@ $(document).ready(function(){
 		.success(function(data){
 			$('#uploadPicture .error').empty();
 			$('#uploadPicture img').attr('src', '/'+data.path);
-			
+
 		})
 
 	});
@@ -353,6 +353,12 @@ $(document).ready(function(){
 		// Pop-up confirmation
 		$popup = confirm("Ajouter à la playlist ?");
 
+		// Design d'interaction
+		var $this = $(this);
+		var $img = $this.children('img');
+		var $left = $img.offset().left;
+		var $top = e.currentTarget.offsetTop+10;
+
 		// Conversion du temps en minutes
 		// $temps = String($(this).data("songduration") / 60000);
 		// $temps = (Math.round( $temps * 100 )/100 );
@@ -376,15 +382,42 @@ $(document).ready(function(){
 			console.dir($datas);
 
 			// Envoi des datas au controller
-			socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas} ,function( datas ) {
-				// console.log(datas);
+			socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas,img:$img.attr('src')} ,function( datas ) {
+				console.log(datas);
 			});
+
+			$img
+				.addClass('invisible')
+				.clone()
+				.appendTo('#sent')
+				.toggleClass('invisible rond')
+				.css({
+					'position':'absolute',
+					'left':$left,
+					'top':$top,
+					'display':'block'
+				})
+				.animate({
+					'left':'45vw'
+				}, 1000, function(){
+					$this.slideUp();
+					$(this).animate({
+						'top':e.currentTarget.offsetTop-$(window).height()
+					}, 200, function(){
+						// socket.emit('new_track', {
+						// 	"track_name" : track,
+						// 	"track_image" : $img.attr('src'),
+						// 	"room" : user.room
+						// });
+						// $(this).remove();
+					});
+				});
 		}
 
 	});
 
 	// Supression d'un son ajouté par sois-même
-	$('body').on('click','.current-playlist .song .remove',function(event){
+	$('body').on('click','.current-playlist .song .delete',function(event){
 		event.stopPropagation();
 		$songId=$(this).parent().data("id");
 		// $playlist=$(".wrapper").data('playlist-url');

@@ -95,11 +95,11 @@ function messageReceivedFromServer(message){
 
 
     if (message.verb === 'add') {
-      console.log('envoi message');
+      // console.log('envoi message');
       addInDom(message);
     }
     if (message.verb === 'delete') {
-      console.log('envoi suppression message');
+      // console.log('envoi suppression message');
       removeInDom(message);
     }
 
@@ -164,14 +164,44 @@ function addInDesktopDom(message){
 
     // affichage DOM
     $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.song.songTrackId+'"><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><img src="'+message.datas.song.user+'" alt="Fred"></div></li>');
-    console.log('j"affiche '+message.datas.song.songTrackName);
+    // console.log('j"affiche '+message.datas.song.songTrackName);
+
+    // cache de variable
+    var $player = $('.ui360 .sm2-canvas');
+    var $reception = $('#reception');
+
+    console.log($player);
+    console.log($reception);
+
+    // ajout de l'image dans le DOM
+    $('<img>').attr('src', message.datas.img).appendTo($reception);
+
+    // détermine la distance entre le centre du player
+    // et le bord gauche de l'écran
+    var $left = $player.offset().left;
+    $left+= ($player.width()/2-(35));
+    console.log("Left après : "+$left);
+
+    var $top = $player.offset().top;
+    $top+= ($player.height()/3.5);
+
+    $('#reception').children('img').css({
+      "position":"absolute",
+      "left":$left,
+      "top":$(window).height()+200
+    }).animate({
+      "top":$top
+    }, 600, function(){
+      $(this).fadeOut(3000, function(){
+        $(this).remove();
+      })
+    });
 
     // Actualisation de la scroll bar
     $('#playlistencours').mCustomScrollbar("update");
     $('#playlistencours').mCustomScrollbar("scrollTo","li:last",{scrollInertia:1000,scrollEasing:"easeInOutQuad"});
 
   }
-
 
 }
 
@@ -192,7 +222,7 @@ function addInMobileDom(message){
     }
 
     // affichage DOM
-    $('.song ul').append('<li data-id="'+message.datas.song.songTrackId+'"><div class="action remove">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>');
+    $('.song ul').append('<li data-id="'+message.datas.song.songTrackId+'"><div class="action delete">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>');
   }
 
 }

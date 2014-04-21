@@ -17,13 +17,14 @@ module.exports = {
         var song     = req.param('song');
         song["user"] = req.session.User.id;
         song["url"]  = req.route.params.url;
+        var img=req.param('img');
 
         // console.dir(song);
 
         Song.create(song).exec(function songAdded(err,added){
           // console.dir(err);
-          console.dir('Song ajouté');
-          console.dir(added)
+          // console.dir('Song ajouté');
+          // console.dir(added)
           var songId = added.id;
 
           Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
@@ -61,7 +62,7 @@ module.exports = {
             verb:'add',
             device:'desktop',
             info:'songAdded',
-            datas:{song:song,id:added.id}
+            datas:{song:song,id:added.id,img:img}
           });
 
         });
@@ -112,9 +113,9 @@ module.exports = {
                 if (err) return next(err);
 
                 console.log("Le morceau suivant est : ", song);
-              
+
                 song.songStatus = "playing";
-                song.save(function(err) { 
+                song.save(function(err) {
                     if(err) return next(err);
 
                     return res.json(song);
@@ -131,7 +132,7 @@ module.exports = {
 
         });
 
-        //return res.json(test); 
+        //return res.json(test);
 
     }
 
