@@ -135,10 +135,6 @@ module.exports = {
             });
 
         });
-
-<<<<<<< HEAD
-        //return res.json(test);
-=======
     },
 
     playerPosition:function(req, res, next){
@@ -162,9 +158,6 @@ module.exports = {
             }
 
         });
-
-
->>>>>>> fda97daff9843ba9591ba2b679aa0a78aab37fcd
 
     }
 
