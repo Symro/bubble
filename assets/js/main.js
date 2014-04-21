@@ -101,33 +101,19 @@ $(document).ready(function(){
 		},
 
 		addToDislike:function(){
+			var $btn = $('#song-dislike');
 
-			$playlist = $('.wrapper').data('playlist-url') || 0;
-			$this = $(this);
+			if($btn.hasClass('active') == false){
 
-			$.ajax({
-				url:'./mobile/playlist/'+$playlist+'/dislike',
-				type:"POST",
-				data:{
-					"data-id" 		: $('#song-dislike').attr('data-id'),
-					"playlist-url"	: $playlist
-				}
-			})
-			.success(function(data){
+				socket.post( "/mobile/playlist/"+user.room+"/dislike",{ song: currentPlaylist.id, room: user.room } ,function( datas ) {
+					console.log("Morceau Disliké !");
 
-				//dislike_song = data.nb_dislike;
-				dislike_song++;
-
-				if(data.skip_song == 1){
-
-					skip_song = true;
-					// on passe à la musique suivante
-					console.log("On passe à la suivante plz");
-
-				}
-
-				$('.current-interaction').off('click', '#song-dislike').children('#song-dislike').addClass('active');
-			});
+					if(!datas.error){
+						$btn.addClass('active');
+					}
+					
+				});
+			}
 
 		}
 

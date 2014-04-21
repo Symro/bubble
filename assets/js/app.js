@@ -330,6 +330,7 @@ function removeInAllDom(message){
   var $currentArtist  = $('.current-song strong');
   var $currentSong    = $('.current-song span');
   var currentLike     = 0;
+  var currentDislike  = 0;
 
   if($player.length != 0){
     // Initialisation
@@ -367,8 +368,8 @@ function updateInMobileDom(message){
     $player.val(parseInt(message.datas.position)).trigger("change");
     setDuration(message.datas.duration);
 
-    $currentArtist.text(message.datas.songTrackArtist);
-    $currentSong.text(message.datas.songTrackName);
+    $currentArtist.text(message.datas.currentPlaylist.songTrackArtist);
+    $currentSong.text(message.datas.currentPlaylist.songTrackName);
 
   }
 
@@ -388,10 +389,17 @@ function updateInDesktopDom(message){
 
   if(message.info == "songLiked"){
     // Incremente le nombre de like du morceau en lecture sur Desktop
-    console.log("LIKE UPDATE ON DESKTOP");
     currentLike++;
     var likeContainer = $('.player_track_like span');
     likeContainer.html(currentLike);
+  }
+
+  if(message.info == "songDisliked"){
+    // Incremente le nombre de dislike du morceau en lecture sur Desktop
+    currentDislike++;
+    var dislikeContainer = $('.player_track_dislike span');
+    dislikeContainer.html(currentDislike);
+
   }
 
 
