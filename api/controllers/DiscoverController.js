@@ -15,11 +15,11 @@ module.exports = {
 	},
 
 	addDiscovery: function (req, res, next) { //Alex
-		song=req.param('song');
-        song["user"]=req.session.User.id;
-        console.dir(song);
+        var ajout = {};
+        ajout.song = req.param('song');
+        ajout.user = req.session.User.id;
 
-        Discover.create(song).exec(function discoveryAdded(err, song){
+        Discover.create(ajout).exec(function discoveryAdded(err, song){
         	console.log(err);
         	console.log(song);
         });

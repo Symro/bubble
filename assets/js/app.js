@@ -42,7 +42,7 @@
       // }
 
 
-      log('New comet message received :: ', message);
+      // log('New comet message received :: ', message);
 
       messageReceivedFromServer(message)
 
@@ -102,7 +102,7 @@ function messageReceivedFromServer(message){
       removeInDom(message);
     }
     if (message.verb === 'update') {
-      console.log("message recu pour de l'update");
+      //console.log("message recu pour de l'update");
       updateInDom(message);
     }
 
@@ -171,7 +171,6 @@ function addInDesktopDom(message){
 
     // Lancement musique
     play_player(currentPlaylist.songTrackId);
-
 
   }
   else if (message.info=="songAdded") {
@@ -356,6 +355,8 @@ function removeInAllDom(message){
   }
 
 function updateInMobileDom(message){
+  // Variable globale "currentPlaylist" présente en temps réél sur Mobile
+  currentPlaylist = message.datas.currentPlaylist;
 
   $player.val(parseInt(message.datas.position)).trigger("change");
   setDuration(message.datas.duration);

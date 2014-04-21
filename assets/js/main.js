@@ -84,21 +84,15 @@ $(document).ready(function(){
 	action = {
 
 		addToDiscovery:function(){
-			console.log("Ajouté !");
-			$playlist = $('.wrapper').data('playlist-url') || 0;
+			console.log("Ajouté aux découvertes !");
 			$this = $(this);
 
-			$.ajax({
-				url:'./mobile/playlist/'+$playlist+'/discover',
-				type:"POST",
-				data:{
-					"data-id" : $('#song-like').attr('data-id')
-				}
-			})
-			.success(function(data){
-				$('.current-interaction').off('click', '#song-like').children('#song-like').addClass('active');
+			socket.post( "/mobile/discovery",{song: currentPlaylist.songTrackId} ,function( datas ) {
+				console.log(datas);
 			});
+
 		},
+
 		addToDislike:function(){
 
 			$playlist = $('.wrapper').data('playlist-url') || 0;
@@ -432,17 +426,6 @@ $(document).ready(function(){
 
 	});
 
-	$('body').on('click','.addDiscovery' ,function(event){ //Alex
-		event.preventDefault();
-		$song={song:$(this).parent().data("id")};
-		console.log($song)
-		// $playlist=$(".wrapper").data('playlist-url');
-
-		socket.post( "/mobile/discovery",{song:$song} ,function( datas ) {
-			// console.log(datas);
-		});
-
-	});
 
 	$('body').on('click','.deleteDiscovery' ,function(event){ //Alex
 		event.preventDefault();
