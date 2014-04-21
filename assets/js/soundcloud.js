@@ -25,18 +25,20 @@ search.init({
 
 	},
 
-	searchedSouncloud:function(){
+	searchedSouncloud:function(query){
 
 		$('.results').empty();
-		SC.get('/tracks', { q: query }, function(tracks) {
+		SC.get('/tracks', query , function(tracks) {
 			$(tracks).each(function(index, track) {
-				console.log(track);
-				$img=track.artwork_url;
-				// Vérification si la musique possède une cover
-				if ($img==null) {
-					$img="./images/icon_music.png"
+				if(track.streamable === true){
+					console.log(track);
+					$img=track.artwork_url;
+					// Vérification si la musique possède une cover
+					if ($img==null) {
+						$img="/images/icon_music.png"
+					}
+					$('.results').append($('<li data-song="'+track.title+'" data-songid="'+track.id+'" data-songservice="soundcloud" data-songartist="'+track.user.username+'" data-songduration="'+track.duration+'" data-permalink="'+track.permalink_url+'"></li>').html('<img src='+$img+'><div><span class="title">'+track.title + '</span><span class="artist">'+ track.user.username +'</span></div>'));
 				}
-				$('.results').append($('<li data-song="'+track.title+'" data-songid="'+track.id+'" data-songservice="soundcloud" data-songartist="'+track.user.username+'" data-songduration="'+track.duration+'" data-permalink="'+track.permalink_url+'"></li>').html('<img src='+$img+'><div><span class="title">'+track.title + '</span><span class="artist">'+ track.user.username +'</span></div>'));
 			});
 		});
 
@@ -66,12 +68,16 @@ $( document ).ready(function() {
 	// écouteur pour lancer une recherche
 	$('input[name="search"]').on('keyup change',function(e){
 		e.preventDefault();
-		var $form=$(this).parent('form');
+		var recherche = $(this).val();
+		console.log(recherche);
 
 		// On récupère la saisie
-		query=$form.serialize();
+		var query = {
+			q: recherche
+		}
 
 		search.getQuery(query);
+
 	});
 
 	// Afficher les sons d'une playlist dans l'historique

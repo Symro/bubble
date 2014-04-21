@@ -87,27 +87,38 @@
 
 );
 
-var currentSongIndex = 0;
-var currentPlaylist = [];
 
+var currentPlaylist;
 
 function messageReceivedFromServer(message){
 
 
     if (message.verb === 'add') {
-      console.log('envoi message');
+<<<<<<< HEAD
+      // console.log('envoi message');
       addInDom(message);
     }
     if (message.verb === 'delete') {
-      console.log('envoi suppression message');
+      // console.log('envoi suppression message');
+=======
+      //console.log('envoi message');
+      addInDom(message);
+    }
+    if (message.verb === 'delete') {
+      //console.log('envoi suppression message');
+>>>>>>> fda97daff9843ba9591ba2b679aa0a78aab37fcd
       removeInDom(message);
+    }
+    if (message.verb === 'update') {
+      console.log("message recu pour de l'update");
+      updateInDom(message);
     }
 
 
 
 }
 
-// FONCTON DE ROUTAGE DES AJOUTS DANS LE DOM
+// FONCTON DE ROUTAGE DU DOM
 function addInDom(message){
     switch (message.device) {
       case 'desktop': addInDesktopDom(message);
@@ -128,6 +139,20 @@ function removeInDom(message){
                       break;
     }
 }
+function updateInDom(message){
+    switch (message.device) {
+      case 'desktop': updateInDesktopDom(message);
+                      break;
+      case 'mobile' : updateInMobileDom(message);
+                      break;
+      case 'all'    : updateInAllDom(message);
+                      break;
+    }
+}
+
+// --------------------------------------
+// PARTIE AJOUT DANS LE DOM 
+// --------------------------------------
 
 function addInDesktopDom(message){
   console.log("addInDesktopDom : ");
@@ -142,32 +167,66 @@ function addInDesktopDom(message){
 
   }
   else if(message.info == "startPlaying"){
-
-    currentPlaylist.push(message.datas);
-
-    var player = $('.desktop-container .player');
-
-    player.removeClass('invisible');
-
     console.log("Lancer la musique !");
     console.dir(message.datas);
 
-    play_player(currentPlaylist[currentSongIndex].songTrackId);
+    // Ajoute le morceau au tableau de lecture
+    currentPlaylist = message.datas;
+
+    // Apparition du player
+    var player = $('.desktop-container .player');
+    player.removeClass('invisible');
+
+    // Lancement musique
+    play_player(currentPlaylist.songTrackId);
 
 
   }
   else if (message.info=="songAdded") {
 
+    // Ajoute le morceau au tableau de lecture
+    //currentPlaylist.push(message.datas.song);
+
     // affichage DOM
     $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.song.songTrackId+'"><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><img src="'+message.datas.song.user+'" alt="Fred"></div></li>');
-    console.log('j"affiche '+message.datas.song.songTrackName);
+    // console.log('j"affiche '+message.datas.song.songTrackName);
+
+    // cache de variable
+    var $player = $('.ui360 .sm2-canvas');
+    var $reception = $('#reception');
+
+    console.log($player);
+    console.log($reception);
+
+    // ajout de l'image dans le DOM
+    $('<img>').attr('src', message.datas.img).appendTo($reception);
+
+    // détermine la distance entre le centre du player
+    // et le bord gauche de l'écran
+    var $left = $player.offset().left;
+    $left+= ($player.width()/2-(35));
+    console.log("Left après : "+$left);
+
+    var $top = $player.offset().top;
+    $top+= ($player.height()/3.5);
+
+    $('#reception').children('img').css({
+      "position":"absolute",
+      "left":$left,
+      "top":$(window).height()+200
+    }).animate({
+      "top":$top
+    }, 600, function(){
+      $(this).fadeOut(3000, function(){
+        $(this).remove();
+      })
+    });
 
     // Actualisation de la scroll bar
     $('#playlistencours').mCustomScrollbar("update");
     $('#playlistencours').mCustomScrollbar("scrollTo","li:last",{scrollInertia:1000,scrollEasing:"easeInOutQuad"});
 
   }
-
 
 }
 
@@ -188,7 +247,7 @@ function addInMobileDom(message){
     }
 
     // affichage DOM
-    $('.song ul').append('<li data-id="'+message.datas.song.songTrackId+'"><div class="action remove">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>');
+    $('.song ul').append('<li data-id="'+message.datas.song.songTrackId+'"><div class="action delete">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>');
   }
 
 }
@@ -209,7 +268,7 @@ function removeInDesktopDom(message){
     // cible la musique à supprimer
     var deleteSong = $('#playlistencours ul > li').filter('[data-id='+message.datas.songTrackId+']');
 
-    console.log(deleteSong);
+    //console.log(deleteSong);
 
     // slide up + suppression DOM
     deleteSong.slideUp(function(){
@@ -220,6 +279,10 @@ function removeInDesktopDom(message){
   }
 
 }
+
+// --------------------------------------
+// PARTIE SUPPRESSION DANS LE DOM 
+// --------------------------------------
 
 function removeInMobileDom(message){
   console.log("removeInMobileDom : ");
@@ -263,3 +326,49 @@ function removeInAllDom(message){
   console.dir(message);
 
 }
+
+
+// --------------------------------------
+// PARTIE MISE A JOUR DANS LE DOM 
+// --------------------------------------
+
+  // 'FAKE' PLAYER MOBILE - PROGRESSION 
+
+  var $player = $(".knob");
+  var $timer  = $(".timer");
+  var $currentArtist  = $('.current-song strong');
+  var $currentSong    = $('.current-song span');
+
+  if($player.length != 0){
+    // Initialisation
+    $player.knob({
+      "release" : function (value) {
+        var minutes = Math.floor(value / 60);
+        var secondes = value - minutes * 60;
+        var zero = (secondes < 10)? "0" : "";
+        $timer.html(minutes+"'"+zero+secondes);
+        //console.log("minutes "+minutes+" Secondes :"+zero+secondes);
+      }
+    });
+  }
+
+  // Définir la durée du morceau
+  function setDuration(val){
+      $player.trigger(
+          'configure',
+          {
+            "min":0,
+            "max":val
+          }
+      );
+  }
+
+function updateInMobileDom(message){
+
+  $player.val(parseInt(message.datas.position)).trigger("change");
+  setDuration(message.datas.duration);
+
+  $currentArtist.text(message.datas.songTrackArtist);
+  $currentSong.text(message.datas.songTrackName);
+
+};

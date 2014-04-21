@@ -43,6 +43,11 @@ module.exports = {
             type:"integer",
             defaultsTo: '0'
         },
+        songStatus:{
+            type:"string",
+            defaultsTo: "waiting",
+            in: ['waiting', 'playing', 'played']
+        },
         user:{
             model:"user"
         },
