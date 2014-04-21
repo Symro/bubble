@@ -112,26 +112,49 @@ module.exports = {
                 if (err) return next(err);
 
                 console.log("Le morceau suivant est : ", song);
-              
-                song.songStatus = "playing";
-                song.save(function(err) { 
-                    if(err) return next(err);
 
+                // S'il y a un morceau suivant à lire en BDD, on retourne le json qui lancera la lecture
+                if(song !== "undefined"){
+
+                    song.songStatus = "playing";
+                    song.save(function(err) { 
+                        if(err) return next(err);
+
+                        return res.json(song);
+                    });
+
+                }
+                else{
                     return res.json(song);
-                    // sails.sockets.broadcast(room,'message',{
-                    //     verb:'add',
-                    //     device:'desktop',
-                    //     info:'startPlaying',
-                    //     datas:song
-                    // });
-                });
-
+                }
+              
+               
 
             });
 
         });
 
-        //return res.json(test); 
+    },
+
+    playerPosition:function(req, res, next){
+        var position  = req.params.all().position;
+        var duration  = req.params.all().duration;
+        var room      = req.param('url');
+
+
+        sails.sockets.broadcast(room,'message',{
+
+            verb:'update',
+            device:'mobile',
+            info:'playerPosition',
+            datas:{
+                position:position,
+                duration:duration
+            }
+
+        });
+
+
 
     }
 

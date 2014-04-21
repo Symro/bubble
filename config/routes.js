@@ -130,6 +130,11 @@ module.exports.routes = {
     action: 'nextSong'
   },
 
+  'post /desktop/playlist/:url/playerPosition':{
+    controller:'SongController',
+    action: 'playerPosition'
+  },
+
   // ROUTES DIVERSES
 
   'get /public/user/*': {

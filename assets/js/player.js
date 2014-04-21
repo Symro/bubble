@@ -128,6 +128,19 @@ threeSixtyPlayer.events.finish = function(){
 
 }
 
+
+setInterval(function(){
+
+	socket.post('/desktop/playlist/'+user.room+'/playerPosition' , {
+			position : (threeSixtyPlayer.sounds.length != 0) ? Math.floor(threeSixtyPlayer.sounds[threeSixtyPlayer.sounds.length-1].position/1000) : 0,
+			duration : (threeSixtyPlayer.sounds.length != 0) ? Math.floor(threeSixtyPlayer.sounds[threeSixtyPlayer.sounds.length-1].durationEstimate/1000) : 0
+		}, function(response){
+			console.log(response);
+	});
+
+}, 1000);
+
+
 function play_player(new_track){
 	console.log("Lecture d'un nouveau morceau : "+new_track);
 	// Change l'url dynamiquement et joue le morceau
