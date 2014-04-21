@@ -94,19 +94,14 @@ function messageReceivedFromServer(message){
 
 
     if (message.verb === 'add') {
-<<<<<<< HEAD
+
       // console.log('envoi message');
       addInDom(message);
     }
-    if (message.verb === 'delete') {
-      // console.log('envoi suppression message');
-=======
-      //console.log('envoi message');
-      addInDom(message);
-    }
+
     if (message.verb === 'delete') {
       //console.log('envoi suppression message');
->>>>>>> fda97daff9843ba9591ba2b679aa0a78aab37fcd
+
       removeInDom(message);
     }
     if (message.verb === 'update') {
