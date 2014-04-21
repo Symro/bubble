@@ -114,7 +114,7 @@ module.exports = {
                 console.log("Le morceau suivant est : ", song);
 
                 // S'il y a un morceau suivant à lire en BDD, on retourne le json qui lancera la lecture
-                if(song !== "undefined"){
+                if(typeof(song) != "undefined"){
 
                     song.songStatus = "playing";
                     song.save(function(err) { 
@@ -125,6 +125,7 @@ module.exports = {
 
                 }
                 else{
+                    var song = {songStatus:"undefined"};
                     return res.json(song);
                 }
               
@@ -137,9 +138,11 @@ module.exports = {
     },
 
     playerPosition:function(req, res, next){
-        var position  = req.params.all().position;
-        var duration  = req.params.all().duration;
-        var room      = req.param('url');
+        var position           = req.params.all().position;
+        var duration           = req.params.all().duration;
+        var songTrackArtist    = req.params.all().songTrackArtist;
+        var songTrackName      = req.params.all().songTrackName;
+        var room               = req.param('url');
 
 
         sails.sockets.broadcast(room,'message',{
@@ -149,7 +152,9 @@ module.exports = {
             info:'playerPosition',
             datas:{
                 position:position,
-                duration:duration
+                duration:duration,
+                songTrackArtist:songTrackArtist,
+                songTrackName:songTrackName
             }
 
         });

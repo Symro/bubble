@@ -298,6 +298,8 @@ function removeInAllDom(message){
 
   var $player = $(".knob");
   var $timer  = $(".timer");
+  var $currentArtist  = $('.current-song strong');
+  var $currentSong    = $('.current-song span');
 
   if($player.length != 0){
     // Initialisation
@@ -327,5 +329,8 @@ function updateInMobileDom(message){
 
   $player.val(parseInt(message.datas.position)).trigger("change");
   setDuration(message.datas.duration);
+
+  $currentArtist.text(message.datas.songTrackArtist);
+  $currentSong.text(message.datas.songTrackName);
 
 };
