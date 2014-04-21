@@ -27,7 +27,7 @@ module.exports = {
 
 	    // Si le champ n'est pas remplit
 		if( playlistUrl == "" ){
-			req.session.flash = { err : [{name:'fieldRequired',message:'Please enter a url to join a playlist.'}] };
+			req.session.flash = { err : [{name:'fieldRequired',message:'Please enter an url to join a playlist.'}] };
 			return res.redirect('/mobile/playlist');
 	    }
 

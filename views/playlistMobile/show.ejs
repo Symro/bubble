@@ -31,7 +31,7 @@
 						        <div class="logo"></div>
 
 						        <section class="w80 ">
-						        <h2>Rejoignez une bubble</h2>
+						        <h2>Join a bubble</h2>
 
 						                    <div class="form-error">
 						                        <% if(flash && flash.err) { %>
@@ -91,7 +91,7 @@
 					</div><!-- FIN PREMIER SLIDE -->
 
 				<div class="swiper-slide decouverte">
-			        <h1 class="title">Découvertes</h1>
+			        <h1 class="title">Discoveries</h1>
 		        	<ul class="discoveries">
 		       			<%- partial('partials/discovery')%>
 		       		</ul>
@@ -100,7 +100,7 @@
 			    </div> <!-- FIN SLIDE MES DECOUVERTES -->
 
 	    		<div class="swiper-slide historique">
-			    	<div class="title">Historique</div>
+			    	<div class="title">Historic</div>
 			    	<ul class="historic">
 			    		<%- partial('partials/historic')%>
 			    	</ul>
@@ -119,11 +119,11 @@
 
       	<div class="menu menu-slidedown">
 			<a href="javascript:void(0)" class="menu-close"><i class="icon-croixclosesuppr"></i></a>
-			<h1 class="title">Réglages</h1>
+			<h1 class="title">Settings</h1>
 
 			<figure id="uploadPicture">
 				<!--<?php require('partials/upload.html'); ?>-->
-				
+
 				<img src="<%= session.User.image %>" alt="<%= session.User.firstname %>" />
 				<figcaption><%= session.User.firstname %></figcaption>
 				<div class="error"></div>
@@ -139,20 +139,20 @@
 				<span id="user-email"><%= session.User.mail %></span>
 				<i id="edit-email" class="icon-croixclosesuppr"></i>
 				<hr/>
-				<label for="user-password">Mot de passe</label>
+				<label for="user-password">Password</label>
 				<span id="user-password">*********</span>
 				<i id="edit-password" class="icon-croixclosesuppr"></i>
 			</div>
 
 			<div class="tutoriel">
-				<h3>Tutoriel</h3>
+				<h3>Tutorial</h3>
 				<i class="icon-eye"></i>
 			</div>
 
 			<div class="deconnexion">
-				<h3>Déconnexion</h3>
-				<a href="/mobile/playlist/" title="Quitter la bulle">Quitter la bulle</a>
-				<a href="/logout" title="Se deconnecter">Se déconnecter</a>
+				<h3>Logout</h3>
+				<a href="/mobile/playlist/" title="Quitter la bulle">Leave the bubble</a>
+				<a href="/logout" title="Se deconnecter">Logout</a>
 			</div>
 		</div>
 

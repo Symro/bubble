@@ -12,7 +12,7 @@
 				<h3><%= playlist.url %> ( <%= playlist.name %> )</h3>
 			</aside>
 			<aside class="mod left w50 txtcenter sidebar">
-				<a href="/desktop/playlist/"><i class="icon-croixclosesuppr"></i>Fermer la bulle</a>
+				<a href="/desktop/playlist/"><i class="icon-croixclosesuppr"></i>Close bubble</a>
 			</aside>
 		</section>
 
@@ -28,9 +28,9 @@
 			<i class="icon-fleched listeParticipant-forward"></i>
 		</div>
 	</div>
-      
+
 	<div class="playlistContent" id="playlistencours" >
-		<h4 class="form-signin-heading txtcenter">Playlist en cours</h4>
+		<h4 class="form-signin-heading txtcenter">Play queue</h4>
 		<ul class="liPlaylist" data-playlist="">
 			<!--<ul class="liPlaylist" data-playlist="<?php echo $PARAMS['id']; ?>">
 			<?php require('partials/playlist.html'); ?>-->
@@ -42,13 +42,13 @@
 	<%= songs.length %>
 
 	<section class="w60 player center col-right <% if(typeof(songs) != 'undefined' && songs.length == 0) { %>invisible<% } %>">
-		
+
 		<div class="ui360 ui360-vis">
 			<a type="audio/mp3" href=""></a>
-			<div class="player_track_artist"></div> 
-			<div class="player_track_name"></div> 
-			<div class="player_track_like"><span>0</span><i class="icon-coeuralone"></i></div> 
-			<div class="player_track_dislike"><span>0</span><i class="icon-thumbalone"></i></div> 
+			<div class="player_track_artist"></div>
+			<div class="player_track_name"></div>
+			<div class="player_track_like"><span>0</span><i class="icon-coeuralone"></i></div>
+			<div class="player_track_dislike"><span>0</span><i class="icon-thumbalone"></i></div>
 		</div>
 
 	</section>
