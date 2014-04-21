@@ -94,7 +94,7 @@ $(document).ready(function(){
 					if(!datas.error){
 						$btn.addClass('active');
 					}
-					
+
 				});
 			}
 
@@ -151,7 +151,7 @@ $(document).ready(function(){
 	});
 
 
-//Cibler ds le dom 
+//Cibler ds le dom
 
 
 	/* --------------------------------------------------------- */
@@ -295,7 +295,18 @@ $(document).ready(function(){
 
 	$(".custom-scroll").mCustomScrollbar();
 
-
+	// Afficher les sons d'une playlist dans l'historique
+	$(document).on('click','li.playlistHist h4, li.playlistHist span',function(e){
+		e.preventDefault();
+		//console.log($(this));
+		$wrapperSongs = $(this).siblings('.wrapperSongs');
+		if($wrapperSongs.is(':visible')){
+			$wrapperSongs.slideUp();
+		}
+		else{
+			$wrapperSongs.slideDown();
+		}
+	});
 
 
    	/* --------------------------------------------------------- */

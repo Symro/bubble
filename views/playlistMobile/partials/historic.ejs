@@ -32,35 +32,33 @@
 				</div>
 				<div class="wrapperSongs custom-scroll">
 					<ul class="historics">
-					<!-- 
+					<!--
 					**********************
-					TO DO : 
+					TO DO :
 					**********************
 					-->
-					<?php foreach ($historic['songs'] as $songs): ?>
-						<?php if ($songs['playlist_url']==$playlist['playlist_url']): ?>
+					<% _.each(histo.songs, function (songs) { %>
 							<li>
 								<div data-track-id="<?php echo $songs['song_track_id']; ?>" data-id="<?php echo $songs['song_id']; ?>">
-									<strong><?php echo $songs['song_track_name']; ?></strong>
-									<span><?php echo $songs['song_track_artist']; ?></span>
+									<strong><%= songs.songTrackName %></strong>
+									<span><%= songs.songTrackArtist %></span>
 								</div>
 								<div>
-									<a href="<?php echo $songs['song_permalink_url']; ?>" title="<?php echo $songs['song_track_name']; ?>"><i class="icon-<?php echo $songs['song_service']; ?>ecouter"></i></a>
+									<a href="<%= songs.songPermalinkUrl %>" title="<%= songs.user.firstname %>"><i class="icon-<%= songs.songService %>ecouter"></i></a>
 								</div>
 								<div>
-									<img src="<?php echo ($songs['user_image'] != 'public/img/default.png') ? $songs['user_image'] : "public/img/no_image.png" ; ?>" alt="<?php echo $songs['user_firstname']; ?>"/>
+									<img src="<%= songs.user.image%>" alt="<%= songs.user.firstname %>"/>
 								</div>
 								<div></div>
 							</li>
-						<?php endif ?>
-					<?php endforeach ?>
+					<% }); %>
 					</ul>
 				</div>
 			</li>
 			<hr>
 
-<% 
-		}); 
+<%
+		});
 	}
 
 }else { %>
