@@ -1994,12 +1994,15 @@ body.ajax .loader-overlay{
   background:rgba(255,255,255,0.3);
   border-radius:50%;
 }
+.current-interaction #song-dislike.active,
 .current-interaction #song-like.active{
   opacity:0.5;
   background:rgba(255,255,255,0);
 }
 .current-interaction #song-like:hover:before,
-.current-interaction #song-like:active:before{
+.current-interaction #song-like:active:before,
+.current-interaction #song-dislike:hover:before,
+.current-interaction #song-dislike:active:before{
   background:none;
 }
 

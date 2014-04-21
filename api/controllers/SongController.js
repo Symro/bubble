@@ -147,10 +147,6 @@ module.exports = {
     playerPosition:function(req, res, next){
         var position           = req.params.all().position;
         var duration           = req.params.all().duration;
-        var songTrackArtist    = req.params.all().currentPlaylist.songTrackArtist;
-        var songTrackName      = req.params.all().currentPlaylist.songTrackName;
-        var songTrackId        = req.params.all().currentPlaylist.songTrackId;
-        var songTrackDbId      = req.params.all().currentPlaylist.songTrackDbId;
         var currentPlaylist    = req.params.all().currentPlaylist;
         var room               = req.param('url');
 
@@ -162,14 +158,38 @@ module.exports = {
             datas:{
                 position:position,
                 duration:duration,
-                songTrackArtist : songTrackArtist,
-                songTrackName   : songTrackName,
-                songTrackId     : songTrackId,
-                songTrackDbId   : songTrackDbId,
                 currentPlaylist : currentPlaylist
             }
 
         });
+
+    },
+
+    dislikeSong:function(req, res, next){
+
+        var room  = req.param('url');
+        var song  = req.param('song'); // BDD id ! et pas songTrackId
+
+        Song.findOne({ where:{ id:song } }).done(function(err, song) {
+
+            song.songCounter = parseInt(song.songCounter)+1;
+            song.save(function(err) {
+                if(err) return next(err);
+
+                sails.sockets.broadcast(req.route.params.url,'message',{
+                    verb:'update',
+                    device:'desktop',
+                    info:'songDisliked',
+                    datas:{}
+                });
+
+                return res.json(song);
+            });
+
+        });
+
+
+
 
     }
 
