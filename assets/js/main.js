@@ -84,12 +84,19 @@ $(document).ready(function(){
 	action = {
 
 		addToDiscovery:function(){
-			console.log("Ajouté aux découvertes !");
-			$this = $(this);
+			var $btn = $('#song-like');
 
-			socket.post( "/mobile/discovery",{song: currentPlaylist.songTrackId} ,function( datas ) {
-				console.log(datas);
-			});
+			if($btn.hasClass('active') == false){
+
+				socket.post( "/mobile/discovery",{song: currentPlaylist.songTrackId} ,function( datas ) {
+					console.log("Ajouté aux découvertes !");
+
+					if(!datas.error){
+						$btn.addClass('active');
+					}
+					
+				});
+			}
 
 		},
 

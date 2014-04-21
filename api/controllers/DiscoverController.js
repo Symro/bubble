@@ -20,8 +20,8 @@ module.exports = {
         ajout.user = req.session.User.id;
 
         Discover.create(ajout).exec(function discoveryAdded(err, song){
-        	console.log(err);
-        	console.log(song);
+        	if(err) return res.json({error:true, message:err});
+        	return res.json({error:false, message:"ok"});
         });
 	},
 
