@@ -88,7 +88,7 @@ $(document).ready(function(){
 
 			if($btn.hasClass('active') == false){
 
-				socket.post( "/mobile/discovery",{song: currentPlaylist.songTrackId} ,function( datas ) {
+				socket.post( "/mobile/discovery",{ song: currentPlaylist.songTrackId, room: user.room } ,function( datas ) {
 					console.log("Ajouté aux découvertes !");
 
 					if(!datas.error){

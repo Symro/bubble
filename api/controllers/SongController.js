@@ -121,6 +121,13 @@ module.exports = {
                     song.save(function(err) {
                         if(err) return next(err);
 
+                        sails.sockets.broadcast(req.route.params.url,'message',{
+                            verb:'update',
+                            device:'mobile',
+                            info:'resetLikeDislike',
+                            datas:{}
+                        });
+
                         return res.json(song);
                     });
 

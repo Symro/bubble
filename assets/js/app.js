@@ -329,6 +329,7 @@ function removeInAllDom(message){
   var $timer  = $(".timer");
   var $currentArtist  = $('.current-song strong');
   var $currentSong    = $('.current-song span');
+  var currentLike     = 0;
 
   if($player.length != 0){
     // Initialisation
@@ -354,14 +355,44 @@ function removeInAllDom(message){
       );
   }
 
+
+
 function updateInMobileDom(message){
-  // Variable globale "currentPlaylist" présente en temps réél sur Mobile
-  currentPlaylist = message.datas.currentPlaylist;
 
-  $player.val(parseInt(message.datas.position)).trigger("change");
-  setDuration(message.datas.duration);
+  if(message.info == "playerPosition"){
 
-  $currentArtist.text(message.datas.songTrackArtist);
-  $currentSong.text(message.datas.songTrackName);
+    // Variable globale "currentPlaylist" présente en temps réél sur Mobile
+    currentPlaylist = message.datas.currentPlaylist;
+
+    $player.val(parseInt(message.datas.position)).trigger("change");
+    setDuration(message.datas.duration);
+
+    $currentArtist.text(message.datas.songTrackArtist);
+    $currentSong.text(message.datas.songTrackName);
+
+  }
+
+  if(message.info == "resetLikeDislike"){
+    // Supprime la classe "Active" des boutons pour permettre de voter à nouveau
+    var $btnLike    = $('#song-like');
+    var $btnDislike = $('#song-dislike');
+
+    $btnLike.add($btnDislike).removeClass('active');
+
+  }
+
+
+};
+
+function updateInDesktopDom(message){
+
+  if(message.info == "songLiked"){
+    // Incremente le nombre de like du morceau en lecture sur Desktop
+    console.log("LIKE UPDATE ON DESKTOP");
+    currentLike++;
+    var likeContainer = $('.player_track_like span');
+    likeContainer.html(currentLike);
+  }
+
 
 };
