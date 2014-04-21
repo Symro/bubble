@@ -94,19 +94,11 @@ function messageReceivedFromServer(message){
 
 
     if (message.verb === 'add') {
-<<<<<<< HEAD
       // console.log('envoi message');
       addInDom(message);
     }
     if (message.verb === 'delete') {
-      // console.log('envoi suppression message');
-=======
-      //console.log('envoi message');
-      addInDom(message);
-    }
-    if (message.verb === 'delete') {
       //console.log('envoi suppression message');
->>>>>>> fda97daff9843ba9591ba2b679aa0a78aab37fcd
       removeInDom(message);
     }
     if (message.verb === 'update') {
@@ -151,7 +143,7 @@ function updateInDom(message){
 }
 
 // --------------------------------------
-// PARTIE AJOUT DANS LE DOM 
+// PARTIE AJOUT DANS LE DOM
 // --------------------------------------
 
 function addInDesktopDom(message){
@@ -281,7 +273,7 @@ function removeInDesktopDom(message){
 }
 
 // --------------------------------------
-// PARTIE SUPPRESSION DANS LE DOM 
+// PARTIE SUPPRESSION DANS LE DOM
 // --------------------------------------
 
 function removeInMobileDom(message){
@@ -329,10 +321,10 @@ function removeInAllDom(message){
 
 
 // --------------------------------------
-// PARTIE MISE A JOUR DANS LE DOM 
+// PARTIE MISE A JOUR DANS LE DOM
 // --------------------------------------
 
-  // 'FAKE' PLAYER MOBILE - PROGRESSION 
+  // 'FAKE' PLAYER MOBILE - PROGRESSION
 
   var $player = $(".knob");
   var $timer  = $(".timer");
