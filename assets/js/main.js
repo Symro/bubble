@@ -127,8 +127,10 @@ $(document).ready(function(){
 
 	$('body').on('click', '#editDiscovery', function(e){
 		e.preventDefault();
+		var $li = $('.discoveries ul li');
 		$('ul.discoveries li a').toggleClass('active');
 		$('.discoveryAction').slideUp();
+		$li.removeClass('active');
 	});
 
 	$('body').on('click', '.dropDown', function(){
@@ -139,6 +141,7 @@ $(document).ready(function(){
 			$li.removeClass('active').find('.discoveryAction').slideUp();
 			$currentLi.addClass('active')
 			$(this).parents('.headDiscovery').next().slideToggle();
+			$('ul.discoveries li a').removeClass('active');
 		}else{
 			$li.removeClass('active')
 			$(this).parents('.headDiscovery').next().slideToggle();
@@ -374,6 +377,10 @@ $(document).ready(function(){
 	$('.search').on('click', '.results li', function(e){
 		e.preventDefault();
 
+
+
+
+
 		// Pop-up confirmation
 		$popup = confirm("Ajouter à la playlist ?");
 
@@ -498,5 +505,43 @@ $(document).ready(function(){
 		});
 
 	});
+
+
+	/* --------------------------------------------------------- */
+	//  PARTIE DESKTOP
+	/* --------------------------------------------------------- */
+
+
+	$('body').on('click','.player_track_dislike' ,function(event){
+		
+		$('.player_carousel_like_dislike_container').removeClass('invisible');
+
+		var ul = $('.player_carousel_like_dislike_container ul');
+		ul.empty();
+
+		$.each( currentDislike.users , function( key, value ) {
+			ul.append('<li><img src="'+value.image+'" alt="'+value.firstname+'"/></li>');
+		});
+
+		var carousel 		  = $('.player_carousel_like_dislike').jcarousel();
+		var carousel_forward  = $('.player_carousel_like_dislike_forward');
+		var carousel_backward = $('.player_carousel_like_dislike_backward');
+
+		
+		// Initialisation jCarousel
+		$('.player_carousel_like_dislike_forward').jcarouselControl({ target: '+=1',carousel: carousel });
+        $('.player_carousel_like_dislike_backward').jcarouselControl({ target: '-=1',carousel: carousel });
+		
+		(currentDislike.users.length > 3) ? carousel_forward.add(carousel_backward).removeClass('invisible') : carousel_forward.add(carousel_backward).addClass('invisible')
+
+
+	});
+
+
+
+
+
+
+
 
 });

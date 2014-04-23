@@ -121,7 +121,7 @@ threeSixtyPlayer.events.finish = function(){
 
 			// Remet le compteur de like & dislike à zéro
 			currentLike = 0;
-			currentDislike = 0;
+			currentDislike.count = 0;
 			likeContainer.text(0);
 			dislikeContainer.text(0);
 
@@ -174,6 +174,7 @@ function stop_send_player_position(){
  *
  * @param {Object} new_track :: database instance of song
  */
+
 
 function play_player(new_track){
 	get_player_position(); // Lancement du timer

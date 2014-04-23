@@ -238,7 +238,7 @@ function addInMobileDom(message){
     }
 
     var eltm = $('.song ul li').length;
-    console.log('num eltm: ', eltm);
+  
     if (eltm == 0)
       var insert = '<li data-id="'+message.datas.song.songTrackId+'" data-songService="'+message.datas.song.songService+'"><div class="action delete"></div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>'
     else
@@ -247,6 +247,7 @@ function addInMobileDom(message){
 
     // affichage DOM
     $('.song ul').append(insert);
+
   }
 
 }
@@ -301,7 +302,6 @@ function removeInMobileDom(message){
 
     // slide up + suppression DOM
     deleteSong.slideUp(function(){
-      console.log($(this));
       $(this).remove();
     });
   }
@@ -338,7 +338,9 @@ function removeInAllDom(message){
   var $currentArtist  = $('.current-song strong');
   var $currentSong    = $('.current-song span');
   var currentLike     = 0;
-  var currentDislike  = 0;
+  var currentDislike  = {};
+      currentDislike.count = 0;
+      currentDislike.users = [];
 
   if($player.length != 0){
     // Initialisation
@@ -408,10 +410,50 @@ function updateInDesktopDom(message){
   }
 
   if(message.info == "songDisliked"){
+
+    var nbConnected = parseInt(message.datas.subscribers.length);
+    nbConnected--; // Retire 1 (pour ne pas prendre en compte le Desktop)
+
     // Incremente le nombre de dislike du morceau en lecture sur Desktop
-    currentDislike++;
+    currentDislike.count++;
     var dislikeContainer = $('.player_track_dislike span');
-    dislikeContainer.html(currentDislike);
+    dislikeContainer.html(currentDislike.count);
+    // On ajoute quelques infos concernant l'utilisateur qui a disliké dans le tableau global currentDislike.user
+    currentDislike.users.push({firstname: message.datas.user.firstname, image: message.datas.user.image });
+
+    console.log("Il y en a en tout "+nbConnected+" connectés et "+currentDislike.count+" veulent passer le morceau");
+
+    // Si plus de la moitié des gens connectés n'aiment pas le morceau, on passe au suivant
+    if(nbConnected >= 2 && currentDislike.count/nbConnected >= 0.5){
+
+        var likeContainer    = $('.player_track_like span');
+        var dislikeContainer = $('.player_track_dislike span');
+
+        // Socket au contrôleur songController.js 
+        socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
+
+            if(response.songStatus != "undefined"){
+              currentPlaylist = response;
+
+              // Remet le compteur de like & dislike à zéro
+              currentLike = 0;
+              currentDislike.count = 0;
+              likeContainer.text(0);
+              dislikeContainer.text(0);
+
+              // Lancement musique suivante
+              play_player(currentPlaylist.songTrackId);
+
+              }
+              else{
+                // Pas de son à lire dans la playlist
+                console.log(" AUCUN SONG A LIRE (après vote dislike) ");
+                stop_send_player_position();
+              }
+
+        });
+
+    }
 
   }
 

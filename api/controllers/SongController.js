@@ -195,14 +195,23 @@ module.exports = {
             song.save(function(err) {
                 if(err) return next(err);
 
+
                 sails.sockets.broadcast(req.route.params.url,'message',{
                     verb:'update',
                     device:'desktop',
                     info:'songDisliked',
-                    datas:{}
+                    datas:{
+                        subscribers: sails.sockets.subscribers(room), 
+                        user:{
+                            firstname:req.session.User.firstname,
+                            image:req.session.User.image
+                        } 
+                    }
                 });
 
                 return res.json(song);
+
+
             });
 
         });

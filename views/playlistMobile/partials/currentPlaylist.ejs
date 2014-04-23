@@ -6,8 +6,6 @@
 
 		<% _.each(songs, function (playlist) { %>
 
-		<%= playlist.name %>
-
 			<% _.each(playlist.songs, function (song) { %>
 
 			<li data-id="<%= song.songTrackId %>" data-songService="<%= song.songService %>">
