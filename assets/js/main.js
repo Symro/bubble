@@ -127,8 +127,10 @@ $(document).ready(function(){
 
 	$('body').on('click', '#editDiscovery', function(e){
 		e.preventDefault();
+		var $li = $('.discoveries ul li');
 		$('ul.discoveries li a').toggleClass('active');
 		$('.discoveryAction').slideUp();
+		$li.removeClass('active');
 	});
 
 	$('body').on('click', '.dropDown', function(){
@@ -139,6 +141,7 @@ $(document).ready(function(){
 			$li.removeClass('active').find('.discoveryAction').slideUp();
 			$currentLi.addClass('active')
 			$(this).parents('.headDiscovery').next().slideToggle();
+			$('ul.discoveries li a').removeClass('active');
 		}else{
 			$li.removeClass('active')
 			$(this).parents('.headDiscovery').next().slideToggle();
@@ -365,6 +368,10 @@ $(document).ready(function(){
 	// Ajout d'un son à une playlist
 	$('.search').on('click', '.results li', function(e){
 		e.preventDefault();
+
+
+
+
 
 		// Pop-up confirmation
 		$popup = confirm("Ajouter à la playlist ?");
