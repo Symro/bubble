@@ -25,7 +25,7 @@
  * For convenience, you can also connect routes directly to views or external URLs.
  *
  */
- 
+
 module.exports.routes = {
 
   // By default, your root route (aka home page) points to a view
@@ -88,6 +88,10 @@ module.exports.routes = {
     controller:'Song',
     action:'add'
   },
+  'post /mobile/playlist/:url/addFromBubble':{
+    controller:'Song',
+    action:'addFromBubble'
+  },
   'post /mobile/playlist/:url/remove':{
     controller:'Song',
     action:'remove'
@@ -146,7 +150,7 @@ module.exports.routes = {
     controller: 'FileController',
     action: 'get'
   },
-  
+
   'get /public/playlist/*': {
     controller: 'FileController',
     action: 'get'
@@ -155,7 +159,7 @@ module.exports.routes = {
   'post /upload/historic/:id':{
     controller: 'upload',
     action: 'playlist'
-  },
+  }
 
 
 

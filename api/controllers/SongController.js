@@ -7,17 +7,26 @@
 
 module.exports = {
 
-    add:function(req, res, next){
+    add:function(req, res, next, songFromHistoric){
         // Log son à ajouter
         // console.dir(req.params.all());
         // console.dir(req.param('song'));
 
         // req.sessoin.id
         // req.param.url
-        var song     = req.param('song');
+        if (songFromHistoric != undefined) {
+            console.log('ajout par histo');
+            var song=songFromHistoric;
+            var img='/images/icon_music.png';
+            console.dir(songFromHistoric);
+        }else{
+            console.log('ajout normal');
+            var song = req.param('song');
+            var img=req.param('img');
+        }
+
         song["user"] = req.session.User.id;
         song["url"]  = req.route.params.url;
-        var img=req.param('img');
 
         // console.dir(song);
 
@@ -176,23 +185,39 @@ module.exports = {
             song.save(function(err) {
                 if(err) return next(err);
 
+
                 sails.sockets.broadcast(req.route.params.url,'message',{
                     verb:'update',
                     device:'desktop',
                     info:'songDisliked',
-                    datas:{}
+                    datas:{
+                        subscribers: sails.sockets.subscribers(room), 
+                        user:{
+                            firstname:req.session.User.firstname,
+                            image:req.session.User.image
+                        } 
+                    }
                 });
 
                 return res.json(song);
+
+
             });
 
         });
 
+    },
 
+    addFromBubble:function(req,res,next){
+        console.log('add from historic');
+        var songId=req.param('song');
 
+        Song.findOneBySongTrackId(songId).exec(function(err,song){
+            if(err) return next(err);
+            console.dir(song);
+            sails.controllers.song.add(req,res,next,song);
+        });
 
     }
-
-
 
 };

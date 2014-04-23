@@ -20,9 +20,9 @@ module.exports = {
         songTrackId:{
             primaryKey: true,
             unique: false,
-            type:"integer",
+            type:"string",
             required:true,
-            maxLength:11
+            maxLength:24
         },
         songTrackArtist:{
             type:"string",

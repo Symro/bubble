@@ -1,100 +1,75 @@
-/**
- * HistoricController.js
- *
- * @description ::
- * @docs        :: http://sailsjs.org/#!documentation/controllers
- */
+<% if(typeof(historic) != "undefined") { %>
 
-module.exports = {
+<% if(historic.length > 0) { %>
 
-	getHistoric: function( req, res, next ){
+<% _.each(historic, function (histo) { %>
 
-		// récupère les url playlist dans lequel il a participé
-		Join.find({user:req.param('userId')}).populate('playlist').sort('playlistUrl ASC').exec(function foundUserHistoric(err, historic){
-			var historic;
-			var fullHistoric = historic;
+			<li class="playlistHist" data-historic-url="<%= histo.playlist.url %>">
+				<h4><a href="<%= histo.playlist.url %>"><%= histo.playlist.name %></a></h4>
+				<%
+					var playlistDate = dateFormat(histo.playlist.createdAt);
 
-			if (err) return next(err);
+					function dateFormat(date) {
+					    var d = date.getDate();
+					    var m = date.getMonth() + 1;
+					    var y = date.getFullYear();
+					    return (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y;
+					}
 
-			if (!historic){
-				historic = {};
-			}
-
-			results = [];
-
-			// récupère les utilisateurs de chaque playlist
-			historic.forEach(function (doc, i){
-				// récupère les utilisateurs ayant rejoint les mêmes playlist que l'utilisateur connecté
-        Join.find({
-            'playlistUrl' : doc.playlistUrl
-	      }).populate('user').sort('playlistUrl ASC').exec( function foundUsersHistoric(err,users){
-        	// Pour chaque utilisateur on l'ajoute au JSON dans la bonne playlist
-            fullHistoric[i].users = users;
-
-            // On récupère les songs de chaque playlist
-            Song.find({'url':doc.playlistUrl}).populate('user').exec(function foundPlaylistSongs(err,song){
-          		fullHistoric[i].songs=song;
-          		// Quand tout est fini, on retourne le JSON final
-	            if(i == historic.length-1){
-								// return res.json({
-								// 	historic:fullHistoric
-								// });
-								return res.view('playlistMobile/partials/historic',{
-									historic:fullHistoric,
-									layout: null
-								});
-           		}
-            });
-
-       	});
-
-      });
-
-			 return res.json({
-			 	historic:historic
-			 });
-
-			 return res.view('playlistMobile/partials/historic',{
-			 	historic:historic,
-			 	layout: null
-			 });
-
+				%>
+				<span><%= playlistDate %></span>
+				<img src="<%= histo.playlist.image %>" alt="<%= histo.playlist.name %>" class="playlistImg">
+				<div class="wrapperUsers">
+					<i class="icon-flecheg listeUsers-backward"></i>
+					<div class="listeUsers">
+						<ul>
+							<% _.each(histo.users, function (users) { %>
+								<li class=""><img class="userImg" src="<%= users.user.image %>" alt="<%= users.user.firstname %>"><div class="error"></div></li>
+							<% }); %>
+						</ul>
+					</div>
+					<i class="icon-fleched listeUsers-forward"></i>
+				</div>
+				<div class="wrapperSongs custom-scroll">
+					<ul class="historics">
+					<% _.each(histo.songs, function (songs) { %>
+							<li>
+								<div class="headHistoric">
+									<div>
+										<strong><%= songs.songTrackName %></strong>
+										<span><%= songs.songTrackArtist %></span>
+									</div>
+									<div>
+										<a href="<%= songs.songPermalinkUrl %>" title="écouter"><i class="icon-<%= songs.songService %>ecouter"></i></a>
+									</div>
+									<div>
+										<img src="<%= songs.user.image%>" alt="<%= songs.user.firstname %>"/>
+									</div>
+									<div >
+										<a class="dropDownH"  href="javascript:void(0)" title="Discovery Action"><i id="iconRotate" class="icon-chevron"></i></a>
+									</div>
+									<div></div>
+								</div>
+								<div class="historicAction" data-track-id="<%= songs.songTrackId %>">
+									<i class="icon-playlist historicToPlaylist"></i>
+									<i class="icon-playen"></i>
+									<i class="icon-coeursansombre historicToDiscoveries"></i>
+								</div>
+							</li>
+					<% }); %>
+					</ul>
+				</div>
+			</li>
+			<hr>
+<%
 		});
-
-
 	}
 
-	// // Retourne la liste des participants à une playlist Bubble
-	// joinedUsers: function(req, res, next){
+}else { %>
 
-	// 	Join.findByPlaylistUrl( req.param('url') ).populate('user').exec(function foundJoinedUsers(err, users){
-
-	// 		if (err) return next(err);
-	// 		if (!users) return next();
-
-	// 		console.log('on est là ! *findByPlaylistUrl* sur du : ');
-
-	// 		return res.json({joinedUsers:users});
-
-	// 	});
-
-	// },
+	<br/>
+	<p>Votre historique est vide. </p>
+	<p>Et si vous rejoignez une Bubble ? :) </p>
 
 
-	// // Un participant vient d'arriver sur une room
-	// joined: function(req, res, next){
-
-	// 	var playlistUrl = req.param('url');
-
-	// 	req.socket.join(playlistUrl);
-	// 	req.socket.broadcast.to(playlistUrl).emit('message', {thisIs: 'Hey Im new !! _______theMessage'});
-
-	// 	res.json({
-	// 		joined:true,
-	//     	success: true
-	//     });
-
-	// }
-
-
-};
+<% } %>

@@ -111,7 +111,7 @@ $(document).ready(function(){
 					if(!datas.error){
 						$btn.addClass('active');
 					}
-					
+
 				});
 			}
 
@@ -307,6 +307,14 @@ $(document).ready(function(){
 		}
 	});
 
+	$('body').on('click', '.dropDownH', function(){
+		var $this = $(this);
+		$div=$this.parents('.headHistoric').next();
+		console.log($div);
+		$this.parents('.headHistoric').next().slideToggle();
+		$('.headHistoric').next().not($div).slideUp();
+	});
+
 
    	/* --------------------------------------------------------- */
 	//  PARTIE BUBBLE LIVE
@@ -384,6 +392,9 @@ $(document).ready(function(){
 
 		// console.log($temps);
 
+		$room=user.room;
+		console.log($room);
+
 		if($popup){
 
 		// Design d'interaction
@@ -455,6 +466,25 @@ $(document).ready(function(){
 
 	});
 
+	// Ajout aux découvertes depuis historique
+	$('.historic').on('click','.historicToDiscoveries',function(e){
+		$song=$(this).parent().data('track-id');
+		console.log($song);
+
+		socket.post( "/mobile/discovery",{song:$song} ,function(datas){
+			// console.log(datas);
+		});
+	});
+
+	// Ajout à la playlist en cours depuis l'historique
+	$('.historic').on('click','.historicToPlaylist',function(e){
+		$song=$(this).parent().data('track-id');
+		console.log($song);
+
+		socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:$song} ,function(datas){
+			// console.log(datas);
+		});
+	});
 
 	$('body').on('click','.deleteDiscovery' ,function(event){ //Alex
 		event.preventDefault();
@@ -476,7 +506,35 @@ $(document).ready(function(){
 	});
 
 
+	/* --------------------------------------------------------- */
+	//  PARTIE DESKTOP
+	/* --------------------------------------------------------- */
 
+
+	$('body').on('click','.player_track_dislike' ,function(event){
+		
+		$('.player_carousel_like_dislike_container').removeClass('invisible');
+
+		var ul = $('.player_carousel_like_dislike_container ul');
+		ul.empty();
+
+		$.each( currentDislike.users , function( key, value ) {
+			ul.append('<li><img src="'+value.image+'" alt="'+value.firstname+'"/></li>');
+		});
+
+		var carousel 		  = $('.player_carousel_like_dislike').jcarousel();
+		var carousel_forward  = $('.player_carousel_like_dislike_forward');
+		var carousel_backward = $('.player_carousel_like_dislike_backward');
+
+		
+		// Initialisation jCarousel
+		$('.player_carousel_like_dislike_forward').jcarouselControl({ target: '+=1',carousel: carousel });
+        $('.player_carousel_like_dislike_backward').jcarouselControl({ target: '-=1',carousel: carousel });
+		
+		(currentDislike.users.length > 3) ? carousel_forward.add(carousel_backward).removeClass('invisible') : carousel_forward.add(carousel_backward).addClass('invisible')
+
+
+	});
 
 
 

@@ -118,6 +118,8 @@ module.exports = {
                   }
                   // une erreur est survenue..
                   else{
+                    console.log("error : ");
+                    console.dir(err);
                     return res.forbidden('Internal Error');
                   }
 
