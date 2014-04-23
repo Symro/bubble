@@ -34,7 +34,7 @@ var jsFilesToInject = [
 
     // then beef it up with some convenience logic for talking to Sails.js
     'linker/js/sails.io.js',
-
+    
     'linker/js/soundcloud-sdk.js',
     'linker/js/soundmanager2-jsmin.js',
     'linker/js/jquery-editable-poshytip.min.js',

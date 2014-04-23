@@ -170,7 +170,7 @@ function addInDesktopDom(message){
     player.removeClass('invisible');
 
     // Lancement musique
-    play_player(currentPlaylist.songTrackId);
+    play_player(currentPlaylist);
 
   }
   else if (message.info=="songAdded") {

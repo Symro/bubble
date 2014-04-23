@@ -14,11 +14,14 @@ module.exports = {
 
         // req.sessoin.id
         // req.param.url
-        if (typeof songFromHistoric != undefined) {
+        if (songFromHistoric != undefined) {
+            console.log('ajout par histo');
             var song=songFromHistoric;
             var img='/images/icon_music.png';
+            console.dir(songFromHistoric);
         }else{
-            var song     = req.param('song');
+            console.log('ajout normal');
+            var song = req.param('song');
             var img=req.param('img');
         }
 
@@ -114,7 +117,7 @@ module.exports = {
         Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId, url: room}).exec(function statusUpdated(err, song){
             if(err) return next(err);
 
-            Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').limit(1).done(function(err, song) {
+            Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').limit(1).exec(function(err, song) {
                 // Error handling
                 if (err) return next(err);
 
@@ -199,11 +202,10 @@ module.exports = {
     addFromBubble:function(req,res,next){
         console.log('add from historic');
         var songId=req.param('song');
-        console.dir(req.param);
 
         Song.findOneBySongTrackId(songId).exec(function(err,song){
             if(err) return next(err);
-            // console.dir(song);
+            console.dir(song);
             sails.controllers.song.add(req,res,next,song);
         });
 

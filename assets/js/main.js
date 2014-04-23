@@ -128,13 +128,22 @@ $(document).ready(function(){
 	$('body').on('click', '#editDiscovery', function(e){
 		e.preventDefault();
 		$('ul.discoveries li a').toggleClass('active');
+		$('.discoveryAction').slideUp();
 	});
 
 	$('body').on('click', '.dropDown', function(){
-		var $this = $(this);
-		$div=$this.parents('.headDiscovery').next();
-		$this.parents('.headDiscovery').next().slideToggle();
-		$('.headDiscovery').next().not($div).slideUp();
+		var $currentLi = $(this).closest( "li" );
+		var $li = $('.discoveries ul li');
+
+		if(!$currentLi.hasClass('active') === true){
+			$li.removeClass('active').find('.discoveryAction').slideUp();
+			$currentLi.addClass('active')
+			$(this).parents('.headDiscovery').next().slideToggle();
+		}else{
+			$li.removeClass('active')
+			$(this).parents('.headDiscovery').next().slideToggle();
+		}
+
 	});
 
 
@@ -158,7 +167,7 @@ $(document).ready(function(){
 
 		$('.menu-close').on('click', function(e){
 			e.preventDefault();
-			$menu.	Class('open');
+			$menu.removeClass('open');
 			$wrapper.removeClass('blur');
 		});
 
@@ -376,6 +385,9 @@ $(document).ready(function(){
 
 		// console.log($temps);
 
+		$room=user.room;
+		console.log($room);
+
 		if($popup){
 
 		// Design d'interaction
@@ -452,7 +464,7 @@ $(document).ready(function(){
 		$song=$(this).parent().data('track-id');
 		console.log($song);
 
-		socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:$song} ,function(datas){
+		socket.post( "/mobile/discovery",{song:$song} ,function(datas){
 			// console.log(datas);
 		});
 	});
