@@ -121,7 +121,7 @@ threeSixtyPlayer.events.finish = function(){
 
 			// Remet le compteur de like & dislike à zéro
 			currentLike = 0;
-			currentDislike = 0;
+			currentDislike.count = 0;
 			likeContainer.text(0);
 			dislikeContainer.text(0);
 
@@ -166,7 +166,6 @@ function send_player_position(){
 function stop_send_player_position(){
 	clearInterval(get_player_position_timer);
 }
-
 
 
 

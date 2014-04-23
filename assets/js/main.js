@@ -459,9 +459,34 @@ $(document).ready(function(){
 
 	});
 
+	/* --------------------------------------------------------- */
+	//  PARTIE DESKTOP
+	/* --------------------------------------------------------- */
 
 
+	$('body').on('click','.player_track_dislike' ,function(event){
+		var ul = $('.player_carousel_like_dislike_container ul');
+		ul.empty();
 
+		$.each( currentDislike.users , function( key, value ) {
+			ul.append('<li><img src="'+value.image+'" alt="'+value.firstname+'"/></li>');
+			console.log("oui");
+		});
+
+		console.log("non");
+		var carousel 		  = $('.player_carousel_like_dislike').jcarousel();
+		var carousel_forward  = $('.player_carousel_like_dislike_forward');
+		var carousel_backward = $('.player_carousel_like_dislike_backward');
+
+		
+		// Initialisation jCarousel
+		$('.player_carousel_like_dislike_forward').jcarouselControl({ target: '+=1',carousel: carousel });
+        $('.player_carousel_like_dislike_backward').jcarouselControl({ target: '-=1',carousel: carousel });
+		
+		(currentDislike.users.length > 3) ? carousel_forward.add(carousel_backward).removeClass('invisible') : carousel_forward.add(carousel_backward).addClass('invisible')
+
+
+	});
 
 
 

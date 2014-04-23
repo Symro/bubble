@@ -155,7 +155,7 @@ module.exports.routes = {
   'post /upload/historic/:id':{
     controller: 'upload',
     action: 'playlist'
-  },
+  }
 
 
 

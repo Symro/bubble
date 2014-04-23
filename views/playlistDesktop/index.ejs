@@ -23,7 +23,6 @@
 			<i class="icon-flecheg listeParticipant-backward"></i>
 			<div class="listeParticipant" data-carousel="">
 				<%- partial('partials/members')%>
-                <!--<?php require('partials/members.html'); ?>-->
 			</div>
 			<i class="icon-fleched listeParticipant-forward"></i>
 		</div>
@@ -32,8 +31,6 @@
 	<div class="playlistContent" id="playlistencours" >
 		<h4 class="form-signin-heading txtcenter">Play queue</h4>
 		<ul class="liPlaylist" data-playlist="">
-			<!--<ul class="liPlaylist" data-playlist="<?php echo $PARAMS['id']; ?>">
-			<?php require('partials/playlist.html'); ?>-->
 			<%- partial('partials/currentPlaylist')%>
 		</ul>
 	</div>
@@ -49,6 +46,15 @@
 			<div class="player_track_name"></div>
 			<div class="player_track_like"><span>0</span><i class="icon-coeuralone"></i></div>
 			<div class="player_track_dislike"><span>0</span><i class="icon-thumbalone"></i></div>
+			<div class="player_carousel_like_dislike_container">
+				<i class="icon-flecheg player_carousel_like_dislike_backward invisible"></i>
+				<div class="player_carousel_like_dislike">
+					<ul>
+						
+					</ul>
+				</div>
+				<i class="icon-fleched player_carousel_like_dislike_forward invisible"></i>
+			</div>
 		</div>
 
 	</section>
