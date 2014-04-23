@@ -1440,26 +1440,50 @@ input[type="text"]:focus,input[type="text"]:active{
   -webkit-flex: none;
   flex: none;
 }
-.discoveries li .headDiscovery div:nth-of-type(3) {
+.discoveries li .headDiscovery div:nth-of-type(2) {
   width:40px;
   margin-left:10px;
   -webkit-flex: none;
   flex: none;
 }
-.discoveries li .headDiscovery div:nth-of-type(3) img{
+.discoveries li .headDiscovery div:nth-of-type(2) img{
   border:solid 1px rgba(255,255,255,0.7);
   border-radius:50%;
   width:35px;
   height:35px;
 }
-.discoveries li .headDiscovery div:nth-of-type(4) {
-  width:40px;
+.discoveries li .headDiscovery div:nth-of-type(3) {
   margin-left:10px;
   -webkit-flex: none;
   flex: none;
+  transition-property:transform;
+  transition-duration: .4s;
+  transition-timing-function:ease-in-out;
+  transform-origin: bottom;
+  transform : rotate(180deg);
+    -webkit-transform : rotate(180deg);
+    -moz-transform : rotate(180deg);
+    -ms-transform : rotate(180deg);
+    -o-transform : rotate(180deg);
+
 }
 
-.discoveries li div:nth-of-type(5) {
+.discoveries li.active div:nth-of-type(3) {
+  transition-property:transform;
+  transition-duration: .4s;
+  transition-timing-function:ease-in-out;
+  transform-origin: bottom;
+    transform : rotate(0deg);
+    -webkit-transform : rotate(0deg);
+    -moz-transform : rotate(0deg);
+    -ms-transform : rotate(0deg);
+    -o-transform : rotate(0deg);
+}
+.discoveries li .headDiscovery div:nth-of-type(3) a{
+  webkit-transform:rotate(90deg);
+}
+
+.discoveries li div:nth-of-type(4) {
   display: inline-block;
   clear:right;
   width:40px;
@@ -1469,6 +1493,7 @@ input[type="text"]:focus,input[type="text"]:active{
 }
 .discoveryAction{
   display:none;
+  padding-top: 4px;
 }
 
 

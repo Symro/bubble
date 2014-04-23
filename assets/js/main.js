@@ -128,13 +128,22 @@ $(document).ready(function(){
 	$('body').on('click', '#editDiscovery', function(e){
 		e.preventDefault();
 		$('ul.discoveries li a').toggleClass('active');
+		$('.discoveryAction').slideUp();
 	});
 
 	$('body').on('click', '.dropDown', function(){
-		var $this = $(this);
-		$div=$this.parents('.headDiscovery').next();
-		$this.parents('.headDiscovery').next().slideToggle();
-		$('.headDiscovery').next().not($div).slideUp();
+		var $currentLi = $(this).closest( "li" );
+		var $li = $('.discoveries ul li');
+
+		if(!$currentLi.hasClass('active') === true){
+			$li.removeClass('active').find('.discoveryAction').slideUp();
+			$currentLi.addClass('active')
+			$(this).parents('.headDiscovery').next().slideToggle();
+		}else{
+			$li.removeClass('active')
+			$(this).parents('.headDiscovery').next().slideToggle();
+		}
+
 	});
 
 

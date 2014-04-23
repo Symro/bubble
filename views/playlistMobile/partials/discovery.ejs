@@ -14,18 +14,15 @@
 						<span><%= discover.song.songTrackName %></span>
 					</div>
 					<div>
-						<a href="<%= discover.song.songPermalinkUrl %>" target="_blank" title="<%= discover.song.songTrackName %>"><i class="icon-<%= discover.song.songService %>ecouter"></i></a>
-					</div>
-					<div>
 						<img src="<%= discover.song.userInfo.image %>" alt="<%= discover.song.userInfo.firstname %>"/>
 					</div>
 					<div >
-						<a class="dropDown"  href="javascript:void(0)" title="Discovery Action"><i id="iconRotate" class="icon-chevron"></i></a>
+						<a class="dropDown"  href="javascript:void(0)" title="Discovery Action"><i class="icon-chevron"></i></a>
 					</div>
 				</div>
 				<div class="discoveryAction">
 					<a class="" href="" title="Add the track to the playslist"><i class="icon-playlist"></i></a>
-					<a class="action deleteDiscovery" title="Listen the track" href="javascript:void(0)"><i class="icon-playen"></i></a>
+					<a href="<%= discover.song.songPermalinkUrl %>" target="_blank" title="<%= discover.song.songTrackName %>"><i class="icon-<%= discover.song.songService %>ecouter"></i></a>
 					<a class="action deleteDiscovery" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
 				</div>
 
