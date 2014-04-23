@@ -126,7 +126,7 @@ threeSixtyPlayer.events.finish = function(){
 			dislikeContainer.text(0);
 
 			// Lancement musique suivante
-	    	play_player(currentPlaylist.songTrackId);
+	    	play_player(currentPlaylist);
 
 	    }
 	    else{
@@ -169,16 +169,36 @@ function stop_send_player_position(){
 
 
 
+/**
+ * Play new song
+ *
+ * @param {Object} new_track :: database instance of song
+ */
+
+
 function play_player(new_track){
 	get_player_position(); // Lancement du timer
 
-	console.log("Lecture d'un nouveau morceau : "+new_track);
+	console.log("Lecture d'un nouveau morceau : "+new_track.songTrackName);
+
 	// Change l'url dynamiquement et joue le morceau
-	$(".ui360 a").attr("href","http://api.soundcloud.com/tracks/"+new_track+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb");
+	switch (new_track.songService) {
+		case 'soundcloud' : 
+			$(".ui360 a").attr("href","http://api.soundcloud.com/tracks/"+new_track.songTrackId+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb");
+		break;
+		case 'spotify' : 
+			$(".ui360 a").attr("href",new_track.songPermalinkUrl);
+		break;
+		case 'deezer' : 
+			$(".ui360 a").attr("href",new_track.songPermalinkUrl);
+		break;
+	}
+
+
     threeSixtyPlayer.handleClick({target:threeSixtyPlayer.links[0],preventDefault:function(){}});
 
-	$('.player_track_name').html(currentPlaylist.songTrackName);
-	$('.player_track_artist').html(currentPlaylist.songTrackArtist);
+	$('.player_track_name').html(new_track.songTrackName);
+	$('.player_track_artist').html(new_track.songTrackArtist);
 
 }
 

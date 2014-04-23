@@ -32,31 +32,35 @@
 				</div>
 				<div class="wrapperSongs custom-scroll">
 					<ul class="historics">
-					<!--
-					**********************
-					TO DO :
-					**********************
-					-->
 					<% _.each(histo.songs, function (songs) { %>
 							<li>
-								<div data-track-id="<?php echo $songs['song_track_id']; ?>" data-id="<?php echo $songs['song_id']; ?>">
-									<strong><%= songs.songTrackName %></strong>
-									<span><%= songs.songTrackArtist %></span>
+								<div class="headHistoric">
+									<div>
+										<strong><%= songs.songTrackName %></strong>
+										<span><%= songs.songTrackArtist %></span>
+									</div>
+									<div>
+										<a href="<%= songs.songPermalinkUrl %>" title="écouter"><i class="icon-<%= songs.songService %>ecouter"></i></a>
+									</div>
+									<div>
+										<img src="<%= songs.user.image%>" alt="<%= songs.user.firstname %>"/>
+									</div>
+									<div >
+										<a class="dropDownH"  href="javascript:void(0)" title="Discovery Action"><i id="iconRotate" class="icon-chevron"></i></a>
+									</div>
+									<div></div>
 								</div>
-								<div>
-									<a href="<%= songs.songPermalinkUrl %>" title="<%= songs.user.firstname %>"><i class="icon-<%= songs.songService %>ecouter"></i></a>
+								<div class="historicAction" data-track-id="<%= songs.songTrackId %>">
+									<i class="icon-playlist historicToPlaylist"></i>
+									<i class="icon-playen"></i>
+									<i class="icon-coeursansombre historicToDiscoveries"></i>
 								</div>
-								<div>
-									<img src="<%= songs.user.image%>" alt="<%= songs.user.firstname %>"/>
-								</div>
-								<div></div>
 							</li>
 					<% }); %>
 					</ul>
 				</div>
 			</li>
 			<hr>
-
 <%
 		});
 	}

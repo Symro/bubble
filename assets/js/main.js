@@ -111,7 +111,7 @@ $(document).ready(function(){
 					if(!datas.error){
 						$btn.addClass('active');
 					}
-					
+
 				});
 			}
 
@@ -128,13 +128,22 @@ $(document).ready(function(){
 	$('body').on('click', '#editDiscovery', function(e){
 		e.preventDefault();
 		$('ul.discoveries li a').toggleClass('active');
+		$('.discoveryAction').slideUp();
 	});
 
 	$('body').on('click', '.dropDown', function(){
-		var $this = $(this);
-		$div=$this.parents('.headDiscovery').next();
-		$this.parents('.headDiscovery').next().slideToggle();
-		$('.headDiscovery').next().not($div).slideUp();
+		var $currentLi = $(this).closest( "li" );
+		var $li = $('.discoveries ul li');
+
+		if(!$currentLi.hasClass('active') === true){
+			$li.removeClass('active').find('.discoveryAction').slideUp();
+			$currentLi.addClass('active')
+			$(this).parents('.headDiscovery').next().slideToggle();
+		}else{
+			$li.removeClass('active')
+			$(this).parents('.headDiscovery').next().slideToggle();
+		}
+
 	});
 
 
@@ -295,6 +304,14 @@ $(document).ready(function(){
 		}
 	});
 
+	$('body').on('click', '.dropDownH', function(){
+		var $this = $(this);
+		$div=$this.parents('.headHistoric').next();
+		console.log($div);
+		$this.parents('.headHistoric').next().slideToggle();
+		$('.headHistoric').next().not($div).slideUp();
+	});
+
 
    	/* --------------------------------------------------------- */
 	//  PARTIE BUBBLE LIVE
@@ -368,6 +385,9 @@ $(document).ready(function(){
 
 		// console.log($temps);
 
+		$room=user.room;
+		console.log($room);
+
 		if($popup){
 
 		// Design d'interaction
@@ -439,6 +459,25 @@ $(document).ready(function(){
 
 	});
 
+	// Ajout aux découvertes depuis historique
+	$('.historic').on('click','.historicToDiscoveries',function(e){
+		$song=$(this).parent().data('track-id');
+		console.log($song);
+
+		socket.post( "/mobile/discovery",{song:$song} ,function(datas){
+			// console.log(datas);
+		});
+	});
+
+	// Ajout à la playlist en cours depuis l'historique
+	$('.historic').on('click','.historicToPlaylist',function(e){
+		$song=$(this).parent().data('track-id');
+		console.log($song);
+
+		socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:$song} ,function(datas){
+			// console.log(datas);
+		});
+	});
 
 	$('body').on('click','.deleteDiscovery' ,function(event){ //Alex
 		event.preventDefault();
@@ -458,6 +497,7 @@ $(document).ready(function(){
 		});
 
 	});
+
 
 	/* --------------------------------------------------------- */
 	//  PARTIE DESKTOP
@@ -487,6 +527,7 @@ $(document).ready(function(){
 
 
 	});
+
 
 
 
