@@ -238,6 +238,7 @@ function addInMobileDom(message){
     }
 
     // affichage DOM
+    $('.playlistInfo').hide();
     $('.song ul').append('<li data-id="'+message.datas.song.songTrackId+'"><div class="action delete">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>');
   }
 
@@ -293,7 +294,6 @@ function removeInMobileDom(message){
 
     // slide up + suppression DOM
     deleteSong.slideUp(function(){
-      console.log($(this));
       $(this).remove();
     });
   }
