@@ -111,7 +111,7 @@ $(document).ready(function(){
 					if(!datas.error){
 						$btn.addClass('active');
 					}
-					
+
 				});
 			}
 
@@ -158,7 +158,7 @@ $(document).ready(function(){
 
 		$('.menu-close').on('click', function(e){
 			e.preventDefault();
-			$menu.removeClass('open');
+			$menu.	Class('open');
 			$wrapper.removeClass('blur');
 		});
 
@@ -293,6 +293,14 @@ $(document).ready(function(){
 		else{
 			$wrapperSongs.slideDown();
 		}
+	});
+
+	$('body').on('click', '.dropDownH', function(){
+		var $this = $(this);
+		$div=$this.parents('.headHistoric').next();
+		console.log($div);
+		$this.parents('.headHistoric').next().slideToggle();
+		$('.headHistoric').next().not($div).slideUp();
 	});
 
 
@@ -439,6 +447,25 @@ $(document).ready(function(){
 
 	});
 
+	// Ajout aux découvertes depuis historique
+	$('.historic').on('click','.historicToDiscoveries',function(e){
+		$song=$(this).parent().data('track-id');
+		console.log($song);
+
+		socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:$song} ,function(datas){
+			// console.log(datas);
+		});
+	});
+
+	// Ajout à la playlist en cours depuis l'historique
+	$('.historic').on('click','.historicToPlaylist',function(e){
+		$song=$(this).parent().data('track-id');
+		console.log($song);
+
+		socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:$song} ,function(datas){
+			// console.log(datas);
+		});
+	});
 
 	$('body').on('click','.deleteDiscovery' ,function(event){ //Alex
 		event.preventDefault();
@@ -458,15 +485,5 @@ $(document).ready(function(){
 		});
 
 	});
-
-
-
-
-
-
-
-
-
-
 
 });

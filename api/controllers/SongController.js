@@ -7,17 +7,23 @@
 
 module.exports = {
 
-    add:function(req, res, next){
+    add:function(req, res, next, songFromHistoric){
         // Log son à ajouter
         // console.dir(req.params.all());
         // console.dir(req.param('song'));
 
         // req.sessoin.id
         // req.param.url
-        var song     = req.param('song');
+        if (typeof songFromHistoric != undefined) {
+            var song=songFromHistoric;
+            var img='/images/icon_music.png';
+        }else{
+            var song     = req.param('song');
+            var img=req.param('img');
+        }
+
         song["user"] = req.session.User.id;
         song["url"]  = req.route.params.url;
-        var img=req.param('img');
 
         // console.dir(song);
 
@@ -188,11 +194,19 @@ module.exports = {
 
         });
 
+    },
 
+    addFromBubble:function(req,res,next){
+        console.log('add from historic');
+        var songId=req.param('song');
+        console.dir(req.param);
 
+        Song.findOneBySongTrackId(songId).exec(function(err,song){
+            if(err) return next(err);
+            // console.dir(song);
+            sails.controllers.song.add(req,res,next,song);
+        });
 
     }
-
-
 
 };
