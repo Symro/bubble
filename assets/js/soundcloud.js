@@ -4,22 +4,60 @@ SC.initialize({
 	client_id: "933d179a29049bde6dd6f1c2db106eeb",
 });
 
-
 // Code
 search.init({
+
+	/**
+	 * Exec Spotify search
+	 * 
+	 * @param {String} query
+	 */
 
 	searchedSpotify:function(query){
 
 		$.ajax({
 			url:'https://api.spotify.com/v1/search?q='+query+'&type=track',
+			type: 'GET',
 			success:function(data){
 
 				$('.results').empty();
-				
+
 				$(data.tracks).each(function(index, track) {
 
 						$img="/images/icon_music.png";
 						$('.results').append($('<li data-song="'+track.name+'" data-songid="'+track.id+'" data-songservice="spotify" data-songartist="'+track.artists[0].name+'" data-songduration="'+track.duration_ms+'" data-permalink="'+track.preview_url+'"></li>').html('<img src='+$img+'><div><span class="title">'+track.name + '</span><span class="artist">'+ track.artists[0].name +'</span></div>'));
+
+				});
+
+			}
+		});
+
+	},
+
+	/**
+	 * Exec Deezer search
+	 * 
+	 * @param {String} query
+	 */
+
+	searchedDeezer:function(query){
+
+		$.ajax({
+			url:'http://api.deezer.com/search?q='+query+'&output=jsonp',
+			type: 'GET',
+			dataType: 'jsonp',
+			success:function(data){
+
+				$('.results').empty();
+
+				$(data.data).each(function(index, track) {
+
+					if (track.readable === true) {
+
+						$img=track.album.cover;
+						$('.results').append($('<li data-song="'+track.title+'" data-songid="'+track.id+'" data-songservice="deezer" data-songartist="'+track.artist.name+'" data-songduration="'+track.duration+'" data-permalink="'+track.preview+'"></li>').html('<img src='+$img+'><div><span class="title">'+track.title + '</span><span class="artist">'+ track.artist.name +'</span></div>'));
+
+					}
 
 				});
 
