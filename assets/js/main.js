@@ -451,9 +451,10 @@ $(document).ready(function(){
 	$('body').on('click','.current-playlist .song .delete',function(event){
 		event.stopPropagation();
 		$songId=$(this).parent().data("id");
+		$songService=$(this).parent().data("songService");
 		// $playlist=$(".wrapper").data('playlist-url');
 
-		socket.post( "/mobile/playlist/"+user.room+"/remove",{song:$songId} ,function( datas ) {
+		socket.post( "/mobile/playlist/"+user.room+"/remove",{song:$songId, service:$songService} ,function( datas ) {
 			// console.log(datas);
 		});
 

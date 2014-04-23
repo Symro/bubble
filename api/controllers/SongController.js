@@ -82,28 +82,38 @@ module.exports = {
 
         // Récupération id song
         songId=Number(req.param('song'));
+        service = req.param('service');
 
-        // Suprresion du son ciblé
-        Song.destroy({songTrackId:songId,url:req.route.params.url}).exec(function getSong(err,song){
-            console.log("song supprimé !");
-            // console.dir(song);
+        Song.findOne(songId).exec(function FindSong (err, song) {
+            if (err) return next(err);
+            console.log(song);
+            // Can delete only waiting songs
+            if (song.songStatus === 'waiting') {
 
-            // Suppression DOM^mobile
-            sails.sockets.broadcast(req.route.params.url,'message',{
-                verb:'delete',
-                device:'mobile',
-                info:'songRemoved',
-                datas:{songTrackId:songId}
-            });
+                // Suprresion du son ciblé
+                Song.destroy({songTrackId:songId, songService:service ,url:req.route.params.url}).exec(function getSong(err,song){
+                    console.log("song supprimé !");
+                    // console.dir(song);
 
-            // Supression DOM desktop
-            sails.sockets.broadcast(req.route.params.url,'message',{
-                verb:'delete',
-                device:'desktop',
-                info:'songRemoved',
-                datas:{songTrackId:songId}
-            });
+                    // Suppression DOM^mobile
+                    sails.sockets.broadcast(req.route.params.url,'message',{
+                        verb:'delete',
+                        device:'mobile',
+                        info:'songRemoved',
+                        datas:{songTrackId:songId}
+                    });
 
+                    // Supression DOM desktop
+                    sails.sockets.broadcast(req.route.params.url,'message',{
+                        verb:'delete',
+                        device:'desktop',
+                        info:'songRemoved',
+                        datas:{songTrackId:songId}
+                    });
+
+                });
+
+            }
         });
     },
 
@@ -134,7 +144,7 @@ module.exports = {
                             verb:'update',
                             device:'mobile',
                             info:'resetLikeDislike',
-                            datas:{}
+                            datas:song
                         });
 
                         return res.json(song);

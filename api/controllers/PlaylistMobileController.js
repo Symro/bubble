@@ -103,7 +103,7 @@ module.exports = {
 			    		// console.dir(songs);
 
 			    		// return res.json({playlist:songs});
-
+			    		sails.log(songs);
 			    		res.view({
 								playlist: playlist,
 								songs:songs,
