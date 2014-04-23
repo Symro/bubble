@@ -28,8 +28,7 @@
     "shortid": "^2.0.0",
     "mkdirp": "^0.3.5",
     "express-resizer": "0.0.6",
-    "gm": "^1.14.2",
-    "node-deezer": "~0.3.3"
+    "gm": "^1.14.2"
   },
   "scripts": {
     "start": "node app.js",
