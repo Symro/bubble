@@ -34,14 +34,6 @@ module.exports = {
 	  	image:{
 	  		type:'string',
 	  		defaultsTo:'/images/no_image.png'
-	  	},
-
-	  	toJSON:function(){
-	  		var obj=this.toObject();
-	  		delete obj.password;
-	  		delete obj.confirmation;
-	  		delete obj._csrf;
-	  		return obj;
 	  	}
 	},
 

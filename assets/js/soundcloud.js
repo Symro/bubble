@@ -8,20 +8,23 @@ SC.initialize({
 // Code
 search.init({
 
-	searchedYoutube:function(){
+	searchedSpotify:function(query){
 
 		$.ajax({
-			url:'http://gdata.youtube.com/feeds/api/videos/-/%7Bhttp%3A%2F%2Fgdata.youtube.com%2Fschemas%2F2007%2Fcategories.cat%7DMusic?alt=json&q='+query+'&orderby=viewCount',
-			dataType:'jsonp',
+			url:'https://api.spotify.com/v1/search?q='+query+'&type=track',
 			success:function(data){
-				$('.results').empty();
 
-				for (i = 0; i < data.feed.entry.length; i++) {
-					console.log(data.feed.entry[i]);
-					$('.results').append($('<li data-songService="youtube"></li>').html('<p><img width="120px" height="80px" src='+data.feed.entry[i].media$group.media$thumbnail[1].url+'><span>'+data.feed.entry[i].media$group.media$title.$t+'</span></p><a href="">Ajouter</a>'));
-				};
+				$('.results').empty();
+				
+				$(data.tracks).each(function(index, track) {
+
+						$img="/images/icon_music.png";
+						$('.results').append($('<li data-song="'+track.name+'" data-songid="'+track.id+'" data-songservice="spotify" data-songartist="'+track.artists[0].name+'" data-songduration="'+track.duration_ms+'" data-permalink="'+track.preview_url+'"></li>').html('<img src='+$img+'><div><span class="title">'+track.name + '</span><span class="artist">'+ track.artists[0].name +'</span></div>'));
+
+				});
+
 			}
-		})
+		});
 
 	},
 

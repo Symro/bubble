@@ -108,7 +108,7 @@ module.exports = {
         Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId, url: room}).exec(function statusUpdated(err, song){
             if(err) return next(err);
 
-            Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').limit(1).done(function(err, song) {
+            Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').limit(1).exec(function(err, song) {
                 // Error handling
                 if (err) return next(err);
 
