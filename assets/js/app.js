@@ -165,9 +165,9 @@ function addInDesktopDom(message){
     // Ajoute le morceau au tableau de lecture
     currentPlaylist = message.datas;
 
-    // Apparition du player
-    var player = $('.desktop-container .player');
-    player.removeClass('invisible');
+    // Apparition du player sur Desktop et mobile
+    var playerDesktop = $('.desktop-container .player');
+    playerDesktop.removeClass('invisible');
 
     // Lancement musique
     play_player(currentPlaylist);
@@ -394,6 +394,13 @@ function updateInMobileDom(message){
     var $btnDislike = $('#song-dislike');
 
     $btnLike.add($btnDislike).removeClass('active');
+
+  }
+
+  if(message.info == "showPlayer"){
+    console.log('Affichage player mobile ! ');
+    // Affichage du player sur mobile
+     $('.current-playlist').removeClass('invisible');
 
   }
 
