@@ -18,7 +18,7 @@ module.exports = {
             console.log('ajout par histo');
             var song=songFromHistoric;
             var img='/images/icon_music.png';
-            console.dir(songFromHistoric);
+            // console.dir(songFromHistoric);
         }else{
             console.log('ajout normal');
             var song = req.param('song');
@@ -51,7 +51,7 @@ module.exports = {
                         info:'startPlaying',
                         datas:song[0]
                     });
-                    
+
                     // affichage player sur mobile
                     sails.sockets.broadcast(req.route.params.url,'message',{
                         verb:'update',
@@ -67,21 +67,25 @@ module.exports = {
 
           });
 
-          // Ajout DOM mobile
-          sails.sockets.broadcast(req.param('url'),'message',{
-            verb:'add',
-            device:'mobile',
-            info:'songAdded',
-            datas:{song:song}
-          });
 
-          // Ajout DOM desktop
-          sails.sockets.broadcast(req.param('url'),'message',{
-            verb:'add',
-            device:'desktop',
-            info:'songAdded',
-            datas:{song:song,id:added.id,img:img}
-          });
+          	User.findOne(song.user).exec(function getImage(err,img){
+          		if(err) return next(err);
+				// Ajout DOM mobile
+				sails.sockets.broadcast(req.param('url'),'message',{
+					verb:'add',
+					device:'mobile',
+					info:'songAdded',
+					datas:{song:song,userImg:img.image}
+				});
+
+				// Ajout DOM desktop
+				sails.sockets.broadcast(req.param('url'),'message',{
+					verb:'add',
+					device:'desktop',
+					info:'songAdded',
+					datas:{song:song,id:added.id,img:img,userImg:img.image}
+				});
+          	});
 
         });
 

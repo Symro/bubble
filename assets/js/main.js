@@ -519,7 +519,6 @@ $(document).ready(function(){
 
 
 	// Ajout aux découvertes depuis historique
-
 	$('.historic').on('click','.historicToDiscoveries',function(e){
 
 		$song=$(this).parent().data('track-id');
@@ -534,12 +533,25 @@ $(document).ready(function(){
 	});
 
 	// Ajout à la playlist en cours depuis l'historique
-
 	$('.historic').on('click','.historicToPlaylist',function(e){
 
 		$song=$(this).parent().data('track-id');
 
 		console.log($song);
+
+		socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:$song} ,function(datas){
+
+			// console.log(datas);
+
+		});
+
+	});
+
+	// Ajout à la playlist en cours depuis desicoveries
+	$('.discoveries').on('click','.discoveriesToPlaylist',function(e){
+
+		$song=String($(this).parent().data('track-id'));
+
 
 		socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:$song} ,function(datas){
 
