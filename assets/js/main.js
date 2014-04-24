@@ -176,6 +176,16 @@ $(document).ready(function(){
 
 	});
 
+	$('.tutoriel').on('click', function(e){
+		e.preventDefault();
+		$('.tutorielOpen').addClass('visible');
+
+		$('.tutoriel-close').on('click', function(e){
+			e.preventDefault();
+			$('.tutorielOpen').removeClass('visible');
+		});
+	})
+
 
 	/* ------------------------------------------------- */
 	// GESTION UPLOAD
