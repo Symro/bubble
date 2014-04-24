@@ -334,6 +334,10 @@ $(document).ready(function(){
 	//  PARTIE BUBBLE LIVE
 	/* --------------------------------------------------------- */
 
+	$('.form-join-playlist input[type="text"]').click(function(){
+	    $(this).focus();
+	});
+
 	$player = $(".knob");
 	$timer  = $(".timer");
 	$music_duration = 180;

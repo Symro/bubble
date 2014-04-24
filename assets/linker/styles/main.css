@@ -86,14 +86,12 @@ input:-moz-placeholder { color:rgba(255,255,255,0.8); }
 body{
   overflow:none;
   background-image: url(../../images/bg_desktop_1080.jpg);
+  background-size:cover;
+  background-repeat: no-repeat;
   font-family: 'Source Sans Pro', sans-serif;
   color:white;
 }
-body.desktop{
-  background-image:url(../../images/bg_desktop_1080.jpg);
-  background-size:cover;
-  background-repeat: no-repeat;
-}
+
 
 a{
   text-decoration: none;
@@ -765,6 +763,7 @@ header {
 .index-container{
   text-align:center;
   padding-top: 50px;
+  height:100%;
 }
 
 .index-container section,
@@ -1412,6 +1411,7 @@ input[type="text"]:focus,input[type="text"]:active{
 
 .discoveries ul{
   list-style: none;
+  padding:0;
 }
 .discoveries li{
   border-bottom:solid 1px rgba(238,226,226,0.5);
@@ -1498,7 +1498,7 @@ input[type="text"]:focus,input[type="text"]:active{
 }
 .discoveries li .headDiscovery div:nth-of-type(2) {
   width:40px;
-  margin-left:10px;
+  margin-left:5px;
   -webkit-flex: none;
   flex: none;
 }
@@ -1552,7 +1552,8 @@ input[type="text"]:focus,input[type="text"]:active{
 }
 .discoveryAction{
   display:none;
-  padding-top: 4px;
+  padding-top: 5px;
+  padding-bottom:6px;
 }
 
 
@@ -1936,6 +1937,10 @@ margin: 0px -180px;
 }
 .menu .tutoriel i{
   margin-left:19%;
+  line-height:1.5em;
+  display:inline-block;
+  height:25px;
+  vertical-align:-8px;
 }
 .menu .tutoriel i+i{
   margin-left:10%;
@@ -2353,4 +2358,16 @@ body.ajax .loader-overlay{
   flex:1;
   -webkit-flex:1;
   float:none;
+}
+
+
+/* MEDIA QUERIES */
+
+
+@media screen and (max-width: 640px) {
+
+  body{
+    background-image:url('../../images/fond.jpg');
+  }
+
 }

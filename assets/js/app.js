@@ -181,7 +181,7 @@ function addInDesktopDom(message){
     //currentPlaylist.push(message.datas.song);
 
     // affichage DOM
-    $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.song.songTrackId+'"><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><img src="'+message.datas.userImg+'" alt="Fred"></div></li>');
+    $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.song.songTrackId+'"><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><img src="'+message.datas.userImg+'" alt=""></div></li>');
     // console.log('j"affiche '+message.datas.song.songTrackName);
 
     // cache de variable
