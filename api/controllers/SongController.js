@@ -145,14 +145,14 @@ module.exports = {
 
     nextSong:function(req, res, next){
 
-        var songId = req.params.all().id;
+        var songId = req.param('id');
         var room   = req.param('url');
         console.log("SongId : "+songId+" room : "+room);
 
         Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId, url: room}).exec(function statusUpdated(err, song){
             if(err) return next(err);
 
-            Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').limit(1).exec(function(err, song) {
+            Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt DESC').exec(function(err, song) {
                 // Error handling
                 if (err) return next(err);
 

@@ -50,12 +50,15 @@ $(document).ready(function(){
 		// L'utilisateur vient d'arriver, il demande la liste des participants
 		socket.get('/desktop/playlist/'+user.room+'/joinedUsers', function(data){
 			console.log(data);
+
+
 		});
 
 		// L'utilisateur vient d'arriver, il demande informe les autres participants
 		socket.get('/desktop/playlist/'+user.room+'/joined', function(response) {
 		  // do something
 		  console.log(response);
+
 		});
 
 		// Initialisation jCarousel
@@ -73,7 +76,11 @@ $(document).ready(function(){
 	// L'utilisateur vient d'arriver, il informe les autres participants et rejoint sa room
 	socket.get('/desktop/playlist/'+user.room+'/joined', function(response) {
 	  // do something
-	  console.log(response);
+	  console.log('coucou',response.count);
+		  if (response.count!=0)
+		  	$('section.current-playlist').removeClass('invisible');
+
+
 	});
 
 
@@ -178,6 +185,10 @@ $(document).ready(function(){
 
 	$('.tutoriel').on('click', function(e){
 		e.preventDefault();
+		$('body').animate({
+			scrollTop:$(document).height() 
+		});
+
 		$('.tutorielOpen').addClass('visible');
 
 		$('.tutoriel-close').on('click', function(e){
@@ -334,6 +345,10 @@ $(document).ready(function(){
 	//  PARTIE BUBBLE LIVE
 	/* --------------------------------------------------------- */
 
+	$('.form-join-playlist input[type="text"]').click(function(){
+	    $(this).focus();
+	});
+
 	$player = $(".knob");
 	$timer  = $(".timer");
 	$music_duration = 180;
@@ -465,10 +480,12 @@ $(document).ready(function(){
  						// });
  						// $(this).remove();
  						// Envoi des datas au controller
- 						console.log($img);
+ 						$(this).hide();
+ 						
 						socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas,img:$img.attr('src')} ,function( datas ) {
 			 				console.log(datas);
 						});
+
  					});
  				});
 	}

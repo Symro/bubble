@@ -23,6 +23,7 @@
     // Listen for Comet messages from Sails
     socket.on('message', function messageReceived(message) {
 
+
       // '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
       // /!\ A LIRE ! /!\
       // .......................................................................................
@@ -181,7 +182,7 @@ function addInDesktopDom(message){
     //currentPlaylist.push(message.datas.song);
 
     // affichage DOM
-    $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.song.songTrackId+'"><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><img src="'+message.datas.userImg+'" alt="Fred"></div></li>');
+    $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.song.songTrackId+'"><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><img src="'+message.datas.userImg+'" alt=""></div></li>');
     // console.log('j"affiche '+message.datas.song.songTrackName);
 
     // cache de variable
@@ -444,6 +445,7 @@ function updateInDesktopDom(message){
         socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
 
             console.log('App.js > socket pour passer au morceau suivant');
+            console.log(response);
             if(response.songStatus != "undefined"){
               currentPlaylist = response;
 
@@ -454,13 +456,14 @@ function updateInDesktopDom(message){
               dislikeContainer.text(0);
 
               // Lancement musique suivante
-              play_player(currentPlaylist.songTrackId);
+              console.log(currentPlaylist);
+              play_player(currentPlaylist);
 
               }
               else{
                 // Pas de son à lire dans la playlist
                 console.log(" AUCUN SONG A LIRE (après vote dislike) ");
-                stop_send_player_position();
+                //stop_send_player_position();
               }
 
         });
