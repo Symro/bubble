@@ -17,7 +17,7 @@ module.exports = {
 
 			console.log('on est là : JoinController.js > joinedUsers >> *findByUrl*  ');
 
-			return res.json({joinedUsers:users});
+				return res.json({joinedUsers:users});
 
 		});
 
@@ -32,11 +32,14 @@ module.exports = {
 		req.socket.join(playlistUrl);
 		req.socket.broadcast.to(playlistUrl).emit('message', {thisIs: 'Hey Im new !! _______theMessage'});
 
-		res.json({
-			joined:true,
-	    	success: true
+		Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
+				sails.log(found);
+			res.json({
+				joined:true,
+		    success: true,
+		    count:found
 	    });
-
+		});
 	}
 
 
