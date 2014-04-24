@@ -377,46 +377,50 @@ $(document).ready(function(){
 		},100);
 	}
 
+	var $this,$e;
+
 	// Ajout d'un son à une playlist
 	$('.search').on('click', '.results li', function(e){
 		e.preventDefault();
 
+		$this = $(this);
+		$e = e;
+
 		$('.confirmSongModal').addClass('visible');
 
+	});
 
-		if( $('a[data-confirm]') == true ){
+	$('.confirmSongModal').on('click','div a:first-child()',function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		console.log($(this).data('confirm'));
+		$('.confirmSongModal').removeClass('visible');
+	});
+	$('.confirmSongModal').on('click','div a:last-child()',function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		console.log($(this).data('confirm'));
+		$('.confirmSongModal').removeClass('visible');
+		designInteraction($this,$e);
+	});
 
-
-		}
-
-		// Pop-up confirmation
-		$popup = confirm("Ajouter à la playlist ?");
-
-		// Conversion du temps en minutes
-		// $temps = String($(this).data("songduration") / 60000);
-		// $temps = (Math.round( $temps * 100 )/100 );
-		// $temps = $temps.toFixed(2).toString();
-		// $temps = $temps.replace(".","'");
-
-		// console.log($temps);
-
-		if($popup){
-
+	function designInteraction( $this, $e ){
 		// Design d'interaction
- 		var $this = $(this);
+
+		$('#sent').empty();
  		var $img = $this.children('img');
  		var $left = $img.offset().left;
- 		var $top = e.currentTarget.offsetTop+10;
+ 		var $top = $e.currentTarget.offsetTop+10;
 
 		// Récupération des datas
 			$datas={
-				songTrackId:$(this).data("songid"),
-				songTrackName:$(this).data("song"),
-				songService:$(this).data("songservice"),
-				songTrackArtist:$(this).data("songartist"),
-				songTrackDuration:$(this).data("songduration"),
-				songPermalinkUrl:$(this).data("permalink"),
-				songSongUrl:$(this).data("songurl")
+				songTrackId:$this.data("songid"),
+				songTrackName:$this.data("song"),
+				songService:$this.data("songservice"),
+				songTrackArtist:$this.data("songartist"),
+				songTrackDuration:$this.data("songduration"),
+				songPermalinkUrl:$this.data("permalink"),
+				songSongUrl:$this.data("songurl")
 			}
 
 			console.dir($datas);
@@ -442,7 +446,7 @@ $(document).ready(function(){
  				}, 1000, function(){
  					$this.slideUp();
  					$(this).animate({
- 						'top':e.currentTarget.offsetTop-$(window).height()
+ 						'top':$e.currentTarget.offsetTop-$(window).height()
  					}, 200, function(){
  						// socket.emit('new_track', {
  						// 	"track_name" : track,
@@ -451,14 +455,13 @@ $(document).ready(function(){
  						// });
  						// $(this).remove();
  						// Envoi des datas au controller
+ 						console.log($img);
 						socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas,img:$img.attr('src')} ,function( datas ) {
 			 				console.log(datas);
 						});
  					});
  				});
-		}
-
-	});
+	}
 
 	// Supression d'un son ajouté par sois-même
 	$('body').on('click','.current-playlist .song .delete',function(event){

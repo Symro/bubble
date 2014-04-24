@@ -143,14 +143,14 @@ module.exports = {
 					return res.redirect('/desktop/playlist');
 				}
 
-				// Ajoute l'utilisateur à la collection (table) JOIN
-				Join.create({
-					user:req.session.User.id,
-					playlistUrl:temp,
-					playlist:temp
-				}).exec(function cb(err,created){
-				  console.log('User : '+created.user_id+' ( '+req.session.User.firstname+' ) --> Joined : '+created.playlist_url);
-				});
+				// // Ajoute l'utilisateur à la collection (table) JOIN
+				// Join.create({
+				// 	user:req.session.User.id,
+				// 	playlistUrl:temp,
+				// 	playlist:temp
+				// }).exec(function cb(err,created){
+				//   console.log('User : '+created.user_id+' ( '+req.session.User.firstname+' ) --> Joined : '+created.playlist_url);
+				// });
 
 				console.log('playlist added : '+playlistObj.name);
 				console.log('url redirection : /desktop/playlist/'+temp);

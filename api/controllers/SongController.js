@@ -29,7 +29,7 @@ module.exports = {
         song["url"]  = req.route.params.url;
 
         // console.dir(song);
-
+        sails.log(song);
         Song.create(song).exec(function songAdded(err,added){
           // console.dir(err);
           // console.dir('Song ajouté');
@@ -68,14 +68,14 @@ module.exports = {
           });
 
 
-          	User.findOne(song.user).exec(function getImage(err,img){
+          	User.findOne(song.user).exec(function getImage(err,imgUser){
           		if(err) return next(err);
 				// Ajout DOM mobile
 				sails.sockets.broadcast(req.param('url'),'message',{
 					verb:'add',
 					device:'mobile',
 					info:'songAdded',
-					datas:{song:song,userImg:img.image}
+					datas:{song:song,userImg:imgUser.image}
 				});
 
 				// Ajout DOM desktop
@@ -83,7 +83,7 @@ module.exports = {
 					verb:'add',
 					device:'desktop',
 					info:'songAdded',
-					datas:{song:song,id:added.id,img:img,userImg:img.image}
+					datas:{song:song,id:added.id,img:img,userImg:imgUser.image}
 				});
           	});
 

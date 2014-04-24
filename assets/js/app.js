@@ -189,6 +189,8 @@ function addInDesktopDom(message){
     console.log($player);
     console.log($reception);
 
+    console.log(message.datas.img);
+
     // ajout de l'image dans le DOM
     $('<img>').attr('src', message.datas.img).appendTo($reception);
 
