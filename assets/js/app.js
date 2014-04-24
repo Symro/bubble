@@ -444,6 +444,7 @@ function updateInDesktopDom(message){
         // Socket au contrôleur songController.js
         socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
 
+            console.log('App.js > socket pour passer au morceau suivant');
             if(response.songStatus != "undefined"){
               currentPlaylist = response;
 
