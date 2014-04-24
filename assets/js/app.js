@@ -445,6 +445,7 @@ function updateInDesktopDom(message){
         socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
 
             console.log('App.js > socket pour passer au morceau suivant');
+            console.log(response);
             if(response.songStatus != "undefined"){
               currentPlaylist = response;
 
@@ -455,13 +456,14 @@ function updateInDesktopDom(message){
               dislikeContainer.text(0);
 
               // Lancement musique suivante
-              play_player(currentPlaylist.songTrackId);
+              console.log(currentPlaylist);
+              play_player(currentPlaylist);
 
               }
               else{
                 // Pas de son à lire dans la playlist
                 console.log(" AUCUN SONG A LIRE (après vote dislike) ");
-                stop_send_player_position();
+                //stop_send_player_position();
               }
 
         });
