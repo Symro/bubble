@@ -237,9 +237,17 @@ function addInMobileDom(message){
       $i='';
     }
 
+    var eltm = $('.song ul li').length;
+  
+    if (eltm == 0)
+      var insert = '<li data-id="'+message.datas.song.songTrackId+'" data-songService="'+message.datas.song.songService+'"><div class="action delete"></div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>'
+    else
+      var insert = '<li data-id="'+message.datas.song.songTrackId+'" data-songService="'+message.datas.song.songService+'"><div class="action delete">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>'
+
+
     // affichage DOM
-    $('.playlistInfo').hide();
-    $('.song ul').append('<li data-id="'+message.datas.song.songTrackId+'"><div class="action delete">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>');
+    $('.song ul').append(insert);
+
   }
 
 }
@@ -376,6 +384,11 @@ function updateInMobileDom(message){
   }
 
   if(message.info == "resetLikeDislike"){
+
+    console.log(message);
+
+    $('div.song ul li[data-id="'+message.datas.songTrackId+'"][data-songservice="'+message.datas.songService+'"] div.action i').remove();
+
     // Supprime la classe "Active" des boutons pour permettre de voter à nouveau
     var $btnLike    = $('#song-like');
     var $btnDislike = $('#song-dislike');

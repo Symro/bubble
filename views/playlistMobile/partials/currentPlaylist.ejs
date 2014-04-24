@@ -8,14 +8,13 @@
 
 			<% _.each(playlist.songs, function (song) { %>
 
-			<li data-id="<%= song.songTrackId %>">
+			<li data-id="<%= song.songTrackId %>" data-songService="<%= song.songService %>">
 
-				<% if (session.User.id == song.user) { %>
-					<div class="action delete">
+				<div class="action delete">
+					<% if (session.User.id == song.user && song.songStatus == 'waiting') { %>
 						<i class="icon-croixclosesuppr"></i>
-					</div>
-				<% } %>
-
+					<% } %>
+				</div>
 
 				<div>
 					<strong><%= song.songTrackName %></strong>

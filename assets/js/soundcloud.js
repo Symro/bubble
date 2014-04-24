@@ -20,6 +20,8 @@ search.init({
 			type: 'GET',
 			success:function(data){
 
+				console.log(data);
+
 				$('.results').empty();
 
 				$(data.tracks).each(function(index, track) {
