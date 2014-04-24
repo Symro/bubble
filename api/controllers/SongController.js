@@ -81,10 +81,10 @@ module.exports = {
     remove:function(req,res,next){
 
         // Récupération id song
-        songId=Number(req.param('song'));
-        service = req.param('service');
+        var songId  = Number(req.param('song'));
+        var service = req.param('service');
 
-        Song.findOne(songId).exec(function FindSong (err, song) {
+        Song.findOne({songTrackId : songId}).exec(function FindSong (err, song) {
             if (err) return next(err);
             console.log(song);
             // Can delete only waiting songs
@@ -95,7 +95,7 @@ module.exports = {
                     console.log("song supprimé !");
                     // console.dir(song);
 
-                    // Suppression DOM^mobile
+                    // Suppression DOM mobile
                     sails.sockets.broadcast(req.route.params.url,'message',{
                         verb:'delete',
                         device:'mobile',
@@ -221,6 +221,7 @@ module.exports = {
     addFromBubble:function(req,res,next){
         console.log('add from historic');
         var songId=req.param('song');
+        console.log("___addFromBubble songId : "+songId);
 
         Song.findOneBySongTrackId(songId).exec(function(err,song){
             if(err) return next(err);
