@@ -101,6 +101,15 @@ $( document ).ready(function() {
 		$(this).siblings().removeClass('active');
 		$(this).addClass('active');
 		search.getSearchEngine($(this).data('service'));
+
+		var recherche = $('input[name="search"]').val();
+		console.log(recherche);
+
+		// On récupère la saisie
+		var query = recherche;
+
+		search.getQuery(recherche);
+
 	});
 
 	$('.search form[action="search"]').on('submit', function(e){
