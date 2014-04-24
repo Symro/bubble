@@ -151,34 +151,35 @@ module.exports = {
 
         Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId, url: room}).exec(function statusUpdated(err, song){
             if(err) return next(err);
+            console.log("SONG UPDATE playing > played where songId & room : "+song);
 
-            Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt DESC').exec(function(err, song) {
+            Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').exec(function(err, song2) {
                 // Error handling
                 if (err) return next(err);
 
-                console.log("Le morceau suivant est : ", song);
+                console.log("SONG FINDONE > played where songId & room : "+song2);
 
                 // S'il y a un morceau suivant à lire en BDD, on retourne le json qui lancera la lecture
                 if(typeof(song) != "undefined"){
 
-                    song.songStatus = "playing";
-                    song.save(function(err) {
+                    song2.songStatus = "playing";
+                    song2.save(function(err) {
                         if(err) return next(err);
 
                         sails.sockets.broadcast(req.route.params.url,'message',{
                             verb:'update',
                             device:'mobile',
                             info:'resetLikeDislike',
-                            datas:song
+                            datas:song2
                         });
 
-                        return res.json(song);
+                        return res.json(song2);
                     });
 
                 }
                 else{
                     var song = {songStatus:"undefined"};
-                    return res.json(song);
+                    return res.json(song2);
                 }
 
 
