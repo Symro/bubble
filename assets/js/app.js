@@ -169,6 +169,8 @@ function addInDesktopDom(message){
     var playerDesktop = $('.desktop-container .player');
     playerDesktop.removeClass('invisible');
 
+    $('.playlistInfo').hide();
+
     // Lancement musique
     play_player(currentPlaylist);
 

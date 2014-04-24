@@ -201,7 +201,7 @@ module.exports = {
         var room  = req.param('url');
         var song  = req.param('song'); // BDD id ! et pas songTrackId
 
-        Song.findOne({ where:{ id:song } }).done(function(err, song) {
+        Song.findOne({ where:{ id:song } }).exec(function(err, song) {
 
             song.songCounter = parseInt(song.songCounter)+1;
             song.save(function(err) {
