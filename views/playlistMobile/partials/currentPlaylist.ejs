@@ -21,7 +21,12 @@
 					<span><%= song.songTrackArtist %></span>
 				</div>
 				<%
-					temps = String(song.songTrackDuration / 60000);
+					if(song.songService=="deezer"){
+						var t=60;
+					}else{
+						var t=60000;
+					}
+					temps = String(song.songTrackDuration / t );
 					temps = (Math.round( temps * 100 )/100 );
 					temps = temps.toFixed(2).toString();
 					temps = temps.replace(".","'");
