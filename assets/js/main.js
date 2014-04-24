@@ -111,7 +111,7 @@ $(document).ready(function(){
 					if(!datas.error){
 						$btn.addClass('active');
 					}
-					
+
 				});
 			}
 
@@ -415,7 +415,8 @@ $(document).ready(function(){
 				songService:$(this).data("songservice"),
 				songTrackArtist:$(this).data("songartist"),
 				songTrackDuration:$(this).data("songduration"),
-				songPermalinkUrl:$(this).data("permalink")
+				songPermalinkUrl:$(this).data("permalink"),
+				songSongUrl:$(this).data("songurl")
 			}
 
 			console.dir($datas);
@@ -463,7 +464,7 @@ $(document).ready(function(){
 	$('body').on('click','.current-playlist .song .delete',function(event){
 		event.stopPropagation();
 		$songId=$(this).parent().data("id");
-		$songService=$(this).parent().data("songService");
+		$songService=$(this).parent().data("songservice");
 		// $playlist=$(".wrapper").data('playlist-url');
 
 		socket.post( "/mobile/playlist/"+user.room+"/remove",{song:$songId, service:$songService} ,function( datas ) {
@@ -486,6 +487,30 @@ $(document).ready(function(){
 			$this.parent().slideUp(300, function(){
 				console.log('ca delete !');
 				$this.remove();
+			});
+
+		});
+
+	});
+
+	// Suppression secondaire des découvertes
+	$('body').on('click','.deleteSecondDiscovery',function(e){
+		e.preventDefault();
+
+		$this=$(this);
+		$id=$(this).parent().data('id');
+
+		socket.post( "/mobile/discovery/"+$id ,function( datas ) {
+			// console.log(datas);
+			console.log("on va delete");
+			console.log($this.parents('.discoveryAction').prev());
+			$this.parents('li').slideUp(300, function(){
+				console.log('ca delete !');
+				// $this.remove();
+			});
+			$this.parents('.discoveryAction').prev().slideUp(300, function(){
+				console.log('ca delete !');
+				// $this.remove();
 			});
 
 		});
@@ -544,7 +569,7 @@ $(document).ready(function(){
 
 		var carousel 		  = $('.player_carousel_like_dislike').jcarousel();
 		var carousel_forward  = $('.player_carousel_like_dislike_forward');
-		var carousel_backward = $('.player_carousel_like_dislike_backward');	
+		var carousel_backward = $('.player_carousel_like_dislike_backward');
 
 		// Initialisation jCarousel
 		$('.player_carousel_like_dislike_forward').jcarouselControl({ target: '+=1',carousel: carousel });
