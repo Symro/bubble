@@ -185,6 +185,10 @@ $(document).ready(function(){
 
 	$('.tutoriel').on('click', function(e){
 		e.preventDefault();
+		$('body').animate({
+			scrollTop:$(document).height() 
+		});
+
 		$('.tutorielOpen').addClass('visible');
 
 		$('.tutoriel-close').on('click', function(e){
@@ -476,10 +480,12 @@ $(document).ready(function(){
  						// });
  						// $(this).remove();
  						// Envoi des datas au controller
- 						console.log($img);
+ 						$(this).hide();
+ 						
 						socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas,img:$img.attr('src')} ,function( datas ) {
 			 				console.log(datas);
 						});
+
  					});
  				});
 	}
