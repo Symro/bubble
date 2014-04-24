@@ -1,8 +1,8 @@
 // Basé sur : https://gist.github.com/tkh44/8225384
 
-//    TO DO : 
+//    TO DO :
 //    '''''''
-// 
+//
 //    - informer les utilisateurs de la màj de la photo
 //    - màj en temps réél des images dans les playlists desktop/mobile
 
@@ -98,7 +98,7 @@ module.exports = {
                 .write(filePath, function (err) {
                   if (!err){
                     // màj url de l'image en BDD
-                    User.findOne(req.session.User.id).done(function(err, user) {
+                    User.findOne(req.session.User.id).exec(function(err, user) {
                       if(err){
                         return res.json(err);
                       }
@@ -124,7 +124,7 @@ module.exports = {
                   }
 
                 });
-                
+
 
               }
             });
@@ -181,8 +181,8 @@ playlist: function (req, res, next) {
                   if (!err){
 
                     // màj url de l'image en BDD
-                    
-                    PlaylistDesktop.findOneByUrl(req.params['id']).done(function(err, playlist) {
+
+                    PlaylistDesktop.findOneByUrl(req.params['id']).exec(function(err, playlist) {
                       if(err){
                         return res.json(err);
                       }
@@ -191,7 +191,7 @@ playlist: function (req, res, next) {
                       playlist.save();
 
                     });
-                    
+
 
                     return res.json(data);
                   }
@@ -201,8 +201,8 @@ playlist: function (req, res, next) {
                   }
 
                 });
-                
-                
+
+
               }
             });
           }
