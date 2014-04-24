@@ -415,7 +415,8 @@ $(document).ready(function(){
 				songService:$(this).data("songservice"),
 				songTrackArtist:$(this).data("songartist"),
 				songTrackDuration:$(this).data("songduration"),
-				songPermalinkUrl:$(this).data("permalink")
+				songPermalinkUrl:$(this).data("permalink"),
+				songSongUrl:$(this).data("songurl")
 			}
 
 			console.dir($datas);

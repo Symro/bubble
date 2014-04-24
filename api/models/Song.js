@@ -48,6 +48,10 @@ module.exports = {
             defaultsTo: "waiting",
             in: ['waiting', 'playing', 'played']
         },
+        songSongUrl: {
+            type: 'string',
+            required: true
+        },
         user:{
             model:"user"
         },

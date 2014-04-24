@@ -187,10 +187,10 @@ function play_player(new_track){
 			$(".ui360 a").attr("href","http://api.soundcloud.com/tracks/"+new_track.songTrackId+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb");
 		break;
 		case 'spotify' : 
-			$(".ui360 a").attr("href",new_track.songPermalinkUrl);
+			$(".ui360 a").attr("href",new_track.songSongUrl);
 		break;
 		case 'deezer' : 
-			$(".ui360 a").attr("href",new_track.songPermalinkUrl);
+			$(".ui360 a").attr("href",new_track.songSongUrl);
 		break;
 	}
 
