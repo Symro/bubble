@@ -49,8 +49,7 @@ module.exports = {
             in: ['waiting', 'playing', 'played']
         },
         songSongUrl: {
-            type: 'string',
-            required: true
+            type: 'string'
         },
         user:{
             model:"user"
