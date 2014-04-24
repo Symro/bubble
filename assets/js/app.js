@@ -222,8 +222,8 @@ function addInDesktopDom(message){
 }
 
 function addInMobileDom(message){
-  console.log("addInMobileDom : ");
-  console.dir(message);
+  // console.log("addInMobileDom : ");
+  // console.dir(message);
 
   if (message.info=="songAdded") {
 
@@ -238,7 +238,7 @@ function addInMobileDom(message){
     }
 
     var eltm = $('.song ul li').length;
-  
+
     if (eltm == 0)
       var insert = '<li data-id="'+message.datas.song.songTrackId+'" data-songService="'+message.datas.song.songService+'"><div class="action delete"></div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.song.user+'"></div></li>'
     else
@@ -253,15 +253,15 @@ function addInMobileDom(message){
 }
 
 function addInAllDom(message){
-  console.log("addInAllDom : ");
-  console.dir(message);
+  // console.log("addInAllDom : ");
+  // console.dir(message);
 
 }
 
 
 function removeInDesktopDom(message){
-  console.log("removeInDesktopDom : ");
-  console.dir(message);
+  // console.log("removeInDesktopDom : ");
+  // console.dir(message);
 
   if (message.info=='songRemoved') {
 
@@ -272,7 +272,7 @@ function removeInDesktopDom(message){
 
     // slide up + suppression DOM
     deleteSong.slideUp(function(){
-      console.log($(this));
+      // console.log($(this));
       $(this).remove();
     });
 
@@ -285,8 +285,8 @@ function removeInDesktopDom(message){
 // --------------------------------------
 
 function removeInMobileDom(message){
-  console.log("removeInMobileDom : ");
-  console.dir(message.datas.songTrackId);
+  // console.log("removeInMobileDom : ");
+  // console.dir(message.datas.songTrackId);
 
   // Suppression d'un morceau de la playlist en lecture
   if (message.info=='songRemoved') {
@@ -321,8 +321,8 @@ function removeInMobileDom(message){
 }
 
 function removeInAllDom(message){
-  console.log("removeInAllDom : ");
-  console.dir(message);
+  // console.log("removeInAllDom : ");
+  // console.dir(message);
 
 }
 
@@ -429,7 +429,7 @@ function updateInDesktopDom(message){
         var likeContainer    = $('.player_track_like span');
         var dislikeContainer = $('.player_track_dislike span');
 
-        // Socket au contrôleur songController.js 
+        // Socket au contrôleur songController.js
         socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
 
             if(response.songStatus != "undefined"){

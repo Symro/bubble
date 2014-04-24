@@ -20,10 +20,10 @@
 						<a class="dropDown"  href="javascript:void(0)" title="Discovery Action"><i class="icon-chevron"></i></a>
 					</div>
 				</div>
-				<div class="discoveryAction">
+				<div class="discoveryAction" data-track-id="<%= discover.song.songTrackId %>" data-id="<%= discover.id %>">
 					<a class="" href="" title="Add the track to the playslist"><i class="icon-playlist"></i></a>
 					<a href="<%= discover.song.songPermalinkUrl %>" target="_blank" title="<%= discover.song.songTrackName %>"><i class="icon-<%= discover.song.songService %>ecouter"></i></a>
-					<a class="action deleteDiscovery" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
+					<a class="action deleteSecondDiscovery" title="Supprimer" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
 				</div>
 
 

@@ -81,12 +81,11 @@ module.exports = {
     remove:function(req,res,next){
 
         // Récupération id song
-        var songId  = Number(req.param('song'));
+        var songId  = String(req.param('song'));
         var service = req.param('service');
 
-        Song.findOne({songTrackId : songId}).exec(function FindSong (err, song) {
+        Song.findOneBySongTrackId(songId).exec(function FindSong (err, song) {
             if (err) return next(err);
-            console.log(song);
             // Can delete only waiting songs
             if (song.songStatus === 'waiting') {
 
@@ -201,11 +200,11 @@ module.exports = {
                     device:'desktop',
                     info:'songDisliked',
                     datas:{
-                        subscribers: sails.sockets.subscribers(room), 
+                        subscribers: sails.sockets.subscribers(room),
                         user:{
                             firstname:req.session.User.firstname,
                             image:req.session.User.image
-                        } 
+                        }
                     }
                 });
 
