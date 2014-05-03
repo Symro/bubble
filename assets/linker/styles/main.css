@@ -2380,6 +2380,13 @@ body.ajax .loader-overlay{
   float:none;
 }
 
+.played{
+  color:rgba(255,255,255,0.3);
+}
+.played img{
+  opacity:0.3;
+}
+
 
 /* MEDIA QUERIES */
 

@@ -133,6 +133,10 @@ threeSixtyPlayer.events.finish = function(){
 	    	// Pas de son à lire dans la playlist
 	    	console.log(" AUCUN SONG A LIRE ");
 	    	stop_send_player_position();
+
+    	    // Masquage du player sur Desktop
+            var playerDesktop = $('.desktop-container .player');
+            playerDesktop.addClass('invisible');
 	    }
 
 	});
@@ -180,6 +184,8 @@ function play_player(new_track){
 	get_player_position(); // Lancement du timer
 
 	console.log("Lecture d'un nouveau morceau : "+new_track.songTrackName);
+
+	$('li[data-db-id="'+new_track.id+'"]').prevAll("li").addClass('played')
 
 	// Change l'url dynamiquement et joue le morceau
 	switch (new_track.songService) {

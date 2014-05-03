@@ -175,6 +175,14 @@ function addInDesktopDom(message){
     // Lancement musique
     play_player(currentPlaylist);
 
+    // Supprime la classe "Active" des boutons pour permettre de voter à nouveau
+    var $btnLike    = $('#song-like');
+    var $btnDislike = $('#song-dislike');
+
+    $btnLike.add($btnDislike).removeClass('active');
+
+
+
   }
   else if (message.info=="songAdded") {
 
@@ -446,6 +454,7 @@ function updateInDesktopDom(message){
 
             console.log('App.js > socket pour passer au morceau suivant');
             console.log(response);
+
             if(response.songStatus != "undefined"){
               currentPlaylist = response;
 
@@ -461,9 +470,10 @@ function updateInDesktopDom(message){
 
               }
               else{
+                
                 // Pas de son à lire dans la playlist
                 console.log(" AUCUN SONG A LIRE (après vote dislike) ");
-                //stop_send_player_position();
+
               }
 
         });

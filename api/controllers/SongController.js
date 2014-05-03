@@ -149,44 +149,49 @@ module.exports = {
         var room   = req.param('url');
         console.log("SongId : "+songId+" room : "+room);
 
-        Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId, url: room}).exec(function statusUpdated(err, song){
-            if(err) return next(err);
-            console.log("SONG UPDATE playing > played where songId & room : "+song);
+        if(typeof(songId) != "undefined"){
+            
+            Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId, url: room}).exec(function statusUpdated(err, song){
+                if(err) return next(err);
+                console.log("SONG UPDATE playing > played where songId & room : "+song);
 
-            Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').exec(function(err, song2) {
-                // Error handling
-                if (err) return next(err);
+                Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').exec(function(err, song2) {
+                    // Error handling
+                    if (err) return next(err);
 
-                console.log("SONG FINDONE > played where songId & room : "+song2);
+                    console.log("SONG FINDONE > played where songId & room : "+song2);
 
-                // S'il y a un morceau suivant à lire en BDD, on retourne le json qui lancera la lecture
-                if(typeof(song) != "undefined"){
+                    // S'il y a un morceau suivant à lire en BDD, on retourne le json qui lancera la lecture
+                    if(typeof(song2) != "undefined"){
 
-                    song2.songStatus = "playing";
-                    song2.save(function(err) {
-                        if(err) return next(err);
+                        song2.songStatus = "playing";
+                        song2.save(function(err) {
+                            if(err) return next(err);
 
-                        sails.sockets.broadcast(req.route.params.url,'message',{
-                            verb:'update',
-                            device:'mobile',
-                            info:'resetLikeDislike',
-                            datas:song2
+                            sails.sockets.broadcast(req.route.params.url,'message',{
+                                verb:'update',
+                                device:'mobile',
+                                info:'resetLikeDislike',
+                                datas:song2
+                            });
+
+                            return res.json(song2);
                         });
 
+                    }
+                    else{
+                        var song2 = {songStatus:"undefined"};
                         return res.json(song2);
-                    });
-
-                }
-                else{
-                    var song = {songStatus:"undefined"};
-                    return res.json(song2);
-                }
+                    }
 
 
+
+                });
 
             });
 
-        });
+        }
+
     },
 
     restartPlayer:function(req, res, next, song){
