@@ -186,7 +186,7 @@ $(document).ready(function(){
 	$('.tutoriel').on('click', function(e){
 		e.preventDefault();
 		$('body').animate({
-			scrollTop:$(document).height() 
+			scrollTop:$(document).height()
 		});
 
 		$('.tutorielOpen').addClass('visible');
@@ -481,7 +481,7 @@ $(document).ready(function(){
  						// $(this).remove();
  						// Envoi des datas au controller
  						$(this).hide();
- 						
+
 						socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas,img:$img.attr('src')} ,function( datas ) {
 			 				console.log(datas);
 						});
@@ -554,7 +554,7 @@ $(document).ready(function(){
 		$song=$(this).parent().data('track-id');
 		console.log($song);
 
-		socket.post( "/mobile/discovery",{song:$song} ,function(datas){
+		socket.post( "/mobile/discovery",{song:$song, room:user.room} ,function(datas){
 
 			// console.log(datas);
 
@@ -565,7 +565,7 @@ $(document).ready(function(){
 	// Ajout à la playlist en cours depuis l'historique
 	$('.historic').on('click','.historicToPlaylist',function(e){
 
-		$song=$(this).parent().data('track-id');
+		$song=String($(this).parent().data('track-id'));
 
 		console.log($song);
 
@@ -582,6 +582,7 @@ $(document).ready(function(){
 
 		$song=String($(this).parent().data('track-id'));
 
+		console.log($song);
 
 		socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:$song} ,function(datas){
 

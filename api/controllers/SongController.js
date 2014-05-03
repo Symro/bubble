@@ -7,7 +7,7 @@
 
 module.exports = {
 
-    add:function(req, res, next, songFromHistoric){
+    add:function(req, res, next, songFromBubble){
         // Log son à ajouter
         // console.dir(req.params.all());
         // console.dir(req.param('song'));
@@ -16,11 +16,11 @@ module.exports = {
         // req.param.url
         Song.findOne({url:req.route.params.url}).sort('createdAt DESC').exec(function getSongs(err, lastSong){
 
-            if (songFromHistoric != undefined) {
+            if (songFromBubble != undefined) {
                 console.log('ajout par histo');
-                var song=songFromHistoric;
+                var song=songFromBubble;
                 var img='/images/icon_music.png';
-                // console.dir(songFromHistoric);
+                // console.dir(songFromBubble);
             }else{
                 console.log('ajout normal');
                 var song = req.param('song');
@@ -150,7 +150,7 @@ module.exports = {
         console.log("SongId : "+songId+" room : "+room);
 
         if(typeof(songId) != "undefined"){
-            
+
             Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId, url: room}).exec(function statusUpdated(err, song){
                 if(err) return next(err);
                 console.log("SONG UPDATE playing > played where songId & room : "+song);

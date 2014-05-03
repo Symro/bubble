@@ -8,9 +8,9 @@
 module.exports = {
 
 	getDiscovery: function( req, res, next ){
-			Discover.find({user:req.session.User.id}).populate('song').exec(function getDiscoveries(err,songs){
-            console.dir(songs);
-        });
+		Discover.find({user:req.session.User.id}).populate('song').exec(function getDiscoveries(err,songs){
+        console.dir(songs);
+    });
 
 	},
 
