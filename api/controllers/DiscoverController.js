@@ -53,7 +53,7 @@ module.exports = {
 
 	showDiscovery: function (req, res, next) {
 
-		Discover.find().populate('song').where({user:req.session.User.id}).exec(function discoveryDisplay(err,discoveries){
+		Discover.find().where({user:req.session.User.id}).populate('song').exec(function discoveryDisplay(err,discoveries){
 			if(err) return next(err);
 
 			var fullDiscoveries = discoveries;
