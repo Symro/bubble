@@ -13,7 +13,7 @@ module.exports = {
     attributes:{
 
         user:{
-            type:"string"
+            model:"user"
         },
         song:{
             model:"song"

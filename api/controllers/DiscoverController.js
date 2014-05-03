@@ -36,7 +36,8 @@ module.exports = {
 	},
 
 	showDiscovery: function (req, res, next) {
-		Discover.find({user: req.session.User.id}).populate('song').exec(function discoveryDisplay(err,discoveries){
+        
+		Discover.find().populate('song').where({user:req.session.User.id}).exec(function discoveryDisplay(err,discoveries){
 			if(err) return next(err);
 
 			var fullDiscoveries = discoveries;
@@ -47,7 +48,6 @@ module.exports = {
 			// Somme du nombre d'itération dans la boucle
 			var addition = (nbDiscoveries1*nbDiscoveries2)/2;
 			var additionBoucle = 0;
-
 
 			if (err) return next(err);
 
