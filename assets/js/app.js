@@ -241,7 +241,10 @@ function addInMobileDom(message){
   if (message.info=="songAdded") {
 
     // Calcul duree en secondes
-    $duree=String((message.datas.song.songTrackDuration / 60000).toFixed(2)).replace(".","'");
+    var minutes = Math.floor(message.datas.song.songTrackDuration / 60000);
+    var secondes = Math.round( (message.datas.song.songTrackDuration - minutes * 60000)/1000 );
+    var duree = minutes+"'"+secondes;
+
 
     // Si c'est l'user qui a ajouté il peut supprimer
     if (message.datas.song.user==user.id) {
@@ -253,9 +256,9 @@ function addInMobileDom(message){
     var eltm = $('.song ul li').length;
 
     if (eltm == 0)
-      var insert = '<li data-id="'+message.datas.song.songTrackId+'" data-songService="'+message.datas.song.songService+'"><div class="action delete"></div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.userImg+'"></div></li>'
+      var insert = '<li data-id="'+message.datas.song.songTrackId+'" data-songService="'+message.datas.song.songService+'"><div class="action delete"></div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+duree+'</span><img src="'+message.datas.userImg+'"></div></li>'
     else
-      var insert = '<li data-id="'+message.datas.song.songTrackId+'" data-songService="'+message.datas.song.songService+'"><div class="action delete">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+$duree+'</span><img src="'+message.datas.userImg+'"></div></li>'
+      var insert = '<li data-id="'+message.datas.song.songTrackId+'" data-songService="'+message.datas.song.songService+'"><div class="action delete">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+duree+'</span><img src="'+message.datas.userImg+'"></div></li>'
 
 
     // affichage DOM

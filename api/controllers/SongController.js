@@ -32,6 +32,9 @@ module.exports = {
             song.songStatus="waiting";
             var d=new Date();
             song.createdAt=d.toISOString();
+            if(song["songService"] == "deezer"){
+                song["songTrackDuration"] = song["songTrackDuration"]*1000;
+            }
 
             // console.dir(song);
             sails.log(song);

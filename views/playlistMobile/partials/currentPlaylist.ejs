@@ -21,18 +21,14 @@
 					<span><%= song.songTrackArtist %></span>
 				</div>
 				<%
-					if(song.songService=="deezer"){
-						var t=60;
-					}else{
-						var t=60000;
-					}
-					temps = String(song.songTrackDuration / t );
-					temps = (Math.round( temps * 100 )/100 );
-					temps = temps.toFixed(2).toString();
-					temps = temps.replace(".","'");
+				    // Calcul duree en secondes
+				    var minutes = Math.floor(song.songTrackDuration / 60000);
+				    var secondes = Math.round( (song.songTrackDuration - minutes * 60000)/1000 );
+				    secondes = (secondes < 10 ) ? '0'+secondes : secondes;
+				    var duree = minutes+"'"+secondes;
 				%>
 				<div>
-					<span><%= temps %></span>
+					<span><%= duree %></span>
 				</div>
 
 			</li>

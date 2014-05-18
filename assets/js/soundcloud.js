@@ -22,7 +22,7 @@ search.init({
 
 				$('.results').empty();
 
-				$(data.tracks).each(function(index, track) {
+				$(data.tracks.items).each(function(index, track) {
 
 						$img="/images/icon_music.png";
 						$('.results').append($('<li data-song="'+track.name+'" data-songid="'+track.id+'" data-songservice="spotify" data-songartist="'+track.artists[0].name+'" data-songduration="'+track.duration_ms+'" data-permalink="'+track.link+'" data-songurl="'+track.preview_url+'"></li>').html('<img src='+$img+'><div><span class="title">'+track.name + '</span><span class="artist">'+ track.artists[0].name +'</span></div>'));
