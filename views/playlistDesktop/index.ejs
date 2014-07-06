@@ -39,20 +39,33 @@
 
 	<section class="w60 player center col-right <% if(typeof(songs) != 'undefined' && songs.length == 0) { %>invisible<% } %>">
 
-		<div class="ui360 ui360-vis">
-			<a type="audio/mp3" href=""></a>
-			<div class="player_track_artist"></div>
-			<div class="player_track_name"></div>
-			<div class="player_track_like"><span>0</span><i class="icon-coeuralone"></i></div>
-			<div class="player_track_dislike"><span>0</span><i class="icon-thumbalone"></i></div>
-			<div class="player_carousel_like_dislike_container invisible">
-				<i class="icon-flecheg player_carousel_like_dislike_backward invisible"></i>
-				<div class="player_carousel_like_dislike">
-					<ul>
+		<button id="test_1">Aller à la fin du morceau</button>
 
-					</ul>
+
+<!-- 		<div class="ui360 ui360-vis">
+			<a type="audio/mp3" href=""></a>
+			
+		</div> -->
+
+		<div class="player_bubble_container">
+			<div class="player_bubble">
+				<input class="player_circle" data-height="500" data-width="500" data-fgColor="#fff" data-bgColor="rgba(255,255,255,0.7)" data-skin="tron" data-thickness=".05" data-displayInput="false" data-min="0" data-max="" value="" readOnly="true">
+				<div class="player_timing"></div>
+
+				<div class="player_track_artist"></div>
+				<div class="player_track_name"></div>
+				<div class="player_play_pause"></div>
+				<div class="player_track_like"><span>0</span><i class="icon-coeuralone"></i></div>
+				<div class="player_track_dislike"><span>0</span><i class="icon-thumbalone"></i></div>
+				<div class="player_carousel_like_dislike_container invisible">
+					<i class="icon-flecheg player_carousel_like_dislike_backward invisible"></i>
+					<div class="player_carousel_like_dislike">
+						<ul>
+
+						</ul>
+					</div>
+					<i class="icon-fleched player_carousel_like_dislike_forward invisible"></i>
 				</div>
-				<i class="icon-fleched player_carousel_like_dislike_forward invisible"></i>
 			</div>
 		</div>
 

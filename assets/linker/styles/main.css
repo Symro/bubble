@@ -2208,35 +2208,60 @@ body.ajax .loader-overlay{
 
 /* DESKTOP - PLAYER */
 
-.ui360 .player_track_name,
-.ui360 .player_track_artist{
+
+.player_bubble_container{
+  position:relative;
+  display:table;
+  width:500px;
+  height:100%;
+  margin:0 auto;
+}
+
+.player_bubble{
+  display:table-cell;
+  vertical-align:middle;
+  width:500px;
+  height:500px;
+}
+
+
+.player_bubble .player_timing{
+  position:absolute;
+  left:0; right:0;
+  top:calc( 50% - 1em );
+  text-align:center;
+  font-size:2.3em;
+  font-weight:bold;
+}
+
+.player_bubble .player_track_name,
+.player_bubble .player_track_artist{
   position:absolute;
   text-align:center;
   text-transform:uppercase;
 }
-.ui360 .player_track_artist{
+.player_bubble .player_track_artist{
   font-weight:bold;
-  top:130px;
+  top:36%;
   font-size:2.1em;
   line-height:0.8em;
-  width:295px;
-  margin-left:-404px;
+  padding:0 13%;
+  width:100%;
 }
-.ui360 .player_track_name{
-  top:210px;
+.player_bubble .player_track_name{
+  top:41%;
   font-size:1.2em;
   line-height:1.1em;
-  margin-left:-440px;
-  width:370px;
+  width:100%;
+  padding:0 9%;
   height:20px;
   overflow:hidden;
   text-overflow:ellipsis;
 }
 
-.ui360 .player_track_dislike,
-.ui360 .player_track_like{
+.player_bubble .player_track_dislike,
+.player_bubble .player_track_like{
   position:absolute;
-  bottom:130px;
   border: 3px solid #FFFFFF;
   border-radius: 50%;
   height: 70px;
@@ -2244,33 +2269,35 @@ body.ajax .loader-overlay{
   width: 70px;
   text-align:center;
   z-index:10;
+  left:31%;
+  top:57%;
 }
-.ui360 .player_track_dislike:hover,
-.ui360 .player_track_like:hover{
+.player_bubble .player_track_dislike{
+  left:55%;
+}
+.player_bubble .player_track_dislike{
+  
+}
+.player_bubble .player_track_dislike:hover,
+.player_bubble .player_track_like:hover{
   background:rgba(255,255,255,0.3);
 }
-.ui360 .player_track_dislike i:before,
-.ui360 .player_track_like i:before{
+.player_bubble .player_track_dislike i:before,
+.player_bubble .player_track_like i:before{
   font-size:1.5em;
 }
-.ui360 .player_track_dislike i:before{
+.player_bubble .player_track_dislike i:before{
   font-size:1.3em;
 }
-.ui360 .player_track_dislike i,
-.ui360 .player_track_like i{
+.player_bubble .player_track_dislike i,
+.player_bubble .player_track_like i{
   vertical-align:-5px;
 }
-.ui360 .player_track_dislike{
-  margin-left:-230px;
-}
-.ui360 .player_track_like{
-  margin-left:-340px;
-}
-.ui360 .player_track_dislike span,
-.ui360 .player_track_like span{
+.player_bubble .player_track_dislike span,
+.player_bubble .player_track_like span{
   font-size:1.8em;
 }
-.ui360 .player_carousel_like_dislike_container{
+.player_bubble .player_carousel_like_dislike_container{
   position:absolute;
   bottom:-150px;
   left:0; right:0;
@@ -2278,7 +2305,7 @@ body.ajax .loader-overlay{
   border-top:solid 3px rgba(238,226,226,0.5);
   border-bottom:solid 3px rgba(238,226,226,0.5);
 }
-.ui360 .player_carousel_like_dislike_container {
+.player_bubble .player_carousel_like_dislike_container {
   overflow:hidden;
   width:320px;
   margin:25px auto 40px auto;
@@ -2294,41 +2321,41 @@ body.ajax .loader-overlay{
   -ms-transform:scale(1);
   transform:scale(1)
 }
-.ui360 .player_carousel_like_dislike_container.invisible{
+.player_bubble .player_carousel_like_dislike_container.invisible{
   opacity:0;
   -webkit-transform:scale(0);
   -moz-transform:scale(0);
   -ms-transform:scale(0);
   transform:scale(0);
 }
-.ui360 .player_carousel_like_dislike_container > div{
+.player_bubble .player_carousel_like_dislike_container > div{
   overflow:hidden;
   position: relative;
   width: 210px;
   margin-right:15px;
   float:left;
 }
-.ui360 .player_carousel_like_dislike_container ul{
+.player_bubble .player_carousel_like_dislike_container ul{
   width: 20000em;
   position: relative;
 }
 
 
-.ui360 .player_carousel_like_dislike_container ul li{
+.player_bubble .player_carousel_like_dislike_container ul li{
   float:left;
   margin:20px 0 0 15px;
   padding: 0;
   list-style: none;
   width: 55px;
 }
-.ui360 .player_carousel_like_dislike_container ul li img{
+.player_bubble .player_carousel_like_dislike_container ul li img{
   border-radius: 50px;
   border:2px solid rgba(255,255,255,0.8);
 }
-.ui360 .player_carousel_like_dislike_container ul li:last-child{
+.player_bubble .player_carousel_like_dislike_container ul li:last-child{
   
 }
-.ui360 .player_carousel_like_dislike_container i{
+.player_bubble .player_carousel_like_dislike_container i{
   float:left;
   margin-top: 30px;
   color:rgba(255,255,255,0.8);
@@ -2338,12 +2365,31 @@ body.ajax .loader-overlay{
   -ms-transition:opacity 300ms linear;
   transition:opacity 300ms linear;
 }
-.ui360 .player_carousel_like_dislike_container i.invisible{
+.player_bubble .player_carousel_like_dislike_container i.invisible{
   opacity:0;
   visibility:hidden;
 }
 
+.player_bubble .player_play_pause{
+  position:absolute;
+  left:calc( 50% - 22px );
+  top:25%;
+  width:44px;
+  height:46px;
+  background:transparent url(../../images/player_sprite.png) no-repeat -0px 1px;
+  cursor:pointer;
+}
+.player_bubble .player_play_pause:hover{
+  background:transparent url(../../images/player_sprite.png) no-repeat -0px -45px;
+}
 
+.player_bubble .player_play_pause.paused{
+ background:transparent url(../../images/player_sprite.png) no-repeat -0px -91px;
+}
+
+.player_bubble .player_play_pause.paused:hover{
+ background:transparent url(../../images/player_sprite.png) no-repeat -0px -137px;
+}
 
 
 

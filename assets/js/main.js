@@ -360,7 +360,7 @@ $(document).ready(function(){
 				var minutes = Math.floor(value / 60);
 				var secondes = value - minutes * 60;
 				var zero = (secondes < 10)? "0" : "";
-				$timer.html(minutes+"'"+zero+secondes);
+				$timer.html(minutes+"’"+zero+secondes);
 				//console.log("minutes "+minutes+" Secondes :"+zero+secondes);
 			}
 		});

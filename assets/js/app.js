@@ -144,6 +144,194 @@ function updateInDom(message){
 }
 
 // --------------------------------------
+// PLAYER 
+// --------------------------------------
+
+  // REGLAGES PLAYER
+
+  soundManager.setup({
+    // path to directory containing SM2 SWF
+    url: '/swf/',
+    debugFlash: false,
+    
+      onready: function(){
+      console.log('soundManager est pret ! ');
+      player();
+    },
+    ontimeout: function() {
+      // console.log('SM2 init failed!');
+    },
+    defaultOptions: {
+      // set global default volume for all sound objects
+      volume: 100
+    }
+
+  });
+
+
+  function player(new_track){
+    var player_circle = $(".player_circle");
+    var player_timing = $(".player_timing");
+
+    if(new_track && $("body").hasClass("desktop") ){
+      console.log("Lecture d'un nouveau morceau : "+new_track.songTrackName);
+      $('li[data-db-id="'+new_track.id+'"]').prevAll("li").addClass('played');
+      //get_player_position(); // Lancement du timer
+
+      $('.player_track_name').html(new_track.songTrackName);
+      $('.player_track_artist').html(new_track.songTrackArtist);
+
+      // Création du cercle de progression
+      player_circle.knob({
+          "release" : function (value) {
+            var minutes = Math.floor(value / 60);
+            var secondes = value - minutes * 60;
+            var zero = (secondes < 10)? "0" : "";
+            player_timing.html(minutes+"’"+zero+secondes);
+          }
+        });
+
+      var songURL = "";
+      // Change l'url dynamiquement et joue le morceau
+      switch (new_track.songService) {
+        case 'soundcloud' : 
+          songURL = "http://api.soundcloud.com/tracks/"+new_track.songTrackId+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb";
+        break;
+        case 'spotify' : 
+          songURL = new_track.songSongUrl;
+        break;
+        case 'deezer' : 
+          songURL = new_track.songSongUrl;
+        break;
+      }
+
+      var player = soundManager.createSound({
+        id: 'bubble_player',
+        autoLoad: true,
+        // useful for URLs without obvious filetype extensions
+        url: songURL,
+
+        whileplaying: function(){
+
+          player_circle.val( (this.position/1000).toFixed(2) ).trigger('change');
+            player_circle.trigger(
+                'configure',{
+                    "min":0,
+                    "max":(this.duration/1000).toFixed(2)
+                }
+            );
+
+          send_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) );
+
+          // console.log( (this.position/1000).toFixed(2) );
+          // console.log( (this.duration/1000).toFixed(2) );
+          // console.log( this.id );
+          //soundManager._writeDebug('sound '+this.id+' playing, '+this.position+' of '+this.duration);
+        },
+        //onplay:   function(){ get_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) ); },
+        //onresume:   function(){ get_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) ); },
+        //onpause:  function(){ stop_send_player_position(); }
+
+      });
+
+
+      soundManager.play('bubble_player',{
+        onfinish: function() {
+          alert('The sound '+this.id+' finished playing.');
+          player.destruct();
+          next_song();
+        }
+      });
+
+      $('.player_play_pause').on("click", function(){
+        $(this).toggleClass("paused");
+        soundManager.togglePause('bubble_player');
+      });
+
+      $("#test_1").on("click",function(e){
+        // Place le player à 2sec de la fin
+        player.setPosition(player.duration-2000);
+      });
+
+    }
+    else{
+      console.log("pas de son :'(");
+    }
+
+  }
+
+
+
+  function next_song(){
+
+    var likeContainer    = $('.player_track_like span');
+    var dislikeContainer = $('.player_track_dislike span');
+
+    console.log("Envoie socket.put avec id = "+currentPlaylist.id);
+    socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
+      console.log("Reponse : ");
+      console.dir(response);
+      if(response.songStatus != "undefined"){
+        currentPlaylist = response;
+
+        // Remet le compteur de like & dislike à zéro
+        currentLike = 0;
+        currentDislike.count = 0;
+        likeContainer.text(0);
+        dislikeContainer.text(0);
+
+        // Lancement musique suivante
+          player(currentPlaylist);
+
+        }
+        else{
+          // Pas de son à lire dans la playlist
+          console.log(" AUCUN SONG A LIRE ");
+          stop_send_player_position();
+
+            // Masquage du player sur Desktop
+              var playerDesktop = $('.desktop-container .player');
+              playerDesktop.addClass('invisible');
+        }
+
+    });
+
+  }
+
+  /* LIVE BUBBLE - PLAYER POSITION */
+
+  var get_player_position_timer;
+
+  // Lance le Timer d'envoie de la position du lecteur
+  function get_player_position(position, duration){
+    stop_send_player_position(); // on clear le timer avant de le relancer
+    get_player_position_timer = setInterval(function(){ send_player_position(position, duration); }, 1000);
+  }
+
+  // Envoie par socket l'instant ds le morceau en lecture, et la durée totale du morceau
+  function send_player_position(position, duration){
+    socket.post('/desktop/playlist/'+user.room+'/playerPosition' , {
+        position : (position) ? position : 0,
+        duration : (duration) ? duration : 0,
+        currentPlaylist : currentPlaylist
+      }, function(response){
+        console.log(response);
+    });
+  }
+
+  // Arrêter l'envoie de la position du player desktop au mobile chaque seconde
+  function stop_send_player_position(){
+    clearInterval(get_player_position_timer);
+  }
+
+
+
+
+
+
+
+
+// --------------------------------------
 // PARTIE AJOUT DANS LE DOM
 // --------------------------------------
 
@@ -173,7 +361,7 @@ function addInDesktopDom(message){
     $('.playlistInfo').hide();
 
     // Lancement musique
-    play_player(currentPlaylist);
+    player(currentPlaylist);
 
     // Supprime la classe "Active" des boutons pour permettre de voter à nouveau
     var $btnLike    = $('#song-like');
@@ -194,7 +382,7 @@ function addInDesktopDom(message){
     // console.log('j"affiche '+message.datas.song.songTrackName);
 
     // cache de variable
-    var $player = $('.ui360 .sm2-canvas');
+    var $player = $('.player_bubble');
     var $reception = $('#reception');
 
     console.log($player);
@@ -208,11 +396,11 @@ function addInDesktopDom(message){
     // détermine la distance entre le centre du player
     // et le bord gauche de l'écran
     var $left = $player.offset().left;
-    $left+= ($player.width()/2-(35));
+    $left+= ($player.width()/2);
     console.log("Left après : "+$left);
 
     var $top = $player.offset().top;
-    $top+= ($player.height()/3.5);
+    $top+= ($player.height()/2);
 
     $('#reception').children('img').css({
       "position":"absolute",
@@ -365,7 +553,7 @@ function removeInAllDom(message){
         var minutes = Math.floor(value / 60);
         var secondes = value - minutes * 60;
         var zero = (secondes < 10)? "0" : "";
-        $timer.html(minutes+"'"+zero+secondes);
+        $timer.html(minutes+"’"+zero+secondes);
         //console.log("minutes "+minutes+" Secondes :"+zero+secondes);
       }
     });
@@ -387,6 +575,7 @@ function removeInAllDom(message){
 function updateInMobileDom(message){
 
   if(message.info == "playerPosition"){
+    console.dir(message.datas);
 
     // Variable globale "currentPlaylist" présente en temps réél sur Mobile
     currentPlaylist = message.datas.currentPlaylist;
@@ -469,7 +658,7 @@ function updateInDesktopDom(message){
 
               // Lancement musique suivante
               console.log(currentPlaylist);
-              play_player(currentPlaylist);
+              player(currentPlaylist);
 
               }
               else{
