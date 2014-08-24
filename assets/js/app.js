@@ -170,6 +170,9 @@ function updateInDom(message){
 
 
   function player(new_track){
+    console.log("PLAYER RECEIVED A NEW TRACK : ");
+    console.dir(new_track);
+
     var player_circle = $(".player_circle");
     var player_timing = $(".player_timing");
 

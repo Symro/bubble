@@ -136,79 +136,98 @@ module.exports = {
 
 
 playlist: function (req, res, next) {
-    var allowedFiles = ["image/jpeg","image/png","image/gif"];
-    var allowFile = isInArray(req.files.fileInput.type, allowedFiles);
+    console.log("Req.files : ");
+    console.dir(req.file());
 
-    if(!allowFile){
-      return res.forbidden('Please upload an image');
-    }
-    if(!req.params['id']){
-      return res.forbidden('Upload error');
-    }
-
-    var file = req.files.fileInput,
-      id = sid.generate(),
-      fileName = id + "." + fileExtension(safeFilename(file.name)),
-      dirPath = UPLOAD_PLAYLIST_PATH + '/' + req.params['id'],
-      filePath = dirPath + '/' + fileName;
-
-    try {
-      mkdirp.sync(dirPath, 0755);
-    } catch (e) {
-      console.log(e);
-    }
-
-    fs.readFile(file.path, function (err, data) {
-      if (err) {
-        return res.json({'error': 'could not read file'});
-      } else {
-        fs.writeFile(filePath, data, function (err) {
-          if (err) {
-            return res.json({'error': 'could not write file to storage'});
-          } else {
-            processImage(id, fileName, filePath, function (err, data) {
-              if (err) {
-                return res.json(err);
-              } else {
-
-                // resize l'image
-                gm(filePath)
-                .autoOrient()
-                .resize(300, 300, "^>")
-                .gravity('Center')
-                .extent(300, 300)
-                .write(filePath, function (err) {
-                  if (!err){
-
-                    // màj url de l'image en BDD
-
-                    PlaylistDesktop.findOneByUrl(req.params['id']).exec(function(err, playlist) {
-                      if(err){
-                        return res.json(err);
-                      }
-
-                      playlist.image = "/"+filePath;
-                      playlist.save();
-
-                    });
+  
+    /* A REVOIR GRACE A : http://stackoverflow.com/questions/23977005/uploading-files-using-skipper-with-sails-js-v0-10-how-to-retrieve-new-file-nam */
+    /* ET : http://software-kraut.de/?p=743 */
 
 
-                    return res.json(data);
-                  }
-                  // une erreur est survenue..
-                  else{
-                    return res.forbidden('Internal Error');
-                  }
-
-                });
-
-
-              }
-            });
-          }
-        })
-      }
+    req.file('historicPicture').upload( SomeReceiver(), function (err, files) {
+      if (err) return res.serverError(err);
+        return res.json({
+          message: files.length + ' file(s) uploaded successfully!',
+          files: files
+        });
+      });
     });
+
+    // var allowedFiles = ["image/jpeg","image/png","image/gif"];
+    // var allowFile = isInArray(req.files.fileInput.type, allowedFiles);
+
+    // if(!allowFile){
+    //   return res.forbidden('Please upload an image');
+    // }
+    // if(!req.params['id']){
+    //   return res.forbidden('Upload error');
+    // }
+
+    // var file = req.files.fileInput,
+    //   id = sid.generate(),
+    //   fileName = id + "." + fileExtension(safeFilename(file.name)),
+    //   dirPath = UPLOAD_PLAYLIST_PATH + '/' + req.params['id'],
+    //   filePath = dirPath + '/' + fileName;
+
+    // try {
+    //   mkdirp.sync(dirPath, 0755);
+    // } catch (e) {
+    //   console.log(e);
+    // }
+
+    // fs.readFile(file.path, function (err, data) {
+    //   if (err) {
+    //     return res.json({'error': 'could not read file'});
+    //   } else {
+    //     fs.writeFile(filePath, data, function (err) {
+    //       if (err) {
+    //         return res.json({'error': 'could not write file to storage'});
+    //       } else {
+    //         processImage(id, fileName, filePath, function (err, data) {
+    //           if (err) {
+    //             return res.json(err);
+    //           } else {
+
+    //             // resize l'image
+    //             gm(filePath)
+    //             .autoOrient()
+    //             .resize(300, 300, "^>")
+    //             .gravity('Center')
+    //             .extent(300, 300)
+    //             .write(filePath, function (err) {
+    //               if (!err){
+
+    //                 // màj url de l'image en BDD
+
+    //                 PlaylistDesktop.findOneByUrl(req.params['id']).exec(function(err, playlist) {
+    //                   if(err){
+    //                     return res.json(err);
+    //                   }
+
+    //                   playlist.image = "/"+filePath;
+    //                   playlist.save();
+
+    //                 });
+
+
+    //                 return res.json(data);
+    //               }
+    //               // une erreur est survenue..
+    //               else{
+    //                 return res.forbidden('Internal Error');
+    //               }
+
+    //             });
+
+
+    //           }
+    //         });
+    //       }
+    //     })
+    //   }
+    // });
+
+
   },
 
   /**

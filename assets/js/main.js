@@ -73,6 +73,40 @@ $(document).ready(function(){
 
 	}
 
+	if(isMobile){
+		var mySwiper = new Swiper('.swiper-container', {
+			pagination: '.pagination',
+			loop:true,
+			paginationClickable: true,
+			onSlideChangeStart: function(swiper, direction){
+				var nav = $('.nav-top .right');
+				switch(swiper.activeLoopIndex){
+					case 0:
+						nav.children('a').removeClass('visible').filter(':first-child').addClass("visible");
+						break;
+					case 1:
+						nav.children('a').removeClass('visible').filter(':nth-child(2)').addClass("visible");
+						$.get( "/mobile/discover", {userId:user.id}, function( data ) {
+							//console.dir(data);
+							$('.discoveries').html(data);
+						});
+						
+						break;
+					case 2:
+						nav.children('a').removeClass('visible');
+						$.get( "/mobile/playlist/"+user.room+"/historic", {userId:user.id}, function( data ) {
+							//console.log(data);
+							$('.historic').html(data);
+						});
+
+						break;
+				}
+			}
+		}) 
+	}
+
+
+
 	// L'utilisateur vient d'arriver, il informe les autres participants et rejoint sa room
 	socket.get('/desktop/playlist/'+user.room+'/joined', function(response) {
 	  // do something
@@ -402,32 +436,30 @@ $(document).ready(function(){
 		},100);
 	}
 
-	var $this,$e;
-
 	// Ajout d'un son à une playlist
 	$('.search').on('click', '.results li', function(e){
 		e.preventDefault();
-
-		$this = $(this);
-		$e = e;
+		var event = e;
+		var $this = $(this);
 
 		$('.confirmSongModal').addClass('visible');
 
+		$('.confirmSongModal').on('click','div a:first-child()',function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			console.log($(this).data('confirm'));
+			$('.confirmSongModal').removeClass('visible');
+		});
+		$('.confirmSongModal').on('click','div a:last-child()',function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			console.log($(this).data('confirm'));
+			$('.confirmSongModal').removeClass('visible');
+			designInteraction($this, event);
+		});
+
 	});
 
-	$('.confirmSongModal').on('click','div a:first-child()',function(e){
-		e.preventDefault();
-		e.stopPropagation();
-		console.log($(this).data('confirm'));
-		$('.confirmSongModal').removeClass('visible');
-	});
-	$('.confirmSongModal').on('click','div a:last-child()',function(e){
-		e.preventDefault();
-		e.stopPropagation();
-		console.log($(this).data('confirm'));
-		$('.confirmSongModal').removeClass('visible');
-		designInteraction($this,$e);
-	});
 
 	function designInteraction( $this, $e ){
 		// Design d'interaction

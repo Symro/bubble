@@ -13,14 +13,14 @@ module.exports = function(req,res,next){
 	var url = req.path;
 
 	// AIDE POUR LE DEBUG : 
-	// console.log('___________________________________________________');
-	// console.log("POLICIES___ DEVICE : "+device);
+	console.log('___________________________________________________');
+	console.log("POLICIES___ DEVICE : "+device);
 
-	// console.log('Is Socket ? : '+req.isSocket);
-	// console.log('Chemin : '+req.path);
-	// console.log('URL : '+req.url);
-	// console.log('méthode : '+req.method);
-	// console.log('___________________________________________________');
+	console.log('Is Socket ? : '+req.isSocket);
+	console.log('Chemin : '+req.path);
+	console.log('URL : '+req.url);
+	console.log('méthode : '+req.method);
+	console.log('___________________________________________________');
 
 
 	if(req.method == "GET" && device == "phone" && url.indexOf("desktop") != -1){

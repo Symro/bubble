@@ -31,23 +31,23 @@
 						        <div class="logo"></div>
 
 						        <section class="w80 ">
-						        <h2>Join a bubble</h2>
+							        <h2>Join a bubble</h2>
 
-						                    <div class="form-error">
-						                        <% if(flash && flash.err) { %>
-						                        <ul class="alert alert-success">
-						                        <% Object.keys(flash.err).forEach(function(error) { %>
-						                            <li><%= flash.err[error].message %></li>
-						                        <% }) %>
-						                        </ul>
-						                        <% } %>
-						                    </div>
+							                    <div class="form-error">
+							                        <% if(flash && flash.err) { %>
+							                        <ul class="alert alert-success">
+							                        <% Object.keys(flash.err).forEach(function(error) { %>
+							                            <li><%= flash.err[error].message %></li>
+							                        <% }) %>
+							                        </ul>
+							                        <% } %>
+							                    </div>
 
-						        <form class="form-join-playlist" action="/mobile/playlist" method="post">
-						                <input type="text" name="playlist_url" placeholder="Enter the bubble code" autocomplete="off" autocorrect="off" autocapitalize="off" maxlength="4" >
-						                <input type='submit' class="btn btn-large" id="validinscription"  value="Let's get started !">
-						                <input type="hidden" name="_csrf" value="<%= _csrf %>" />
-						        </form>
+							        <form class="form-join-playlist" action="/mobile/playlist" method="post">
+							                <input type="text" name="playlist_url" placeholder="Enter the bubble code" autocomplete="off" autocorrect="off" autocapitalize="off" maxlength="4" >
+							                <input type='submit' class="btn btn-large" id="validinscription"  value="Let's get started !">
+							                <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+							        </form>
 
 						        </section>
 						    </div>
@@ -105,8 +105,8 @@
 			    		<%- partial('partials/historic')%>
 			    	</ul>
 
-			    	<form id="formHistoricPicture" method="post" enctype="multipart/form-data">
-						<input type="file" id="historicPicture" name="historicPicture" />
+			    	<form id="formHistoricPicture" method="post" action="/upload/historic/" enctype="multipart/form-data">
+						<input type="file" id="historicPicture" name="historicPicture">
 						<input type="submit" name="submitHistoricPicture" value="Envoyer">
 					</form>
 			    </div><!-- FIN SLIDE HISTORIQUE -->

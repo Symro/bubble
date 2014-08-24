@@ -15,42 +15,41 @@
 // (if you're using LESS with the built-in default config, you'll want
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
-    'linker/styles/style.css',
 
-    'linker/**/*.css',
+  'styles/style.css',
 
-    'linker/styles/main.css',
+  'styles/**/*.css',
+
+  'styles/main.css'
+
 ];
 
 
 // Client-side javascript files to inject in order
 // (uses Grunt-style wildcard/glob/splat expressions)
 var jsFilesToInject = [
+  
+  // Load sails.io before everything else
+  'js/dependencies/sails.io.js',
+  'js/dependencies/jquery.js',
 
-    // Bring in the socket.io client
-    'linker/js/jquery.js',
-    'linker/js/validate.js',
-    'linker/js/socket.io.js',
+  'js/vendors/validate.js',
+  'js/vendors/soundcloud-sdk.js',
+  'js/vendors/soundmanager2-jsmin.js',
+  'js/vendors/jquery.mCustomScrollbar.concat.min.js',
+  'js/vendors/jquery.knob.js',
+  'js/vendors/jquery.jcarousel.min.js',
+  'js/vendors/idangerous.swiper-2.1.min.js',
+  'js/vendors/**/*.js',
 
-    // then beef it up with some convenience logic for talking to Sails.js
-    'linker/js/sails.io.js',
-    
-    'linker/js/soundcloud-sdk.js',
-    'linker/js/soundmanager2-jsmin.js',
-    'linker/js/jquery-editable-poshytip.min.js',
-    'linker/js/jquery.mCustomScrollbar.concat.min.js',
-    'linker/js/jquery.knob.js',
-    'linker/js/jquery.jcarousel.min.js',
 
-    // A simpler boilerplate library for getting you up and running w/ an
-    // automatic listener for incoming messages from Socket.io.
-    //'linker/js/app.js',
+  // Dependencies like jQuery, or Angular are brought in here
+  //'js/dependencies/**/*.js',
 
-    // *->    put other dependencies here   <-*
-    
-    // All of the rest of your app scripts imported here
-    'linker/**/*.js'
-	
+  // All of the rest of your client-side js files
+  // will be injected here in no particular order.
+  // 'js/**/*.js'
+  
 ];
 
 
@@ -66,11 +65,6 @@ var jsFilesToInject = [
 var templateFilesToInject = [
   'templates/**/*.html'
 ];
-
-
-
-
-
 
 
 

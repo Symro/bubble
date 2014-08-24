@@ -12,75 +12,102 @@ module.exports = {
         // console.dir(req.params.all());
         // console.dir(req.param('song'));
 
-        // req.sessoin.id
-        // req.param.url
+        // ---------- INFORMATON COMPORTEMENT ACTUEL SongController.js / Août 2014 ----------- 
+        // 
+        // 1) ON RECUPERE LE MORCEAU LE PLUS RECENT DE LA PLAYLIST EN COURS (pour connaitre son status de lecture)
+        //
+        // 2) ON AJOUTE LE NOUVEAU MORCEAU A LA PLAYLIST
+        //
+        // 3) ON COMPTE LE NOMBRE DE MORCEAU ACTUELLEMNT PRÉSENT
+        //      >> Si le status 1) était à played ==> la musique était terminée ==> on relance le player
+        //      >> Si il n'y a qu'1 seul morceau dans la playlist ==> on lance le player pour la 1ère fois
+        //
+        // 4) ON ENVOIE LES INFORMATIONS VIA SOCKET AUX DESKTOP + MOBILE
+        // 
+
         Song.findOne({url:req.route.params.url}).sort('createdAt DESC').exec(function getSongs(err, lastSong){
 
             if (songFromBubble != undefined) {
                 console.log('ajout par histo');
-                var song=songFromBubble;
-                var img='/images/icon_music.png';
+                var song    = songFromBubble;
+                var img     = '/images/icon_music.png';
                 // console.dir(songFromBubble);
             }else{
                 console.log('ajout normal');
-                var song = req.param('song');
-                var img=req.param('img');
+                var song    = req.param('song');
+                var img     = req.param('img');
             }
 
-            song["user"] = req.session.User.id;
-            song["url"]  = req.route.params.url;
-            song.songStatus="waiting";
             var d=new Date();
-            song.createdAt=d.toISOString();
+
+            song.user       = req.session.User.id;
+            song.url        = req.route.params.url;
+            song.songStatus = "waiting";
+            song.createdAt  = d.toISOString();
+
             if(song["songService"] == "deezer"){
                 song["songTrackDuration"] = song["songTrackDuration"]*1000;
             }
 
-            // console.dir(song);
-            sails.log(song);
             Song.create(song).exec(function songAdded(err,added){
-              // console.dir(err);
-              // console.dir('Song ajouté');
-              // console.dir(added)
-              var songId = added.id;
+                if(err) return next(err);
+                // console.dir(err);
+                // console.dir('Song ajouté');
+                // console.dir(added)
+                var songId = added.id;
+                var newTrack = added;
 
-              Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
-                console.log("Nb de song dans la playlist : "+found);
-
-
-                if (lastSong && lastSong.songStatus=="played") {
-                    sails.controllers.song.restartPlayer(req, res, next , added);
-                }
+                Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
+                    console.log("Nb de song dans la playlist : "+found);
 
 
-                // Si c'est le premier morceau, on informe le desktop qu'il doit lancer le player
-                if(found == 1){
-                    // mais avant on met à jour le status du morceau
-                    Song.update({songStatus:"waiting"},{songStatus:"playing"}).where({id: songId}).exec(function statusUpdated(err, song){
-                        if(err) return next(err);
+                    if (lastSong && lastSong.songStatus=="played") {
+                        sails.controllers.song.restartPlayer(req, res, next , added);
+                    }
 
-                        // affichage player sur desktop + lancement du son (1er son ajouté de toute la playlist)
-                        sails.sockets.broadcast(req.route.params.url,'message',{
-                            verb:'add',
-                            device:'desktop',
-                            info:'startPlaying',
-                            datas:song[0]
+
+                    // Si c'est le premier morceau, on informe le desktop qu'il doit lancer le player
+                    if(found == 1){
+                        console.log("songId : "+songId);
+                        // mais avant on met à jour le status du morceau
+
+                        // /!\ IMPOSSIBLE D'UPDATE UN SON PAR RAPPORT A SON _id -- (Aout 2014)
+                        //    | ALTERNATIVE | > union de caractéristiques qui permette de trouver 1 seule morceau 
+                        //    | TEMPORAIRE  | >  ==> date d'ajout + user + url playlist = 1 morceau unique identifié..?
+
+                        var whereParams = { user: newTrack.user, url: req.route.params.url, createdAt: newTrack.createdAt };
+
+                        Song.update({songStatus:"waiting"}, {songStatus:"playing"}).where(whereParams).exec(function statusUpdated(err, song){
+                            if(err) return next(err);
+
+                            //console.log("song___ : ");
+                            //console.dir(song);
+
+                            if(song){
+
+                                // affichage player sur desktop + lancement du son (1er son ajouté de toute la playlist)
+                                sails.sockets.broadcast(req.route.params.url,'message',{
+                                    verb:'add',
+                                    device:'desktop',
+                                    info:'startPlaying',
+                                    datas:song[0]
+                                });
+
+                                // affichage player sur mobile
+                                sails.sockets.broadcast(req.route.params.url,'message',{
+                                    verb:'update',
+                                    device:'mobile',
+                                    info:'showPlayer',
+                                    datas:{}
+                                });
+
+                            }
+
                         });
 
-                        // affichage player sur mobile
-                        sails.sockets.broadcast(req.route.params.url,'message',{
-                            verb:'update',
-                            device:'mobile',
-                            info:'showPlayer',
-                            datas:{}
-                        });
+                    }
 
-                    });
-
-
-                }
-
-              });
+                });
 
 
               	User.findOne(song.user).exec(function getImage(err,imgUser){
@@ -90,7 +117,7 @@ module.exports = {
     					verb:'add',
     					device:'mobile',
     					info:'songAdded',
-    					datas:{song:song,userImg:imgUser.image}
+    					datas:{song:song, userImg:imgUser.image}
     				});
 
     				// Ajout DOM desktop
@@ -98,12 +125,14 @@ module.exports = {
     					verb:'add',
     					device:'desktop',
     					info:'songAdded',
-    					datas:{song:song,id:added.id,img:img,userImg:imgUser.image}
+    					datas:{song:song, id:added.id, img:img, userImg:imgUser.image}
     				});
               	});
 
             });
-        });
+
+
+        }); // Fin Song.findOne(...)
 
     },
 
