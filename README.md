@@ -1,3 +1,6 @@
-# BubbleApp
+BubbleApp
+=========
 
-a [Sails](http://sailsjs.org) application
+[Bubble App](http://www.bubbleapp.fr), la playlist collaborative de demain !
+
+Motivé motivé !
