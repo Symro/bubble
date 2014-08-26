@@ -11,7 +11,10 @@ var sid = require('shortid');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 var gm = require('gm').subClass({ imageMagick: true });
-
+/* NEW */
+// var uuid = require('node-uuid');
+var path = require('path');
+/* /NEW */
 
 var UPLOAD_USER_PATH = 'public/user';
 var UPLOAD_PLAYLIST_PATH = 'public/playlist';
@@ -136,22 +139,52 @@ module.exports = {
 
 
 playlist: function (req, res, next) {
-    console.log("Req.files : ");
-    console.dir(req.file());
-
-  
     /* A REVOIR GRACE A : http://stackoverflow.com/questions/23977005/uploading-files-using-skipper-with-sails-js-v0-10-how-to-retrieve-new-file-nam */
     /* ET : http://software-kraut.de/?p=743 */
+    /* RESIZE : http://stackoverflow.com/questions/24069203/skipper-in-sailsjs-beta-image-resize-before-upload */
 
 
-    req.file('historicPicture').upload( SomeReceiver(), function (err, files) {
-      if (err) return res.serverError(err);
-        return res.json({
+    var results = [],
+    streamOptions = {
+      dirname: "upload/",
+      saveAs: function(file) {
+        var filename = file.filename,
+            //newName = uuid.v4() + path.extname(filename);
+            newName = Date.now() + path.extname(filename);
+        return newName;
+      },
+      completed: function(fileData, next) {
+        /* Callback fichier uploadé avec succès */
+
+        next();
+
+        // Upload.create(fileData).exec(function(err, savedFile){
+        //   if (err) {
+        //     next(err);
+        //   } else {
+        //     results.push({
+        //       id: savedFile.id,
+        //       url: '/files/' + savedFile.localName
+        //     });
+        //     next();
+        //   }
+        // });
+
+      }
+    };
+
+    req.file('fileInput').upload(Uploader.documentReceiverStream(streamOptions),
+      function (err, files) {
+        if (err) return res.serverError(err);
+
+        res.json({
           message: files.length + ' file(s) uploaded successfully!',
-          files: files
+          files: results
         });
-      });
-    });
+      }
+    );
+
+
 
     // var allowedFiles = ["image/jpeg","image/png","image/gif"];
     // var allowFile = isInArray(req.files.fileInput.type, allowedFiles);
@@ -229,6 +262,7 @@ playlist: function (req, res, next) {
 
 
   },
+
 
   /**
    * Overrides for the settings in `config/controllers.js`
