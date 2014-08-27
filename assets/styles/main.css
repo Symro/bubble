@@ -80,7 +80,7 @@ h2, .h2-like {
   line-height: 1.5;
 }
 h3, .h3-like {
-  margin: 0.875em 0 0 0;
+  margin: 0em 0 0 0;
   font-size: 1.7143em; /* equiv 24px */
   line-height: 1.75;
 }
@@ -1377,7 +1377,7 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
 
 /*********** DESKTOP - COL LEFT ***********/
 .col-left{
-  border-right:solid 1px rgba(238,226,226,0.5);
+  background-color: rgba(0,0,0,0.3);
   min-height: 100%;
 }
 .col-left h4{
@@ -1590,6 +1590,25 @@ cursor:  pointer;
 .playlistContent ul{
   width: 370px;
 }
+
+footer{
+  background-color: #222;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+footer li{
+  float: left;
+  list-style: none;
+  line-height: 22px;
+  margin-bottom: 10px;
+
+}
+footer li:last-child{
+  float: right;
+  margin-right: 20px;
+}
+
 
 /*********** END DESKTOP - COL LEFT ***********/
 

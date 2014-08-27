@@ -17,23 +17,31 @@
 		</section>
 
 
-	<div class="participantSidebar">
-		<h4 class="form-signin-heading txtcenter">Participants</h4>
-		<div class="wrapperParticipants">
-			<i class="icon-flecheg listeParticipant-backward"></i>
-			<div class="listeParticipant" data-carousel="">
-				<%- partial('partials/members')%>
+		<div class="participantSidebar">
+			<h4 class="form-signin-heading txtcenter">Participants</h4>
+			<div class="wrapperParticipants">
+				<i class="icon-flecheg listeParticipant-backward"></i>
+				<div class="listeParticipant" data-carousel="">
+					<%- partial('partials/members')%>
+				</div>
+				<i class="icon-fleched listeParticipant-forward"></i>
 			</div>
-			<i class="icon-fleched listeParticipant-forward"></i>
 		</div>
-	</div>
 
-	<div class="playlistContent" id="playlistencours" >
-		<h4 class="form-signin-heading txtcenter">Play queue</h4>
-		<ul class="liPlaylist" data-playlist="">
-			<%- partial('partials/currentPlaylist')%>
-		</ul>
-	</div>
+		<div class="playlistContent" id="playlistencours" >
+			<h4 class="form-signin-heading txtcenter">Play queue</h4>
+			<ul class="liPlaylist" data-playlist="">
+				<%- partial('partials/currentPlaylist')%>
+			</ul>
+		</div>
+
+		<footer>
+			<ul>
+				<li>Crédits/Contact</li>
+				<li>Twitter</li>
+			</ul>
+
+		</footer>
 
 	</section>
 
