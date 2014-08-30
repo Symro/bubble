@@ -84,13 +84,30 @@ module.exports = {
                 return res.json(err);
               }
 
+              // Stock le chemin de l'ancienne image
+              var previous_img = user.image;
+
               user.image = "/"+chemin_img_300;
 
               // Update l'URL de l'image de la session en cours de l'utilisateur
               //req.session.User.id = user.image;
 
               user.save(function(err) {
-                // value has been saved
+
+                // On envoie des infos à tous les sockets connectés concernant l'update !
+                User.publishUpdate(user.id, { 
+                  type:"image",
+                  previous:{
+                    image:previous_img
+                  },
+                  actual:{
+                    image:"/"+chemin_img_300
+                  },
+                  user:{
+                    firstname:user.firstname
+                  }
+                });
+
               });
 
             });

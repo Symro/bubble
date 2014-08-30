@@ -32,13 +32,21 @@ module.exports = {
 		req.socket.join(playlistUrl);
 		req.socket.broadcast.to(playlistUrl).emit('message', {thisIs: 'Hey Im new !! _______theMessage'});
 
+		// Subscribes client to ONLY the update events for every `User` record.
+	    User.find({}).exec(function(e,listOfUsers){
+	        User.subscribe(req.socket, listOfUsers, 'update');
+	        console.log('User with socket id '+req.socket.id+' is now subscribed ');
+	    });
+
 		Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
-				sails.log(found);
+
+			sails.log(found);
 			res.json({
 				joined:true,
-		    success: true,
-		    count:found
-	    });
+		    	success: true,
+		    	count:found
+	    	});
+
 		});
 	}
 

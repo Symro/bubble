@@ -45,11 +45,35 @@
 
       // log('New comet message received :: ', message);
 
-      messageReceivedFromServer(message)
-
-
+      messageReceivedFromServer(message);
 
     });
+
+
+    // Ecouteur pour les Publish de la table 'User'
+    socket.on('user',function(obj){
+      console.dir(obj);
+
+      if (obj.verb == 'updated') {
+
+        if(obj.data.type == "image"){
+
+          var message = {
+            device:"all",
+            info:"imageUpdated",
+            datas:obj.data
+          };
+
+          updateInDom(message);
+
+        }
+
+        console.log('PublishUpdate socket.on("user") !');
+
+      }
+      
+    });
+
 
     ///////////////////////////////////////////////////////////
     // Here's where you'll want to add any custom logic for
@@ -677,5 +701,35 @@ function updateInDesktopDom(message){
 
   }
 
-
 };
+
+
+function updateInAllDom(message){
+  console.dir(message);
+
+  if(message.info == "imageUpdated"){
+
+    var image_precedente = message.datas.previous.image;
+    var image_nouvelle   = message.datas.actual.image;
+    var user             = message.datas.user.firstname;
+
+    console.log("On est dans l'update de l'image ! ");
+    console.log("image précédente : "+image_precedente);
+    console.log("image nouvelle : "+image_nouvelle);
+
+    var image_recherche  = $('img[src="'+message.datas.previous.image+'"]');
+
+    if( image_recherche.length > 0 ){
+
+      console.log("Trouvé !");
+      image_recherche.each(function(i, el){
+        image_recherche.attr("src", image_nouvelle);
+      });
+
+    }    
+
+  }
+
+}
+
+
