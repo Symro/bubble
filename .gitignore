@@ -116,3 +116,6 @@ npm-debug.log
 nbproject
 .idea
 .node_history
+
+upload/user/*
+upload/playlist/*
