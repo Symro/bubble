@@ -270,7 +270,7 @@ $(document).ready(function(){
 		})
 		.success(function(data){
 			$('#uploadPicture .error').empty();
-			$('#uploadPicture img').attr('src', '/'+data.path);
+			$('#uploadPicture img').attr('src', data.path);
 
 		})
 
@@ -290,23 +290,37 @@ $(document).ready(function(){
 
 	$('#formHistoricPicture').on('submit', function(e){
 		e.preventDefault();
-		var playlist = historicPicture.parents('.playlistHist').data('historic-url');
-		var datas = new FormData();
-		datas.append( "fileInput", $("#historicPicture")[0].files[0]);
+		var allowedFiles = ["image/jpeg","image/png","image/gif"]
+		var playlist 	 = historicPicture.parents('.playlistHist').data('historic-url');
+		var file  	 	 = $("#historicPicture")[0].files[0];
+		var datas 	 	 = new FormData();
 
-		$.ajax({
-			url:'/upload/historic/'+playlist,
-			type:'POST',
-			data:datas,
-			processData:false,
-			contentType:false
-		})
-		.success(function(data){
-			historicPicture.attr('src', '/'+data.path);
-		})
-		// .fail(function(jqXHR, textStatus){
-		// 	$('#uploadPicture .error').html(jqXHR.responseJSON.message);
-		// })
+		datas.append( "fileInput", file);
+
+		// Vérification du type de fichier avant upload
+		if(allowedFiles.indexOf(file.type) > -1){
+
+			$.ajax({
+				url:'/upload/historic/'+playlist,
+				type:'POST',
+				data:datas,
+				processData:false,
+				contentType:false
+			})
+			.success(function(data){
+				historicPicture.attr('src', data.path);
+			})
+			.fail(function(jqXHR, textStatus){
+				console.log(jqXHR, textStatus);
+				$('#uploadPicture .error').html(jqXHR.responseJSON.message);
+			});
+
+		}
+		else{
+			console.log("Veuillez uploader une image");
+		};
+
+
 
 
 	});

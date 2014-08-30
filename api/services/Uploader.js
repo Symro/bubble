@@ -36,12 +36,12 @@ exports.documentReceiverStream = function(options) {
   // into this receiver.  (filename === `file.filename`).
   documentReceiver._write = function onFile(file, encoding, done) {
 
+    // Vérification du type de fichier dans le contrôleur
     var allowedFiles = ["image/jpeg","image/png","image/gif"];
     var allowFile = isInArray(file.headers["content-type"], allowedFiles);
 
     if(!allowFile){
-      // return res.forbidden('Please upload an image');
-      return done('Please upload an image');
+      return done({err:true, errMessage:"wrongfile"});
     }
 
     var newFilename = opts.saveAs(file),

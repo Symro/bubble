@@ -137,12 +137,12 @@ module.exports.routes = {
 
   // ROUTES DIVERSES
 
-  'get /public/user/*': {
+  'get /upload/user/*': {
     controller: 'FileController',
     action: 'get'
   },
 
-  'get /public/playlist/*': {
+  'get /upload/playlist/*': {
     controller: 'FileController',
     action: 'get'
   },
