@@ -309,6 +309,15 @@ $(document).ready(function(){
 			})
 			.success(function(data){
 				historicPicture.attr('src', data.path);
+
+				var previous_image = $('img[src^="'+data.old_path+'"]');
+				if( previous_image.length > 0 ){
+			      console.log("Des images à updater ont été trouvé !");
+			      previous_image.each(function(i, el){
+			        previous_image.attr("src", data.path+'?'+Math.random());
+			      });
+			    }
+
 			})
 			.fail(function(jqXHR, textStatus){
 				console.log(jqXHR, textStatus);

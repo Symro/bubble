@@ -705,7 +705,6 @@ function updateInDesktopDom(message){
 
 
 function updateInAllDom(message){
-  console.dir(message);
 
   if(message.info == "imageUpdated"){
 
@@ -714,16 +713,14 @@ function updateInAllDom(message){
     var user             = message.datas.user.firstname;
 
     console.log("On est dans l'update de l'image ! ");
-    console.log("image précédente : "+image_precedente);
-    console.log("image nouvelle : "+image_nouvelle);
 
-    var image_recherche  = $('img[src="'+message.datas.previous.image+'"]');
+    var image_recherche  = $('img[src^="'+message.datas.previous.image+'"]');
 
     if( image_recherche.length > 0 ){
 
-      console.log("Trouvé !");
       image_recherche.each(function(i, el){
-        image_recherche.attr("src", image_nouvelle);
+        image_recherche.attr("src", image_nouvelle+'?'+Math.random());
+        console.log("Mise à jour de "+(i+1)+" images dans le dom ");
       });
 
     }    

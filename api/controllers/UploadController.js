@@ -110,12 +110,14 @@ module.exports = {
 
               });
 
+              // Retour de l'url de l'image pour màj JS dans le DOM
+              return res.json({
+                path : "/"+chemin_img_300,
+                old_path : previous_img
+              });
+
             });
 
-            // Retour de l'url de l'image pour màj JS dans le DOM
-            return res.json({
-              path : "/"+chemin_img_300
-            });
 
           }
           // une erreur est survenue..
