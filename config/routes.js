@@ -24,14 +24,39 @@ module.exports.routes = {
 
 
   '/': {
-    controller: 'session',
-    action:'new'
+    controller: 'user',
+    action:'login'
   },
 
+  // ROUTES USER
+
   '/logout': {
-    controller: 'session',
-    action:'destroy'
+    controller: 'user',
+    action:'logout'
   },
+
+  'get /user/register': {
+    controller: 'user',
+    action:'register'
+  },
+
+  'post /user/register': {
+    controller: 'user',
+    action:'registration'
+  },
+
+  'post /user/login': {
+    controller: 'user',
+    action:'authentication'
+  },
+
+  // ROUTES ADMIN
+
+  // 'get /admin':{
+  //   controller: 'admin',
+  //   action: 'index'
+  // }, 
+  
 
   // ROUTES MOBILE
 

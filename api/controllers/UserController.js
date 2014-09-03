@@ -15,17 +15,29 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
+var bcrypt=require('bcrypt-nodejs');
+
 module.exports = {
 
-	// Chargement de la page inscription
-	inscription:function(req,res){
 
-		res.view();
-
+	// Affichage page de login
+	login:function(req,res){
+	  	res.view('user/login');
 	},
 
-  	// POST du formulaire d'inscription
-	createUser:function(req,res,next){
+	// Déconnexion de l'utilisateur
+	logout:function(req,res,next){
+		req.session.destroy();
+		res.redirect('/');
+	},
+
+	// Chargement de la page inscription
+	register:function(req,res){
+		res.view('user/register');
+	},
+
+  	// Inscription de l'utilisateur
+	registration:function(req,res,next){
 
 		User.findOneByMail( req.param('mail'), function (err, user) {
 			if (err){
@@ -35,7 +47,7 @@ module.exports = {
 				};
 
 				// Redirection au formulaire
-				return res.redirect('/user/inscription');
+				return res.redirect('/user/register');
 			}
 
 	        else{
@@ -46,7 +58,7 @@ module.exports = {
 	                    req.session.flash={
 							err:emailAlreadyExists
 						};
-						return res.redirect('/user/inscription');
+						return res.redirect('/user/register');
 	                }
 	                // création du compte :
 	                else{
@@ -64,7 +76,7 @@ module.exports = {
 									err:error
 								};
 								// Redirection au formulaire
-								return res.redirect('/user/inscription');
+								return res.redirect('/user/register');
 							}
 							req.session.authenticated=true;
 							req.session.User=user;
@@ -81,25 +93,64 @@ module.exports = {
 
 	},
 
-	show: function(req, res, next) {
-	    User.findOne(req.param('id'), function foundUser(err, user) {
-		if (err) return next(err);
-		if (!user) return next();
-		res.view({
-			user: user
+
+	// Authentification de l'utilisateur
+	authentication:function(req,res,next){
+
+	    if(!req.param('mail')|| !req.param('password')){
+	      var fieldsRequired=[{name:'fieldsRequired',message:'Please enter an email and a password.'}];
+
+	      req.session.flash={
+	        err:fieldsRequired
+	      }
+
+	      return res.redirect('/');
+	    }
+
+	    User.findOneByMail(req.param('mail'),function(err,user){
+			if (err) return next(err);
+
+			// If no user is found
+			if (!user){
+				var noAccountError=[{name:'noAccount',message:'The email address '+req.param('mail')+' is not found'}];
+				req.session.flash={
+				  err:noAccountError
+				}
+				return res.redirect('/');
+			}
+
+			// Compare passwords
+			bcrypt.compare(req.param('password'),user.password,function(err,valid){
+				if (err) return next(err);
+
+				// If doesn't match
+				if(!valid){
+					var mismatchError=[{name:'mismatchError',message:'Invalid email or password'}];
+					req.session.flash={
+						err:mismatchError
+					}
+					res.redirect('/');
+					return;
+				}
+
+				// Log user in
+				req.session.authenticated=true;
+				req.session.User=user;
+
+				// Envoie d'une socket aux autres
+				User.publishUpdate(user.id, {
+					loggedIn: true,
+					id:user.id,
+					name:user.firstname
+				});
+
+				// redirect
+				res.redirect('/mobile/playlist/');
+
+			});
+
 		});
-	    });
-	},
-
-	index:function(req,res,next){
-
-              User.find(function foundUsers(err,users){
-                if (err) return next(err);
-                  res.view({
-                    users:users
-                  });
-              });
-    }
+	}
 
 
   /**

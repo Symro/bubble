@@ -29,8 +29,8 @@ module.exports.policies = {
   '*': 'flash',
 
   user:{
-    'index':"authenticated",
-    'show':"authenticated",
+    // 'index':"authenticated",
+    // 'show':"authenticated",
     'createUser':"flash",
   },
 
