@@ -56,6 +56,26 @@ module.exports.routes = {
   //   controller: 'admin',
   //   action: 'index'
   // }, 
+
+  'get /admin/':{
+    controller: 'admin',
+    action: 'index'
+  }, 
+
+  'get /admin/user':{
+    controller: 'admin',
+    action: 'user'
+  }, 
+
+  'get /admin/activity':{
+    controller: 'admin',
+    action: 'activity'
+  }, 
+
+  'get /admin/message':{
+    controller: 'admin',
+    action: 'message'
+  }, 
   
 
   // ROUTES MOBILE

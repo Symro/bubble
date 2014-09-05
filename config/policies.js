@@ -46,6 +46,9 @@ module.exports.policies = {
   },
   upload:{
     '*':['flash','authenticated']
+  },
+  admin:{
+    '*':['flash','authenticated']
   }
 
 
