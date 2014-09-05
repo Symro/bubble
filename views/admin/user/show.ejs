@@ -7,7 +7,31 @@
                         <!-- Main content -->
                         <section class="content">
 
-                            <%= user.infos.firstname  %>
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="box box-info">
+                                        <div class="box-header">
+                                            <i class="fa fa-user"></i>
+                                            <h3 class="box-title"><%= user.infos.firstname  %> - <%= user.infos.mail  %></h3>
+                                        </div><!-- /.box-header -->
+                                        <div class="box-body">
+                                            <div class="callout callout-info">
+                                                <h4>Résumé du profil</h4>
+
+                                                <div class="box-body chart-responsive">
+                                                    <div class="chart" id="user-chart" style="height: 300px; position: relative;"></div>
+                                                </div><!-- /.box-body -->
+
+                                                </p>
+                                            </div>
+
+                                        </div><!-- /.box-body -->
+                                    </div><!-- /.box -->
+                                </div><!-- /.col -->
+                            </div><!-- /.row -->
+
+                            
 
 
                          
@@ -42,6 +66,18 @@
                 //     "bInfo": true,
                 //     "bAutoWidth": false
                 // });
-            });
-        </script>
 
+                //DONUT CHART
+                var donut = new Morris.Donut({
+                    element: 'user-chart',
+                    resize: true,
+                    colors: ["#3c8dbc", "#D0E3F0"],
+                    data: [
+                        {label: "Playlist créées", value: <%= user.nb_playlists  %>},
+                        {label: "Playlist rejointes", value: <%= user.nb_joined  %> },
+                    ],
+                    hideHover: 'auto'
+                });
+            });
+
+        </script>
