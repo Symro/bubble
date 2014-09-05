@@ -114,6 +114,59 @@ module.exports = {
 			});
 		});
 		
+    },
+
+
+
+
+
+    /* PARTIE ADMIN USERS */
+
+    userShow: function(req,res,next){
+
+    	var id = req.param('id');
+    	var user_obj = {};
+    	console.log(id);
+
+    	// Retrouve l'utilisateur
+		User.findOne({ id: id }).exec(function foundUsers(err,user){
+			if (err) return next(err);
+			user_obj.infos = {
+				id			: user.id,
+				firstname	: user.firstname,
+				mail		: user.mail,
+				image		: user.image
+			}
+
+			// Retouve les playlists que l'utilisateur a créé
+			PlaylistDesktop.find({ host: id }).exec(function foundUserPlaylist(err,playlists){
+				if (err) return next(err);
+				user_obj.nb_playlists 	= playlists.length;
+				user_obj.playlists 	 	= playlists;
+
+				// Retouve les playlists que l'utilisateur a rejoint
+				Join.find({ user: id }).exec(function foundUserPlaylist(err,joined){
+					if (err) return next(err);
+					user_obj.nb_joined 	= joined.length;
+					user_obj.joined 	= joined;
+
+					console.dir(user_obj);
+
+					// Appel de la vue "show.ejs" avec toutes les infos qu'il faut
+			    	res.view("admin/user/show" ,{
+						user: user_obj,
+						layout: "layout_admin"
+					});
+
+				});
+
+			});
+
+		});
+
+
+
+
     }
 
 	

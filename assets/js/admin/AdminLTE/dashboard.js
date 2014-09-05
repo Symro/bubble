@@ -257,4 +257,18 @@ $(function() {
         }
     });
 
+
+    /* Déterminer la page actuelle */
+    var pathname = window.location.pathname;
+
+    var active_link = $('a[href="'+pathname+'"]');
+    active_link.parents("li").addClass('active');
+
+    console.log(pathname);
+
+
+
+
+
+
 });

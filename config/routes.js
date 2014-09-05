@@ -52,10 +52,7 @@ module.exports.routes = {
 
   // ROUTES ADMIN
 
-  // 'get /admin':{
-  //   controller: 'admin',
-  //   action: 'index'
-  // }, 
+  // >> BASES DU DASHBOARD
 
   'get /admin/':{
     controller: 'admin',
@@ -76,6 +73,25 @@ module.exports.routes = {
     controller: 'admin',
     action: 'message'
   }, 
+
+  // >> ADMIN USERS
+
+  '/admin/user/show/:id':{
+    controller: 'admin',
+    action: 'userShow'
+  }, 
+
+  '/admin/user/edit/:id':{
+    controller: 'admin',
+    action: 'userEdit'
+  }, 
+
+  '/admin/user/delete/:id':{
+    controller: 'admin',
+    action: 'userDelete'
+  }, 
+
+
   
 
   // ROUTES MOBILE
