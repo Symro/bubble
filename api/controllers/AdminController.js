@@ -199,6 +199,62 @@ module.exports = {
 
 
 
+    },
+
+
+    userEdit: function(req,res,next){
+
+    	var id = req.param('id');
+    	var user_obj = {};
+
+    	if(!id){ return next(err); }
+
+    	// Modification des info de l'utilisateur
+    	if(req.method == "POST"){
+
+    		var firstname 	= req.param("form-firstname");
+    		var mail 		= req.param("form-mail");
+    		var image 		= req.param("form-image");
+    		var password 	= req.param("form-password");
+
+    		var values = (password.length < 6 || password == "") ? {firstname:firstname,mail:mail,image:image} : {firstname:firstname,mail:mail,image:image,password:password};
+
+    		User.update({ id: id }, values).exec(function afterwards(err,updated){
+				if (err) { return next(err); }
+				console.log('Updated user');
+
+			  	// Redirection vers la page d'edition
+	    		res.redirect("/admin/user/edit/"+id);
+			});
+
+    	}
+    	else{
+
+	    	// Retrouve l'utilisateur
+			User.findOne({ id: id }).exec(function foundUsers(err,user){
+				if (err) return next(err);
+
+				user_obj.infos = {
+					id			: user.id,
+					firstname	: user.firstname,
+					mail		: user.mail,
+					image		: user.image
+				}
+				user_obj.moment = moment; // on passe le require("moment.js") pour l'utiliser dans la vue
+
+
+				// Appel de la vue "show.ejs" avec toutes les infos qu'il faut
+		    	res.view("admin/user/edit" ,{
+					user: user_obj,
+					layout: "layout_admin"
+				});
+
+	    	});
+
+		}
+
+
+
     }
 
 	

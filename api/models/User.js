@@ -43,9 +43,18 @@ module.exports = {
 		require('bcrypt-nodejs').hash(values.password, null, null, function(err, hash) {
 			if (err) return next(err);
 			values.password=hash;
-			// values.online=true;
 			next();
 		});
+	},
+
+	beforeUpdate:function(values,next){
+		if (values.password) {
+			require('bcrypt-nodejs').hash(values.password, null, null, function(err, hash) {
+				if (err) return next(err);
+				values.password=hash;
+				next();
+			});
+		}
 	}
 
 };
