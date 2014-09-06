@@ -118,6 +118,14 @@ module.exports = {
 				}
 				return res.redirect('/');
 			}
+			// If user banned
+			if (user.status == 0){
+				var accountDeactivated=[{name:'unactiveAccount',message:'This account has been deactivated'}];
+				req.session.flash={
+				  err:accountDeactivated
+				}
+				return res.redirect('/');
+			}
 
 			// Compare passwords
 			bcrypt.compare(req.param('password'),user.password,function(err,valid){

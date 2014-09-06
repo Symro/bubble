@@ -3538,8 +3538,8 @@ fieldset[disabled] .btn-vk.active {
 /* CUSTOM STYLES */
 
 .user-photo{
-  max-height:350px;
-  overflow-x:scroll;
+  max-height:320px;
+  overflow-y:scroll;
 }
 .user-photo ul{
   list-style:none; 

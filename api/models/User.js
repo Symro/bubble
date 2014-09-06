@@ -33,7 +33,16 @@ module.exports = {
 	  	image:{
 	  		type:'string',
 	  		defaultsTo:'/images/no_image.png'
+	  	},
+	  	status:{
+	  		type:'integer',
+	  		defaultsTo: 1
+	  	},
+	  	grade:{
+	  		defaultsTo: "user",
+            in: ['guest', 'user', 'admin']
 	  	}
+
 	},
 
 	beforeCreate:function(values,next){

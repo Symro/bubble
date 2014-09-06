@@ -36,7 +36,9 @@
                                                         <i class="fa fa-fw fa-edit"></i> Modifier
                                                     </a>
                                                     <a class="btn btn-default btn-xs" href="/admin/user/delete/<%= user.id %>">
-                                                        <i class="fa fa-fw fa-trash-o"></i> Supprimer
+
+                                                        <i class="fa fa-fw <%= (user.status == 0) ? "fa-plus-square" : "fa-minus-square" %>"></i> <%= (user.status == 0) ? "Activer" : "Désactiver" %>
+                                                                                                                 
                                                     </a>
                                                 </td>
                                             </tr>

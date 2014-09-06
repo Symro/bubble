@@ -254,7 +254,27 @@ module.exports = {
 
 
 
-    }
+    },
+
+   	userDelete: function(req,res,next){
+   		var id = req.param('id');
+    	var user_obj = {};
+
+    	if(!id){ return next(err); }
+
+    	User.findOne({ id: id }).exec(function user(err,user){
+    		var status = (user.status == 1) ? 0 : 1;
+
+		   	User.update({ id: id }, {status: status}).exec(function afterwards(err,updated){
+				if (err) { return next(err); }
+
+			  	// Redirection vers la page d'edition
+	    		res.redirect("/admin/user/");
+			});
+
+	   	});
+
+   	}
 
 	
 };
