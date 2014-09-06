@@ -16,6 +16,8 @@
                                     <h3>
                                         <% if(typeof songs != 'undefined' && songs.nb) { %>
                                             <%= songs.nb %>
+                                        <% }else{ %>
+                                            0
                                         <% } %>
                                     </h3>
                                     <p>
@@ -37,6 +39,8 @@
                                     <h3>
                                         <% if(typeof playlists != 'undefined' && playlists.nb) { %>
                                             <%= playlists.nb %>
+                                        <% }else{ %>
+                                            0
                                         <% } %>
                                     </h3>
                                     <p>

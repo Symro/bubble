@@ -342,6 +342,7 @@ function updateInDom(message){
         duration : (duration) ? duration : 0,
         currentPlaylist : currentPlaylist
       }, function(response){
+        console.log("send_player_position SOCKET to room : "+user.room);
         console.log(response);
     });
   }
@@ -450,7 +451,7 @@ function addInDesktopDom(message){
 }
 
 function addInMobileDom(message){
-  // console.log("addInMobileDom : ");
+  console.log("addInMobileDom : ");
   console.dir(message);
 
   if (message.info=="songAdded") {
@@ -602,6 +603,7 @@ function removeInAllDom(message){
 function updateInMobileDom(message){
 
   if(message.info == "playerPosition"){
+    console.log("updateInMobileDom - playerPosition");
     console.dir(message.datas);
 
     // Variable globale "currentPlaylist" présente en temps réél sur Mobile
@@ -616,7 +618,7 @@ function updateInMobileDom(message){
   }
 
   if(message.info == "resetLikeDislike"){
-
+    console.log("updateInMobileDom - resetLikeDislike");
     console.log(message);
 
     $('div.song ul li[data-id="'+message.datas.songTrackId+'"][data-songservice="'+message.datas.songService+'"] div.action i').remove();
@@ -632,7 +634,7 @@ function updateInMobileDom(message){
   if(message.info == "showPlayer"){
     console.log('Affichage player mobile ! ');
     // Affichage du player sur mobile
-     $('.current-playlist').removeClass('invisible');
+    $('.current-playlist').removeClass('invisible');
 
   }
 

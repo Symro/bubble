@@ -80,8 +80,7 @@ module.exports = {
                         Song.update({songStatus:"waiting"}, {songStatus:"playing"}).where(whereParams).exec(function statusUpdated(err, song){
                             if(err) return next(err);
 
-                            //console.log("song___ : ");
-                            //console.dir(song);
+                            console.log("SONG CONTROLLER - ADD ");
 
                             if(song){
 

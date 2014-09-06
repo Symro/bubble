@@ -435,30 +435,6 @@ $(document).ready(function(){
 	    );
 	}
 
-	// Animation des ondes sur mobile
-	if(isMobile){
-		var imgHeight = 250;
-		var numImgs = 41;
-		var cont = 0;
-		var img = 1;
-		var anim = $('.animation').find('img');
-
-		var animation = setInterval(function(){
-		    var position =  -1 * (cont*imgHeight);
-
-		    if(cont == numImgs){
-
-		    	//if(img == 1){img++;}
-		    	//else if(img == 2){img++;}
-		    	//else{img = 1;}
-		    	//console.log(img);
-		    	cont = 0;
-		    }
-		    anim.filter(':nth-child('+img+')').css({'margin-top': position, 'opacity' : 1});
-		    cont++;
-		},100);
-	}
-
 	// Ajout d'un son à une playlist
 	$('.search').on('click', '.results li', function(e){
 		e.preventDefault();
@@ -470,13 +446,11 @@ $(document).ready(function(){
 		$('.confirmSongModal').on('click','div a:first-child()',function(e){
 			e.preventDefault();
 			e.stopPropagation();
-			console.log($(this).data('confirm'));
 			$('.confirmSongModal').removeClass('visible');
 		});
 		$('.confirmSongModal').on('click','div a:last-child()',function(e){
 			e.preventDefault();
 			e.stopPropagation();
-			console.log($(this).data('confirm'));
 			$('.confirmSongModal').removeClass('visible');
 			designInteraction($this, event);
 		});
@@ -493,14 +467,14 @@ $(document).ready(function(){
  		var $top = $e.currentTarget.offsetTop+10;
 
 		// Récupération des datas
-			$datas={
-				songTrackId:$this.data("songid"),
-				songTrackName:$this.data("song"),
-				songService:$this.data("songservice"),
-				songTrackArtist:$this.data("songartist"),
-				songTrackDuration:$this.data("songduration"),
-				songPermalinkUrl:$this.data("permalink"),
-				songSongUrl:$this.data("songurl")
+			$datas = {
+				songTrackId: 		$this.data("songid"),
+				songTrackName: 		$this.data("song"),
+				songService: 		$this.data("songservice"),
+				songTrackArtist: 	$this.data("songartist"),
+				songTrackDuration: 	$this.data("songduration"),
+				songPermalinkUrl: 	$this.data("permalink"),
+				songSongUrl: 		$this.data("songurl")
 			}
 
 			console.dir($datas);
