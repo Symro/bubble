@@ -6,6 +6,7 @@
  */
 
 var moment = require('moment');
+var fs     = require('fs');
 
 module.exports = {
 
@@ -35,6 +36,7 @@ module.exports = {
 
 			user_obj.nb 	= users.length; // Nombre d'utilisateur en BDD
 			user_obj.detail = users;		// Détails de chaque utilisateur
+
 
 			// REQUETE PLAYLIST
 			PlaylistDesktop.find().exec(function foundPlaylist(err, playlists){
@@ -126,17 +128,47 @@ module.exports = {
 
     	var id = req.param('id');
     	var user_obj = {};
-    	console.log(id);
+
+    	if(!id){ return next(err); }
 
     	// Retrouve l'utilisateur
 		User.findOne({ id: id }).exec(function foundUsers(err,user){
 			if (err) return next(err);
+
 			user_obj.infos = {
 				id			: user.id,
 				firstname	: user.firstname,
 				mail		: user.mail,
 				image		: user.image
 			}
+			user_obj.moment = moment; // on passe le require("moment.js") pour l'utiliser dans la vue
+
+			var user_photos_folder 	= "upload/user/"+user.firstname+"-"+user.id+"/";
+			var user_photos_300, 
+				user_photos_date;
+
+			// On essaie de lire le dossier contenant les photos de l'utilisateur
+			try {
+				var user_photos_files = fs.readdirSync(user_photos_folder);
+			} catch (e) {
+			  	// Oups il y a une erreur
+			  	console.log("Impossible de lire le dossier !")
+			}
+	
+			if(user_photos_files){
+				// on trie les photos des plus récentes aux plus anciennes
+				// on ne garde que les photos 300px
+				// on récupère la première partie du nom de l'image qui contient le timestamp
+				user_photos_files = _(user_photos_files).reverse().value();
+				user_photos_300  = _.remove(user_photos_files, function(file) { return file.indexOf("-300.") != -1; });
+				user_photos_date = _.map(user_photos_300, function(file){ return parseInt(file.substring(0, parseInt(file.indexOf("-")))); });
+			}else{
+				user_photos_300 = user_photos_date = undefined;
+			}
+			
+			user_obj.dir_photos  = user_photos_folder; // chemin dossier des photos
+			user_obj.date_photos = user_photos_date;   // dates des photos au format Unix Timestamp
+			user_obj.photos 	 = user_photos_300;	   // tableau contenant les noms complets des photos	
 
 			// Retouve les playlists que l'utilisateur a créé
 			PlaylistDesktop.find({ host: id }).exec(function foundUserPlaylist(err,playlists){

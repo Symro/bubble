@@ -3533,3 +3533,27 @@ fieldset[disabled] .btn-vk.active {
   color: #587ea3;
   background-color: #ffffff;
 }
+
+
+/* CUSTOM STYLES */
+
+.user-photo{
+  max-height:350px;
+  overflow-x:scroll;
+}
+.user-photo ul{
+  list-style:none; 
+  overflow:hidden;
+}
+.user-photo ul li{
+  margin:10px;
+  float:left;
+}
+.user-photo img{
+  width:150px;
+  height:150px;
+}
+.user-photo p{
+  text-align:center;
+  font-size:0.85em;
+}
