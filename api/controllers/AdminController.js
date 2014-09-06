@@ -242,7 +242,6 @@ module.exports = {
 				}
 				user_obj.moment = moment; // on passe le require("moment.js") pour l'utiliser dans la vue
 
-
 				// Appel de la vue "show.ejs" avec toutes les infos qu'il faut
 		    	res.view("admin/user/edit" ,{
 					user: user_obj,
