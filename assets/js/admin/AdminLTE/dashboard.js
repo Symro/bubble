@@ -264,8 +264,6 @@ $(function() {
     var active_link = $('a[href="'+pathname+'"]');
     active_link.parents("li").addClass('active');
 
-    console.log(pathname);
-
 
 
 

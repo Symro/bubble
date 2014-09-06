@@ -23,7 +23,6 @@
                                                     <div class="chart" id="user-chart" style="height: 300px; position: relative;"></div>
                                                 </div><!-- /.box-body -->
 
-                                                </p>
                                             </div>
 
                                         </div><!-- /.box-body -->
@@ -61,17 +60,100 @@
 
                             </div><!-- /.row -->
 
-                            
+                            <div class="row">
+
+                                <div class="col-md-6">
+
+                                    <div class="nav-tabs-custom">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active"><a data-toggle="tab" href="#tab_1">Liste des playlists créées</a></li>
+                                            <li class=""><a data-toggle="tab" href="#tab_2">Liste des playlists rejointes</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div id="tab_1" class="tab-pane active">
+
+                                                <% if(user.playlists.length){ %>
+                                                <div class="box">
+                                                    <div class="box-body table-responsive">
+                                                        <table id="tableau1" class="table table-bordered table-striped tableau">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Photo</th>
+                                                                    <th>Nom</th>
+                                                                    <th>URL</th>
+                                                                    <th>Date création</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <% _.each(user.playlists, function(playlist) { %>
+                                                                <tr>
+                                                                    <td><img width="20px" height="20px" src="<%= playlist.image %>" alt="<%= playlist.name %>"/></td>
+                                                                    <td><%= playlist.name %></td>
+                                                                    <td><%= playlist.url %></td>
+                                                                    <td><%= user.moment(playlist.createdAt).format('DD/MM/YYYY HH:mm') %></td>
+                                                                </tr>
+                                                            <% }) %>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Photo</th>
+                                                                    <th>Nom</th>
+                                                                    <th>URL</th>
+                                                                    <th>Date création</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div><!-- /.box-body -->
+                                                </div><!-- /.box -->
+                                                <% }else{ %>
+                                                        Aucune playlist créée
+                                                <% } %>
+
+                                            </div><!-- /.tab-pane -->
+                                            <div id="tab_2" class="tab-pane">
 
 
-                         
+                                                <% if(user.joined.length){ %>
+                                                <div class="box">
+                                                    <div class="box-body table-responsive">
+                                                        <table id="tableau2" class="table table-bordered table-striped tableau">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Playlist ID</th>
+                                                                    <th>Date 1ère arrivée</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <% _.each(user.joined, function(join) { %>
+                                                                <tr>
+                                                                    <td><%= join.playlist %></td>
+                                                                    <td><%= user.moment(join.createdAt).format('DD/MM/YYYY HH:mm') %></td>
+                                                                </tr>
+                                                            <% }) %>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Playlist ID</th>
+                                                                    <th>Date 1ère arrivée</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div><!-- /.box-body -->
+                                                </div><!-- /.box -->
+                                                <% }else{ %>
+                                                        Aucune playlist rejointe
+                                                <% } %>
 
-                        </section><!-- right col -->
-                    </div><!-- /.row (main row) -->
 
+                                            </div><!-- /.tab-pane -->
+                                        </div><!-- /.tab-content -->
+                                    </div><!-- /.nav-tabs-custom -->
+                                </div><!-- /.col -->
+                            </div><!-- /.row -->
+
+                        
                 </section><!-- /.content -->
             </aside><!-- /.right-side -->
-        </div><!-- ./wrapper -->
 
 
 
@@ -86,16 +168,14 @@
 
         <!-- page script -->
         <script type="text/javascript">
-            $(function() {
-                $("#example1").dataTable();
-                // $('#example2').dataTable({
-                //     "bPaginate": true,
-                //     "bLengthChange": false,
-                //     "bFilter": false,
-                //     "bSort": true,
-                //     "bInfo": true,
-                //     "bAutoWidth": false
-                // });
+            $(document).ready(function(){
+                $("[id^=tableau]").dataTable({
+                    "pageLength": 25,
+                    "lengthMenu":  [ [ 25, 50, 100, -1], [ 25, 50, 100, "Tous"] ],
+                    "language": {
+                        "url": "css/plugins/dataTables/fr_FR.txt"
+                    }
+                });
 
                 //DONUT CHART
                 var donut = new Morris.Donut({
