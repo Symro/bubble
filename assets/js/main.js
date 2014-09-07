@@ -36,20 +36,9 @@ $(document).ready(function(){
 	if(isDesktop){
 
 
-		$('#test1').on('click', function(){
-
-			console.log('button clicked');
-			console.log('SOCKET___ socket request(/desktop/playlist/'+user.room+'/joinedUsers); ');
-
-			socket.get('/desktop/playlist/'+user.room+'/joinedUsers', function(res){
-				console.log(res);
-			});
-
-		});
-
 		// L'utilisateur vient d'arriver, il demande la liste des participants
 		socket.get('/desktop/playlist/'+user.room+'/joinedUsers', function(data){
-			console.log(data);
+//			//console.log(data);
 
 
 		});
@@ -57,7 +46,7 @@ $(document).ready(function(){
 		// L'utilisateur vient d'arriver, il demande informe les autres participants
 		socket.get('/desktop/playlist/'+user.room+'/joined', function(response) {
 		  // do something
-		  console.log(response);
+		  //console.log(response);
 
 		});
 
@@ -109,11 +98,10 @@ $(document).ready(function(){
 
 	// L'utilisateur vient d'arriver, il informe les autres participants et rejoint sa room
 	socket.get('/desktop/playlist/'+user.room+'/joined', function(response) {
-	  // do something
-	  console.log('coucou',response.count);
-		  if (response.count!=0)
-		  	$('section.current-playlist').removeClass('invisible');
 
+		if (response.count != 0 ){
+		  	$('section.current-playlist').removeClass('invisible');
+		}
 
 	});
 
@@ -346,23 +334,6 @@ $(document).ready(function(){
     });
 
 
-	if(isMobile){
-	    //turn to inline mode
-	    //$.fn.editable.defaults.mode = 'inline';
-	}
-
-    // $('#edit-email,#user-email').click(function() {
-
-    // 	$('#user-email').editable({
-    // 		name : 'email',
-    //         url: '',
-    //         title: 'Email ',
-    //         type: 'email',
-    //         success: function(data) {
-    //         }
-    // 	});
-
-    // });
 
 
    	/* --------------------------------------------------------- */
@@ -462,9 +433,9 @@ $(document).ready(function(){
 		// Design d'interaction
 
 		$('#sent').empty();
- 		var $img = $this.children('img');
- 		var $left = $img.offset().left;
- 		var $top = $e.currentTarget.offsetTop+10;
+ 		var $img 	= $this.children('img');
+ 		var $left 	= $img.offset().left;
+ 		var $top 	= $e.currentTarget.offsetTop+10;
 
 		// Récupération des datas
 			$datas = {
@@ -491,8 +462,8 @@ $(document).ready(function(){
  				.toggleClass('invisible rond')
  				.css({
  					'position':'absolute',
- 					'left':$left,
- 					'top':$top,
+ 					'left': $left,
+ 					'top':  $top,
  					'display':'block'
  				})
  				.animate({
@@ -502,11 +473,7 @@ $(document).ready(function(){
  					$(this).animate({
  						'top':$e.currentTarget.offsetTop-$(window).height()
  					}, 200, function(){
- 						// socket.emit('new_track', {
- 						// 	"track_name" : track,
- 						// 	"track_image" : $img.attr('src'),
- 						// 	"room" : user.room
- 						// });
+
  						// $(this).remove();
  						// Envoi des datas au controller
  						$(this).hide();

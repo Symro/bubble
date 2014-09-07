@@ -22,7 +22,7 @@ module.exports = {
 		//
 
 
-		if(log && log.action && req.session && res.locals.ua){
+		if(log && log.action && req.session.User != undefined && res.locals.ua != undefined){
 
 			log.type 	= (log.type) 	? log.type 		: "";
 			log.info 	= (log.info) 	? log.info 		: "";

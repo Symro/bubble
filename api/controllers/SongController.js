@@ -26,6 +26,10 @@ module.exports = {
         // 
 
         Song.findOne({url:req.route.params.url}).sort('createdAt DESC').exec(function getSongs(err, lastSong){
+            if(err){
+                console.log("SongController > Song.findOne() > ERREUR");
+                return next(err);
+            }
 
             if (songFromBubble != undefined) {
                 console.log('ajout par histo');
@@ -38,7 +42,7 @@ module.exports = {
                 var img     = req.param('img');
             }
 
-            var d=new Date();
+            var d = new Date();
 
             song.user       = req.session.User.id;
             song.url        = req.route.params.url;
@@ -97,7 +101,7 @@ module.exports = {
                                     verb:'update',
                                     device:'mobile',
                                     info:'showPlayer',
-                                    datas:{}
+                                    datas:{test:"test"} // temp ! normalement, datas:{}
                                 });
 
                             }
@@ -109,14 +113,15 @@ module.exports = {
                 });
 
 
-              	User.findOne(song.user).exec(function getImage(err,imgUser){
+              	User.findOne(req.session.User.id).exec(function getImage(err,user){
               		if(err) return next(err);
+
     				// Ajout DOM mobile
     				sails.sockets.broadcast(req.param('url'),'message',{
     					verb:'add',
     					device:'mobile',
     					info:'songAdded',
-    					datas:{song:song, userImg:imgUser.image}
+    					datas:{song:song, userImg:user.image}
     				});
 
     				// Ajout DOM desktop
@@ -124,11 +129,12 @@ module.exports = {
     					verb:'add',
     					device:'desktop',
     					info:'songAdded',
-    					datas:{song:song, id:added.id, img:img, userImg:imgUser.image}
+    					datas:{song:song, id:added.id, img:img, userImg:user.image}
     				});
+
               	});
 
-            });
+            }); // Fin Song.create(song)
 
 
         }); // Fin Song.findOne(...)
@@ -257,16 +263,14 @@ module.exports = {
         var room               = req.param('url');
 
         sails.sockets.broadcast(room,'message',{
-
-            verb:'update',
-            device:'mobile',
-            info:'playerPosition',
+            verb:   'update',
+            device: 'mobile',
+            info:   'playerPosition',
             datas:{
                 position:position,
                 duration:duration,
                 currentPlaylist : currentPlaylist
             }
-
         });
 
     },

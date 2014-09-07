@@ -194,14 +194,15 @@ function updateInDom(message){
 
 
   function player(new_track){
-    console.log("PLAYER RECEIVED A NEW TRACK : ");
-    console.dir(new_track);
+    console.log(">> function player(new_track)");
 
     var player_circle = $(".player_circle");
     var player_timing = $(".player_timing");
 
     if(new_track && $("body").hasClass("desktop") ){
-      console.log("Lecture d'un nouveau morceau : "+new_track.songTrackName);
+      console.log(">> function player(new_track) > IF ! :) ");
+      console.log(">> Lecture d'un nouveau morceau : "+new_track.songTrackName);
+      
       $('li[data-db-id="'+new_track.id+'"]').prevAll("li").addClass('played');
       //get_player_position(); // Lancement du timer
 
@@ -241,12 +242,12 @@ function updateInDom(message){
         whileplaying: function(){
 
           player_circle.val( (this.position/1000).toFixed(2) ).trigger('change');
-            player_circle.trigger(
-                'configure',{
-                    "min":0,
-                    "max":(this.duration/1000).toFixed(2)
-                }
-            );
+          player_circle.trigger(
+              'configure',{
+                  "min":0,
+                  "max":(this.duration/1000).toFixed(2)
+              }
+          );
 
           send_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) );
 
@@ -282,7 +283,7 @@ function updateInDom(message){
 
     }
     else{
-      console.log("pas de son :'(");
+      console.log(">> function player(new_track) > ELSE");
     }
 
   }
@@ -400,7 +401,7 @@ function addInDesktopDom(message){
 
 
   }
-  else if (message.info=="songAdded") {
+  else if (message.info == "songAdded") {
 
     // Ajoute le morceau au tableau de lecture
     //currentPlaylist.push(message.datas.song);
@@ -410,32 +411,28 @@ function addInDesktopDom(message){
     // console.log('j"affiche '+message.datas.song.songTrackName);
 
     // cache de variable
-    var $player = $('.player_bubble');
-    var $reception = $('#reception');
-
-    console.log($player);
-    console.log($reception);
+    var player_desktop  = $('.player_bubble');
+    var reception       = $('#reception');
 
     console.log(message.datas.img);
 
     // ajout de l'image dans le DOM
-    $('<img>').attr('src', message.datas.img).appendTo($reception);
+    $('<img>').attr('src', message.datas.img).appendTo(reception);
 
     // détermine la distance entre le centre du player
     // et le bord gauche de l'écran
-    var $left = $player.offset().left;
-    $left+= ($player.width()/2);
-    console.log("Left après : "+$left);
+    var player_desktop_left = player_desktop.offset().left;
+    player_desktop_left += (player_desktop.width()/2);
 
-    var $top = $player.offset().top;
-    $top+= ($player.height()/2);
+    var player_desktop_top = player_desktop.offset().top;
+    player_desktop_top += (player_desktop.height()/2);
 
     $('#reception').children('img').css({
       "position":"absolute",
-      "left":$left,
+      "left":player_desktop_left,
       "top":$(window).height()+200
     }).animate({
-      "top":$top
+      "top":player_desktop_top
     }, 600, function(){
       $(this).fadeOut(3000, function(){
         $(this).remove();
@@ -521,7 +518,7 @@ function removeInMobileDom(message){
   // console.dir(message.datas.songTrackId);
 
   // Suppression d'un morceau de la playlist en lecture
-  if (message.info=='songRemoved') {
+  if (message.info == 'songRemoved') {
 
     // cible la musique à supprimer
     var deleteSong = $('.current-playlist .song ul > li').filter('[data-id='+message.datas.songTrackId+']');
@@ -601,6 +598,8 @@ function removeInAllDom(message){
 
 
 function updateInMobileDom(message){
+  console.log("updateInMobileDom, message :  ");
+  console.dir(message);
 
   if(message.info == "playerPosition"){
     console.log("updateInMobileDom - playerPosition");

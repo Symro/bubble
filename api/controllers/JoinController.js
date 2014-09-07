@@ -30,7 +30,7 @@ module.exports = {
 		var playlistUrl = req.param('url');
 
 		req.socket.join(playlistUrl);
-		req.socket.broadcast.to(playlistUrl).emit('message', {thisIs: 'Hey Im new !! _______theMessage'});
+		req.socket.broadcast.to(playlistUrl).emit('message', {thisIs: 'Hey je viens d\'arriver ! :D'});
 
 		// Subscribes client to ONLY the update events for every `User` record.
 	    User.find({}).exec(function(e,listOfUsers){
