@@ -9,24 +9,26 @@
 
                     <div class="box">
                                 <div class="box-body table-responsive">
-                                    <table id="example1" class="table table-bordered table-striped">
+                                    <table id="user-table" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th>Photo</th>
                                                 <th>ID</th>
                                                 <th>Prénom</th>
                                                 <th>Email</th>
+                                                <th>Grade</th>
                                                 <th>Date création</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         <% _.each(users, function(user) { %>
-                                            <tr>
+                                            <tr class="<%= (user.status == 0) ? 'deactivated' : '' %>">
                                                 <td><img width="20px" height="20px" src="<%= user.image %>" alt="<%= user.firstname %>"/></td>
-                                                <td><%= user.id %></td>
+                                                <td class="user-list-id"><%= user.id %></td>
                                                 <td><%= user.firstname %></td>
                                                 <td><%= user.mail %></td>
+                                                <td><%= user.grade %></td>
                                                 <td><%= moment(user.createdAt).format('DD/MM/YYYY HH:mm') %></td>
                                                 <td>
                                                     <a class="btn btn-default btn-xs" href="/admin/user/show/<%= user.id %>">
@@ -50,6 +52,7 @@
                                                 <th>ID</th>
                                                 <th>Prénom</th>
                                                 <th>Email</th>
+                                                <th>Grade</th>
                                                 <th>Date création</th>
                                                 <th></th>
                                             </tr>
@@ -81,15 +84,9 @@
         <!-- page script -->
         <script type="text/javascript">
             $(function() {
-                $("#example1").dataTable();
-                // $('#example2').dataTable({
-                //     "bPaginate": true,
-                //     "bLengthChange": false,
-                //     "bFilter": false,
-                //     "bSort": true,
-                //     "bInfo": true,
-                //     "bAutoWidth": false
-                // });
+                $("#user-table").dataTable();
+
+
             });
         </script>
 

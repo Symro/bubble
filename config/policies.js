@@ -48,7 +48,7 @@ module.exports.policies = {
     '*':['flash','authenticated']
   },
   // admin:{
-  //   '*':['flash','authenticated']
+  //   '*':['flash','authenticated','admin']
   // }
 
 

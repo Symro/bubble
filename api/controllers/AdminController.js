@@ -139,7 +139,10 @@ module.exports = {
 				id			: user.id,
 				firstname	: user.firstname,
 				mail		: user.mail,
+				grade 		: user.grade,
+				status		: user.status,
 				image		: user.image
+								
 			}
 			user_obj.moment = moment; // on passe le require("moment.js") pour l'utiliser dans la vue
 
@@ -215,9 +218,10 @@ module.exports = {
     		var firstname 	= req.param("form-firstname");
     		var mail 		= req.param("form-mail");
     		var image 		= req.param("form-image");
+    		var grade 		= req.param("form-grade");
     		var password 	= req.param("form-password");
 
-    		var values = (password.length < 6 || password == "") ? {firstname:firstname,mail:mail,image:image} : {firstname:firstname,mail:mail,image:image,password:password};
+    		var values = (password.length < 6 || password == "") ? {firstname:firstname,mail:mail,image:image,grade:grade} : {firstname:firstname,mail:mail,image:image,grade:grade,password:password};
 
     		User.update({ id: id }, values).exec(function afterwards(err,updated){
 				if (err) { return next(err); }
@@ -238,6 +242,8 @@ module.exports = {
 					id			: user.id,
 					firstname	: user.firstname,
 					mail		: user.mail,
+					grade		: user.grade,
+					status 		: user.status,
 					image		: user.image
 				}
 				user_obj.moment = moment; // on passe le require("moment.js") pour l'utiliser dans la vue

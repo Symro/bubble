@@ -3557,3 +3557,14 @@ fieldset[disabled] .btn-vk.active {
   text-align:center;
   font-size:0.85em;
 }
+
+.user-edit{
+
+}
+.user-edit .fa{
+  width:15px;
+}
+
+.table .deactivated .user-list-id{
+  text-decoration:line-through;
+}

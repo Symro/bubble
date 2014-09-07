@@ -19,7 +19,7 @@
                                         <div class="callout callout-info">
                                             <h4>Modification du profil</h4>
 
-                                            <form action="/admin/user/edit/<%= user.infos.id  %>" method="POST">
+                                            <form action="/admin/user/edit/<%= user.infos.id  %>" method="POST" class="user-edit">
 
                                                 <br/>
                                                 <div class="input-group">
@@ -41,6 +41,17 @@
                                                     </select>
                                                 </div>
                                                 <br/>
+
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-tasks"></i></span>
+                                                    <select class="form-control" name="form-grade">
+                                                        <option value="guest" <%= (user.infos.grade == "guest") ? "selected" : "" %>>Invité</option>
+                                                        <option value="user"  <%= (user.infos.grade == "user") ? "selected" : "" %>>Utilisateur</option>
+                                                        <option value="admin" <%= (user.infos.grade == "admin") ? "selected" : "" %>>Administrateur</option>
+                                                    </select>
+                                                </div>
+                                                <br/>
+
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-key"></i></span>
                                                     <input type="text" name="form-password" placeholder="Password" class="form-control" value="">

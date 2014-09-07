@@ -39,6 +39,7 @@ module.exports = {
 	  		defaultsTo: 1
 	  	},
 	  	grade:{
+	  		type:'string',
 	  		defaultsTo: "user",
             in: ['guest', 'user', 'admin']
 	  	}
@@ -60,10 +61,14 @@ module.exports = {
 		if (values.password) {
 			require('bcrypt-nodejs').hash(values.password, null, null, function(err, hash) {
 				if (err) return next(err);
-				values.password=hash;
+				values.password = hash;
+				next();
 			});
 		}
-		next();
+		else{
+			next();
+		}
+		
 	}
 
 };
