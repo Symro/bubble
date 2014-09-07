@@ -10,6 +10,18 @@ module.exports = {
 	// Permet d'ajouter aux log des infos concernant l'utilisateur
 	info: function(req, res, next, log){
 
+		// Exemple d'utilisation du LogController : 
+		//
+		//  // Log des actions
+		// 	sails.controllers.log.info(req, res, next , {action:"LOGIN", type:"USER", info:"SUCCESS"});
+		//
+		//	IMPORTANT :
+		//
+		// >> le 4è paramètre est un objet ayant au minimum une action de type string ayant une valeur spécifique (voir api/models/Log.js)
+		// >> les autres paramètres (type et info) sont optionnels et de type string (voir api/models/Log.js pour utiliser les bonnes valeurs)
+		//
+
+
 		if(log && log.action && req.session && res.locals.ua){
 
 			log.type 	= (log.type) 	? log.type 		: "";
