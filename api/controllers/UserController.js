@@ -27,6 +27,9 @@ module.exports = {
 
 	// Déconnexion de l'utilisateur
 	logout:function(req,res,next){
+	  	// Log des actions
+		sails.controllers.log.info(req, res, next , {action:"LOGOUT", type:"USER"});
+
 		req.session.destroy();
 		res.redirect('/');
 	},
@@ -144,6 +147,9 @@ module.exports = {
 				// Log user in
 				req.session.authenticated=true;
 				req.session.User=user;
+
+				// Log des actions
+				sails.controllers.log.info(req, res, next , {action:"LOGIN", type:"USER", info:"SUCCESS"});
 
 				// Envoie d'une socket aux autres
 				User.publishUpdate(user.id, {

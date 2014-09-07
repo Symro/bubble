@@ -142,7 +142,7 @@ module.exports = {
 				grade 		: user.grade,
 				status		: user.status,
 				image		: user.image
-								
+
 			}
 			user_obj.moment = moment; // on passe le require("moment.js") pour l'utiliser dans la vue
 

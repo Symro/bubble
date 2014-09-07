@@ -1,11 +1,11 @@
 /**
  * Allow any authenticated user.
  */
-module.exports = function(req, res, ok) {
+module.exports = function(req, res, next) {
 
   // User is allowed, proceed to controller
   if (req.session.authenticated) {
-    return ok();
+    return next();
   }
 
   // User is not allowed
@@ -14,7 +14,10 @@ module.exports = function(req, res, ok) {
       req.session.flash = {
       err: requireLoginError
     }
-    res.redirect('/');
-    return;
+
+    // Log des actions
+    sails.controllers.log.info(req, res, next , {action:"LOGIN", type:"USER", info:"FAILED"});
+
+    return res.redirect('/');
   }
 };

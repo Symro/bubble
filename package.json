@@ -29,7 +29,8 @@
     "sails": "~0.10.2",
     "sails-disk": "~0.10.0",
     "sails-mongo": "^0.10.3",
-    "shortid": "^2.0.1"
+    "shortid": "^2.0.1",
+    "useragent": "^2.0.9"
   },
   "scripts": {
     "start": "node app.js",

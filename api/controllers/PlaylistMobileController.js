@@ -37,6 +37,10 @@ module.exports = {
 	    	if(!found){
 	    		console.log("join failed!");
 				req.session.flash = { err : [{name:'fieldRequired',message:'Please enter a valid code.'}] };
+
+				// Log des actions
+				sails.controllers.log.info(req, res, next , {action:"JOIN", type:"PLAYLIST", info:"INVALID_CODE"});
+
 				return res.redirect('/mobile/playlist');
 	    	}
 
@@ -55,6 +59,9 @@ module.exports = {
 							playlist:playlistUrl
 						}).exec(function cb(err,created){
 						  	console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
+
+						  	// Log des actions
+							sails.controllers.log.info(req, res, next , {action:"JOIN", type:"PLAYLIST", info:playlistUrl});
 
 						  	sails.sockets.broadcast(playlistUrl, 'message' , {
 						    	verb 	: "add",

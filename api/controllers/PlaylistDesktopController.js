@@ -143,17 +143,12 @@ module.exports = {
 					return res.redirect('/desktop/playlist');
 				}
 
-				// // Ajoute l'utilisateur à la collection (table) JOIN
-				// Join.create({
-				// 	user:req.session.User.id,
-				// 	playlistUrl:temp,
-				// 	playlist:temp
-				// }).exec(function cb(err,created){
-				//   console.log('User : '+created.user_id+' ( '+req.session.User.firstname+' ) --> Joined : '+created.playlist_url);
-				// });
+				// console.log('playlist added : '+playlistObj.name);
+				// console.log('url redirection : /desktop/playlist/'+temp);
 
-				console.log('playlist added : '+playlistObj.name);
-				console.log('url redirection : /desktop/playlist/'+temp);
+				// Log des actions
+				sails.controllers.log.info(req, res, next , {action:"CREATE", type:"PLAYLIST"});
+
 				return res.redirect('/desktop/playlist/'+temp);
 
 			});

@@ -94,6 +94,9 @@ module.exports = {
 
               user.save(function(err) {
 
+                // Log des actions
+                sails.controllers.log.info(req, res, next , {action:"UPLOAD", type:"IMAGE_USER", info:"SUCCESS"});
+
                 // On envoie des infos à tous les sockets connectés concernant l'update !
                 User.publishUpdate(user.id, { 
                   type:"image",
@@ -122,6 +125,10 @@ module.exports = {
           }
           // une erreur est survenue..
           else{
+
+            // Log des actions
+            sails.controllers.log.info(req, res, next , {action:"UPLOAD", type:"IMAGE_USER", info:"FAILED"});
+
             console.log("error : ");
             console.dir(err);
             return res.forbidden('Internal Error');
@@ -218,6 +225,9 @@ module.exports = {
                 return res.json(err);
               }
 
+              // Log des actions
+              sails.controllers.log.info(req, res, next , {action:"UPLOAD", type:"IMAGE_PLAYLIST", info:"SUCCESS"});
+
               // On enregistre en base l'image de taille 300px
               playlist.image = "/"+chemin_img_300;
               playlist.save();
@@ -232,6 +242,10 @@ module.exports = {
           }
           // une erreur est survenue..
           else{
+            
+            // Log des actions
+            sails.controllers.log.info(req, res, next , {action:"UPLOAD", type:"IMAGE_PLAYLIST", info:"FAILED"});
+
             console.log("error : ");
             console.dir(err);
             return res.forbidden('Internal Error');

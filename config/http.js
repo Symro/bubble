@@ -37,12 +37,12 @@ module.exports.http = {
       'cookieParser',
       'session',
       'deviceInit',
-      'myRequestLogger',
       'bodyParser',
       'handleBodyParserError',
       'compress',
       'methodOverride',
       'poweredBy',
+      'userAgent',
       '$custom',
       'router',
       'www',
@@ -57,9 +57,23 @@ module.exports.http = {
   *                                                                           *
   ****************************************************************************/
 
-    myRequestLogger: function (req, res, next) {
-        //console.log("Requested :: ", req.method, req.url);
-        return next();
+    // myRequestLogger: function (req, res, next) {
+    //     return next();
+    // },
+
+    userAgent: function(req, res, next){
+      var useragent = require('useragent');
+      var agent = useragent.parse(req.headers['user-agent']);
+
+      res.locals.ua = {
+        browser : agent.family,
+        version : agent.toVersion(),
+        device : agent.device.toString(),
+        os : agent.os.toString(),
+        ip : req.ip
+      }
+
+      return next();
     }
 
 

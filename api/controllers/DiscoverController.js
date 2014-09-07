@@ -36,7 +36,15 @@ module.exports = {
 
         Discover.findOrCreate({user:req.session.User.id,song:req.param('song')},ajout).exec(function discoveryAdded(err, song){
 
-            if(err) return next(err);
+            if(err){            
+                // Log des actions
+                sails.controllers.log.info(req, res, next , {action:"ADD", type:"DISCOVER", info:"FAILED"});
+
+                return next(err);
+            }
+
+            // Log des actions
+            sails.controllers.log.info(req, res, next , {action:"ADD", type:"DISCOVER", info:"SUCCESS"});
 
             sails.sockets.broadcast(room,'message',{
                 verb:'update',
@@ -102,12 +110,19 @@ module.exports = {
 
 	deleteDiscovery: function (req,res,next){
 		console.log("on est ds deleteDiscovery");
-		var discoveryId= req.param('id');
+		var discoveryId = req.param('id');
 
 		Discover.destroy({ id:discoveryId }).exec(function discoveryDestroyed(err,song) {
-        	if (err) return next(err);
+        	if (err){
+                // Log des actions
+                sails.controllers.log.info(req, res, next , {action:"REMOVE", type:"DISCOVER", info:"FAILED"});
+                return next(err);
+            }
         	console.log("suppression de : " );
         	console.dir(song);
+
+            // Log des actions
+            sails.controllers.log.info(req, res, next , {action:"REMOVE", type:"DISCOVER", info:"SUCCESS"});
 
         	sails.sockets.broadcast(req.route.params.url,'message',{
                 verb:'delete',
