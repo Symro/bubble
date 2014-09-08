@@ -560,33 +560,46 @@ function removeInAllDom(message){
 // PARTIE MISE A JOUR DANS LE DOM
 // --------------------------------------
 
-  // 'FAKE' PLAYER MOBILE - PROGRESSION
+// 'FAKE' PLAYER MOBILE - PROGRESSION
 
-  var $player = $(".knob");
-  var $timer  = $(".timer");
-  var $currentArtist  = $('.current-song strong');
-  var $currentSong    = $('.current-song span');
-  var currentLike     = 0;
-  var currentDislike  = {};
-      currentDislike.count = 0;
-      currentDislike.users = [];
+function playerMobile(){
+  this.dom = {
+    player : '.knob',
+    timer  : '.timer',
+    artist : '.current-song strong',
+    song   : '.current-song span'
+  },
+  this.like = {
+    nb : 0,
+    user : {}
+  },
+  this.dislike = {
+    nb : 0,
+    user : {}
+  },
+  this.init = function(){
+    var that = this;
+    console.log("Initialisation du Player Mobile");
 
-  if($player.length != 0){
-    // Initialisation
-    $player.knob({
-      "release" : function (value) {
-        var minutes = Math.floor(value / 60);
-        var secondes = value - minutes * 60;
-        var zero = (secondes < 10)? "0" : "";
-        $timer.html(minutes+"’"+zero+secondes);
-        //console.log("minutes "+minutes+" Secondes :"+zero+secondes);
-      }
-    });
-  }
+    if( $(this.dom.player).length != 0){
+      console.log("Player Mobile existe dans le DOM :)");
+      // Initialisation
+      $(this.dom.player).knob({
+          "release" : function (value) {
+            if(value){
+              var minutes   = Math.floor(value / 60);
+              var secondes  = value - minutes * 60;
+              var zero      = (secondes < 10)? "0" : "";
+              $(that.dom.timer).html(minutes+"’"+zero+secondes);
+            }
+          }
+      });
+    }
 
-  // Définir la durée du morceau
-  function setDuration(val){
-      $player.trigger(
+  },
+  this.update = function(val){
+      console.log("Player Mobile this.update ! =) ");
+      $(this.dom.player).trigger(
           'configure',
           {
             "min":0,
@@ -594,6 +607,41 @@ function removeInAllDom(message){
           }
       );
   }
+
+}  
+
+  // var $player = $(".knob");
+  // var $timer  = $(".timer");
+  // var $currentArtist  = $('.current-song strong');
+  // var $currentSong    = $('.current-song span');
+  // var currentLike     = 0;
+  // var currentDislike  = {};
+  //     currentDislike.count = 0;
+  //     currentDislike.users = [];
+
+  // if($player.length != 0){
+  //   // Initialisation
+  //   $player.knob({
+  //     "release" : function (value) {
+  //       var minutes = Math.floor(value / 60);
+  //       var secondes = value - minutes * 60;
+  //       var zero = (secondes < 10)? "0" : "";
+  //       $timer.html(minutes+"’"+zero+secondes);
+  //       //console.log("minutes "+minutes+" Secondes :"+zero+secondes);
+  //     }
+  //   });
+  // }
+
+  // // Définir la durée du morceau
+  // function setDuration(val){
+  //     $player.trigger(
+  //         'configure',
+  //         {
+  //           "min":0,
+  //           "max":val
+  //         }
+  //     );
+  // }
 
 
 
@@ -608,11 +656,14 @@ function updateInMobileDom(message){
     // Variable globale "currentPlaylist" présente en temps réél sur Mobile
     currentPlaylist = message.datas.currentPlaylist;
 
-    $player.val(parseInt(message.datas.position)).trigger("change");
-    setDuration(message.datas.duration);
+    $(player_mobile.dom.player).val(parseInt(message.datas.position)).trigger("change");
+    // $player.val(parseInt(message.datas.position)).trigger("change");
 
-    $currentArtist.text(message.datas.currentPlaylist.songTrackArtist);
-    $currentSong.text(message.datas.currentPlaylist.songTrackName);
+    player_mobile.update(message.datas.duration);
+    // setDuration(message.datas.duration);
+
+    $(player_mobile.dom.artist).text(message.datas.currentPlaylist.songTrackArtist);
+    $(player_mobile.dom.song).text(message.datas.currentPlaylist.songTrackName);
 
   }
 
@@ -634,6 +685,10 @@ function updateInMobileDom(message){
     console.log('Affichage player mobile ! ');
     // Affichage du player sur mobile
     $('.current-playlist').removeClass('invisible');
+
+    window.player_mobile = new playerMobile();
+    player_mobile.init();
+    player_mobile.update(10);
 
   }
 

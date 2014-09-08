@@ -2421,32 +2421,27 @@ body.ajax .loader-overlay{
   width: 100%;
   font-size: 18px;
 }
+.current-player-wrap{
+  position:relative;
+}
 
-#current-player{
+.current-player-wrap #current-player{
   position:relative;
   width:200px;
   margin:20px auto;
 }
-#current-player .timer{
+.current-player-wrap #current-player div{
+
+}
+.current-player-wrap .timer{
   position:absolute;
-  width:100%;
-  top:80px;
+  width:200px;
+  top:50%; left:50%;
+  margin-left:-100px;
+  margin-top:-25px;
   text-align:center;
   font-weight:bold;
   font-size:30px;
-}
-#current-player .animation{
-  position:absolute;
-  top:-23px;
-  left:-26px;
-  width:251px;
-  height:241px;
-  overflow:hidden;
-}
-#current-player .animation img{
-  position:absolute;
-  left:0;
-  opacity:0;
 }
 
 .invisible{
