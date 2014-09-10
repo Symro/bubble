@@ -10,8 +10,9 @@ module.exports = {
   attributes: {
 
   	user:{
-		type:"string",
-		required:true
+      model:"user",
+  		type:"string",
+  		required:true
   	},
   	action:{
   		// LOGIN, LOGOUT, CREATE, JOIN, REMOVE, ADD, UPLOAD, CONNECT, [..?]

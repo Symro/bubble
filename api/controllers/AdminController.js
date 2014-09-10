@@ -93,12 +93,25 @@ module.exports = {
 
 	activity:function(req,res,next){
 
-		User.find(function foundUsers(err,users){
-			if (err) return next(err);
-			res.view({
-				users:users,
-				layout: "layout_admin"
-			});
+		var d = new Date();
+		d.setDate(d.getDate() - 1);
+
+		Log.find(
+			{ createdAt: 
+				{ '>': new Date(new Date().setDate(new Date().getDate()-1)),
+				  '<': new Date(new Date())
+				}, sort:"createdAt DESC" 
+			}).populate("user").exec(function foundUsers(err,logs){
+
+				// console.dir(logs);
+
+				if (err) return next(err);
+				res.view({
+					moment:moment,
+					activity:logs,
+					layout: "layout_admin"
+				});
+
 		});
 		
     },
@@ -185,12 +198,22 @@ module.exports = {
 					user_obj.nb_joined 	= joined.length;
 					user_obj.joined 	= joined;
 
-					console.dir(user_obj);
 
-					// Appel de la vue "show.ejs" avec toutes les infos qu'il faut
-			    	res.view("admin/user/show" ,{
-						user: user_obj,
-						layout: "layout_admin"
+					Log.find({ where : { user: id }, sort:"createdAt DESC" }).exec(function logUser(err, log){
+						if (err) return next(err);
+						// Nombre de connexion au site
+						user_obj.nb_login = _.find(log, function(chr) {
+						  return chr.action == "LOGIN" && chr.action == "SUCCESS";
+						});
+						// Activité de l'utilisateur
+						user_obj.activity = log;
+
+						// Appel de la vue "show.ejs" avec toutes les infos qu'il faut
+				    	res.view("admin/user/show" ,{
+							user: user_obj,
+							layout: "layout_admin"
+						});
+
 					});
 
 				});

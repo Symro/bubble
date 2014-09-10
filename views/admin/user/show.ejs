@@ -151,6 +151,100 @@
                                         </div><!-- /.tab-content -->
                                     </div><!-- /.nav-tabs-custom -->
                                 </div><!-- /.col -->
+
+                              <div class="col-md-6">
+
+                                    <div class="nav-tabs-custom">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active"><a data-toggle="tab" href="#tab_1">Activités sur Bubble</a></li>
+                                            <!-- <li class=""><a data-toggle="tab" href="#tab_2">Liste des playlists rejointes</a></li> -->
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div id="tab_1" class="tab-pane active">
+
+                                                <% if(user.activity.length){ %>
+                                                <div class="box">
+                                                    <div class="box-body table-responsive">
+                                                        <table id="tableau1" class="table table-bordered table-striped tableau">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Action</th>
+                                                                    <th>Type</th>
+                                                                    <th>Info</th>
+                                                                    <th>Date création</th>
+                                                                    <th>Navigateur</th>
+                                                                    <th>Device</th>
+                                                                    <th>IP</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <% _.each(user.activity, function(activity) { %>
+                                                                <tr>
+                                                                    <% if(activity.action == "LOGIN"){  %>
+                                                                    <td>s'est connecté</td>
+                                                                    <td>en tant qu'<%= (activity.type == "USER") ? "utilisateur" : "admin" %></td>
+                                                                    <td><%= activity.info == "SUCCESS" ? "avec succès" : "raté !" %></td>
+                                                                    <% }
+                                                                    else if(activity.action == "CREATE"){  %>
+                                                                    <td>a créé </td>
+                                                                    <td>une <%= activity.type == "PLAYLIST" ? "bubble" : "???" %></td>
+                                                                    <td></td>
+                                                                    <% }
+                                                                    else if(activity.action == "JOIN"){  %>
+                                                                    <td>a rejoint</td>
+                                                                    <td><%= activity.type == "PLAYLIST" ? "la playlist" : "???" %></td>
+                                                                    <td><%= activity.info != "" ? activity.info : "---" %></td>
+                                                                    <% }
+                                                                    else if(activity.action == "UPLOAD"){  %>
+                                                                    <td>a uploadé</td>
+                                                                    <td><%= activity.type == "IMAGE_USER" ? "une photo de profil" : "une illustration de playlist" %></td>
+                                                                    <td><%= activity.info == "SUCCESS" ? "avec succès" : "raté !" %></td>
+                                                                    <% }
+                                                                    else {  %>
+                                                                    <td><%= activity.action %></td>
+                                                                    <td><%= activity.type  %></td>
+                                                                    <td><%= activity.info %></td>
+                                                                    <% } %>
+                                                                    <td>le <%= user.moment(activity.createdAt).format('DD/MM/YYYY HH:mm') %></td>
+                                                                    <td><%= activity.browser %> <%= activity.version %></td>
+                                                                    <td><%= activity.device %> <%= activity.os %></td>
+                                                                    <td><%= activity.ip %></td>
+                                                                </tr>
+                                                                
+
+                                                            <% }) %>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Action</th>
+                                                                    <th>Type</th>
+                                                                    <th>Info</th>
+                                                                    <th>Date création</th>
+                                                                    <th>Navigateur</th>
+                                                                    <th>Device</th>
+                                                                    <th>IP</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div><!-- /.box-body -->
+                                                </div><!-- /.box -->
+                                                <% }else{ %>
+                                                        Aucune activité
+                                                <% } %>
+
+                                            </div><!-- /.tab-pane -->
+                                            <div id="tab_2" class="tab-pane">
+
+
+                                            </div><!-- /.tab-pane -->
+
+                                        </div><!-- /.tab-content -->
+                                    </div><!-- /.nav-tabs-custom -->
+                                </div><!-- /.col -->                                
+
+
+
+
                             </div><!-- /.row -->
 
                         

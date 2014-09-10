@@ -3539,6 +3539,7 @@ fieldset[disabled] .btn-vk.active {
 
 .user-photo{
   max-height:320px;
+  height:320px;
   overflow-y:scroll;
 }
 .user-photo ul{
