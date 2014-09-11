@@ -8,6 +8,10 @@
  */
 
 
+window.isMobile  = ($("body").hasClass('mobile'))  ? true : false;
+window.isDesktop = ($("body").hasClass('desktop')) ? true : false;
+
+
 (function (io) {
 
   // as soon as this file is loaded, connect automatically,
@@ -29,10 +33,10 @@
       // .......................................................................................
 
       // Un message arrivera d'un contrôleur avec les infos suivantes :
-      // __ VERB doit être soit : get (obtenir), add (ajout), update (modifier), delete (supprimer)
+      // __ VERB doit être soit : get (obtenir), add (ajouter), update (modifier), delete (supprimer)
       // __ DEVICE doit être : desktop, mobile, all
       // __ INFO : information de ce qu'il se passe (écrit en CamelCase please!)
-      // __ DATA : un JSON de préférence pour manipuler ensuite en jQuery et inserer dans le DOM
+      // __ DATA : un JSON de préférence pour manipuler ensuite en jQuery et insérer dans le DOM
 
       // EXEMPLE
       // message =  {
@@ -138,9 +142,9 @@ function messageReceivedFromServer(message){
 // FONCTON DE ROUTAGE DU DOM
 function addInDom(message){
     switch (message.device) {
-      case 'desktop': addInDesktopDom(message);
+      case 'desktop': if(isDesktop) { addInDesktopDom(message); }
                       break;
-      case 'mobile' : addInMobileDom(message);
+      case 'mobile' : if(isMobile)  { addInMobileDom(message);  }
                       break;
       case 'all'    : addInAllDom(message);
                       break;
@@ -148,9 +152,9 @@ function addInDom(message){
 }
 function removeInDom(message){
     switch (message.device) {
-      case 'desktop': removeInDesktopDom(message);
+      case 'desktop': if(isDesktop) { removeInDesktopDom(message); }
                       break;
-      case 'mobile' : removeInMobileDom(message);
+      case 'mobile' : if(isMobile)  { removeInMobileDom(message);  }
                       break;
       case 'all'    : removeInAllDom(message);
                       break;
@@ -158,9 +162,9 @@ function removeInDom(message){
 }
 function updateInDom(message){
     switch (message.device) {
-      case 'desktop': updateInDesktopDom(message);
+      case 'desktop': if(isDesktop) { updateInDesktopDom(message); }
                       break;
-      case 'mobile' : updateInMobileDom(message);
+      case 'mobile' : if(isMobile)  { updateInMobileDom(message);  }
                       break;
       case 'all'    : updateInAllDom(message);
                       break;
@@ -168,125 +172,288 @@ function updateInDom(message){
 }
 
 // --------------------------------------
-// PLAYER 
+// PLAYER DESKTOP
 // --------------------------------------
 
-  // REGLAGES PLAYER
+  if(isDesktop){
 
-  soundManager.setup({
-    // path to directory containing SM2 SWF
-    url: '/swf/',
-    debugFlash: false,
-    
-      onready: function(){
-      console.log('soundManager est pret ! ');
-      player();
-    },
-    ontimeout: function() {
-      // console.log('SM2 init failed!');
-    },
-    defaultOptions: {
-      // set global default volume for all sound objects
-      volume: 100
-    }
-
-  });
-
-
-  function player(new_track){
-    console.log(">> function player(new_track)");
-
-    var player_circle = $(".player_circle");
-    var player_timing = $(".player_timing");
-
-    if(new_track && $("body").hasClass("desktop") ){
-      console.log(">> function player(new_track) > IF ! :) ");
-      console.log(">> Lecture d'un nouveau morceau : "+new_track.songTrackName);
+    // REGLAGES SOUNDMANAGER PLAYER
+    soundManager.setup({
+      // path to directory containing SM2 SWF
+      url: '/swf/',
+      debugFlash: false,
       
-      $('li[data-db-id="'+new_track.id+'"]').prevAll("li").addClass('played');
-      //get_player_position(); // Lancement du timer
+      onready: function(){
+        console.log('soundManager est pret ! ');
+        //player();
+      },
+      ontimeout: function() {
+        // console.log('SM2 init failed!');
+      },
+      defaultOptions: {
+        // set global default volume for all sound objects
+        volume: 100
+      }
 
-      $('.player_track_name').html(new_track.songTrackName);
-      $('.player_track_artist').html(new_track.songTrackArtist);
+    });
 
-      // Création du cercle de progression
-      player_circle.knob({
-          "release" : function (value) {
-            var minutes = Math.floor(value / 60);
-            var secondes = value - minutes * 60;
-            var zero = (secondes < 10)? "0" : "";
-            player_timing.html(minutes+"’"+zero+secondes);
+    /* LIVE BUBBLE - PLAYER POSITION */
+
+    // var get_player_position_timer;
+
+    // // Lance le Timer d'envoie de la position du lecteur
+    // function get_player_position(position, duration){
+    //   stop_send_player_position(); // on clear le timer avant de le relancer
+    //   get_player_position_timer = setInterval(function(){ send_player_position(position, duration); }, 1000);
+    // }
+
+    // // Envoie par socket l'instant ds le morceau en lecture, et la durée totale du morceau
+    // function send_player_position(position, duration){
+    //   socket.post('/desktop/playlist/'+user.room+'/playerPosition' , {
+    //       position : (position) ? position : 0,
+    //       duration : (duration) ? duration : 0,
+    //       currentPlaylist : currentPlaylist
+    //     }, function(response){
+    //       console.log("send_player_position SOCKET to room : "+user.room);
+    //       console.log(response);
+    //   });
+    // }
+
+    // // Arrêter l'envoie de la position du player desktop au mobile chaque seconde
+    // function stop_send_player_position(){
+    //   clearInterval(get_player_position_timer);
+    // }
+
+
+
+    // /* GESTION PLAYER SOUNDMANAGER - DESKTOP */
+    // function player(new_track){
+    //   console.log(">> function player(new_track)");
+
+    //   var player_circle = $(".player_circle");
+    //   var player_timing = $(".player_timing");
+
+    //   if(new_track){
+    //     console.log(">> function player(new_track) > IF ! :) ");
+    //     console.log(">> Lecture d'un nouveau morceau : "+new_track.songTrackName);
+        
+    //     $('li[data-db-id="'+new_track.id+'"]').prevAll("li").addClass('played');
+
+    //     $('.player_track_name').html(new_track.songTrackName);
+    //     $('.player_track_artist').html(new_track.songTrackArtist);
+
+    //     // Création du cercle de progression
+    //     player_circle.knob({
+    //       "release" : function (value) {
+    //         var minutes = Math.floor(value / 60);
+    //         var secondes = value - minutes * 60;
+    //         var zero = (secondes < 10)? "0" : "";
+    //         player_timing.html(minutes+"’"+zero+secondes);
+    //       }
+    //     });
+
+    //     var songURL = "";
+    //     // Change l'url dynamiquement et joue le morceau
+    //     switch (new_track.songService) {
+    //       case 'soundcloud' : 
+    //         songURL = "http://api.soundcloud.com/tracks/"+new_track.songTrackId+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb";
+    //       break;
+    //       case 'spotify' : 
+    //         songURL = new_track.songSongUrl;
+    //       break;
+    //       case 'deezer' : 
+    //         songURL = new_track.songSongUrl;
+    //       break;
+    //     }
+
+    //     window.playerDesktop = soundManager.createSound({
+    //       id: 'bubble_player',
+    //       autoLoad: true,
+    //       // useful for URLs without obvious filetype extensions
+    //       url: songURL,
+
+    //       whileplaying: function(){
+
+    //         player_circle.val( (this.position/1000).toFixed(2) ).trigger('change');
+    //         player_circle.trigger(
+    //             'configure',{
+    //                 "min":0,
+    //                 "max":(this.duration/1000).toFixed(2)
+    //             }
+    //         );
+
+    //         send_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) );
+
+    //         // console.log( (this.position/1000).toFixed(2) );
+    //         // console.log( (this.duration/1000).toFixed(2) );
+    //         // console.log( this.id );
+    //         //soundManager._writeDebug('sound '+this.id+' playing, '+this.position+' of '+this.duration);
+    //       },
+    //       //onplay:   function(){ get_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) ); },
+    //       //onresume:   function(){ get_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) ); },
+    //       //onpause:  function(){ stop_send_player_position(); }
+
+    //     });
+
+
+    //     soundManager.play('bubble_player',{
+    //       onfinish: function() {
+    //         alert('The sound '+this.id+' finished playing.');
+    //         playerDesktop.destruct();
+    //         next_song();
+    //       }
+    //     });
+
+    //     $('.player_play_pause').on("click", function(){
+    //       $(this).toggleClass("paused");
+    //       soundManager.togglePause('bubble_player');
+    //     });
+
+    //     $("#test_1").on("click",function(e){
+    //       // Place le player à 2sec de la fin
+    //       playerDesktop.setPosition(playerDesktop.duration-2000);
+    //     });
+
+    //   }
+    //   else{
+    //     console.log(">> function player(new_track) > ELSE");
+    //   }
+
+    // }
+
+
+    /* GESTION PLAYER SOUNDMANAGER - DESKTOP */
+    function PlayerDesktop(new_track){
+      var player_circle       = $(".player_circle");
+      var player_timing       = $(".player_timing");
+      var player_track_name   = $(".player_track_name");
+      var player_track_artist = $(".player_track_artist");
+
+      this.init = function(){
+        var that = this;
+        that.initDone = false;
+
+        // Création du cercle de progression
+        console.log('playerDesktop >> init');
+        if(player_circle.length){
+          player_circle.knob({
+            "release" : function (value) {
+              var minutes = Math.floor(value / 60) || 0;
+              var secondes = value - minutes * 60  || 0;
+              var zero = (secondes < 10)? "0" : "";
+              player_timing.html(minutes+"’"+zero+secondes);
+
+              
+            }
+          });
+
+          that.initDone = true;
+        }
+      }
+
+      this.playSoundCloud = function(track){
+        console.log('playerDesktop >> playSoundCloud');
+        var that = this;
+
+        // On check si le cercle Knob est initialisé.
+        if(!this.initDone){
+          this.init();
+        }
+
+        window.playerDesktop = soundManager.createSound({
+          id: 'bubble_player',
+          autoLoad: true,
+          // useful for URLs without obvious filetype extensions
+          url: "http://api.soundcloud.com/tracks/"+track.songTrackId+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb",
+
+          whileplaying: function(){
+            console.log(this);
+
+            that.updatePosition({
+              position: this.position, 
+              duration: this.duration
+            });
+
+          }
+          //onplay:   function(){ get_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) ); },
+          //onresume:   function(){ get_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) ); },
+          //onpause:  function(){ stop_send_player_position(); }
+
+        });
+
+        soundManager.play('bubble_player',{
+          onfinish: function() {
+            alert('The sound '+this.id+' finished playing.');
+            playerDesktop.destruct();
+            next_song();
           }
         });
 
-      var songURL = "";
-      // Change l'url dynamiquement et joue le morceau
-      switch (new_track.songService) {
-        case 'soundcloud' : 
-          songURL = "http://api.soundcloud.com/tracks/"+new_track.songTrackId+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb";
-        break;
-        case 'spotify' : 
-          songURL = new_track.songSongUrl;
-        break;
-        case 'deezer' : 
-          songURL = new_track.songSongUrl;
-        break;
+        // Pause du lecteur
+        $('.player_play_pause').on("click", function(){
+          $(this).toggleClass("paused");
+          soundManager.togglePause('bubble_player');
+        });
+
+        // Place le player à 2sec de la fin
+        $("#test_1").on("click",function(e){
+          playerDesktop.setPosition(playerDesktop.duration-2000);
+        });
+
       }
 
-      var player = soundManager.createSound({
-        id: 'bubble_player',
-        autoLoad: true,
-        // useful for URLs without obvious filetype extensions
-        url: songURL,
 
-        whileplaying: function(){
+      this.updateInfo = function(track){
+        console.log('playerDesktop >> updateInfo');
+        console.dir(track);
 
-          player_circle.val( (this.position/1000).toFixed(2) ).trigger('change');
-          player_circle.trigger(
-              'configure',{
-                  "min":0,
-                  "max":(this.duration/1000).toFixed(2)
-              }
-          );
+        // player_track_name.html(track.songTrackName);
+        // player_track_artist.html(track.songTrackArtist);
 
-          send_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) );
+        // TODO
 
-          // console.log( (this.position/1000).toFixed(2) );
-          // console.log( (this.duration/1000).toFixed(2) );
-          // console.log( this.id );
-          //soundManager._writeDebug('sound '+this.id+' playing, '+this.position+' of '+this.duration);
-        },
-        //onplay:   function(){ get_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) ); },
-        //onresume:   function(){ get_player_position( (this.position/1000).toFixed(2) , (this.duration/1000).toFixed(2) ); },
-        //onpause:  function(){ stop_send_player_position(); }
+      }
 
-      });
+      this.updatePosition = function(info){
+        // réceptionne un objet content : info.position + info.duration
+        console.log('playerDesktop >> updatePosition');
+
+        player_circle.val( (parseFloat(info.position)/1000).toFixed(2) ).trigger('change');
+        player_circle.trigger(
+            'configure',{
+                "min":0,
+                "max":(parseFloat(info.duration)/1000).toFixed(2)
+            }
+        );
+
+        this.sendPosition(info);
+      }
+
+      this.sendPosition = function(info){
+        // Envoie la position du player via socket pour le mobile
+        console.log('playerDesktop >> sendPosition');
+        socket.post('/desktop/playlist/'+user.room+'/playerPosition' , {
+            position : (info.position) ? (parseFloat(info.position)/1000).toFixed(2) : 0,
+            duration : (info.duration) ? (parseFloat(info.duration)/1000).toFixed(2) : 0,
+            currentPlaylist : (info.currentPlaylist) ? info.currentPlaylist : {}
+          }, function(response){
+            console.log("send_player_position SOCKET to room : "+user.room);
+            console.log(response);
+        });
+
+      }
 
 
-      soundManager.play('bubble_player',{
-        onfinish: function() {
-          alert('The sound '+this.id+' finished playing.');
-          player.destruct();
-          next_song();
-        }
-      });
 
-      $('.player_play_pause').on("click", function(){
-        $(this).toggleClass("paused");
-        soundManager.togglePause('bubble_player');
-      });
+    } // Fin playerDesktop()
 
-      $("#test_1").on("click",function(e){
-        // Place le player à 2sec de la fin
-        player.setPosition(player.duration-2000);
-      });
 
-    }
-    else{
-      console.log(">> function player(new_track) > ELSE");
-    }
+    var player_desktop = new PlayerDesktop();
+    player_desktop.init();
 
-  }
+
+
+  } // FIN isDestkop()
 
 
 
@@ -309,7 +476,7 @@ function updateInDom(message){
         dislikeContainer.text(0);
 
         // Lancement musique suivante
-          player(currentPlaylist);
+        player(currentPlaylist);
 
         }
         else{
@@ -318,43 +485,13 @@ function updateInDom(message){
           stop_send_player_position();
 
             // Masquage du player sur Desktop
-              var playerDesktop = $('.desktop-container .player');
-              playerDesktop.addClass('invisible');
+            var playerDesktopContainer = $('.desktop-container .player');
+            playerDesktopContainer.addClass('invisible');
         }
 
     });
 
   }
-
-  /* LIVE BUBBLE - PLAYER POSITION */
-
-  var get_player_position_timer;
-
-  // Lance le Timer d'envoie de la position du lecteur
-  function get_player_position(position, duration){
-    stop_send_player_position(); // on clear le timer avant de le relancer
-    get_player_position_timer = setInterval(function(){ send_player_position(position, duration); }, 1000);
-  }
-
-  // Envoie par socket l'instant ds le morceau en lecture, et la durée totale du morceau
-  function send_player_position(position, duration){
-    socket.post('/desktop/playlist/'+user.room+'/playerPosition' , {
-        position : (position) ? position : 0,
-        duration : (duration) ? duration : 0,
-        currentPlaylist : currentPlaylist
-      }, function(response){
-        console.log("send_player_position SOCKET to room : "+user.room);
-        console.log(response);
-    });
-  }
-
-  // Arrêter l'envoie de la position du player desktop au mobile chaque seconde
-  function stop_send_player_position(){
-    clearInterval(get_player_position_timer);
-  }
-
-
-
 
 
 
@@ -384,8 +521,8 @@ function addInDesktopDom(message){
     currentPlaylist = message.datas;
 
     // Apparition du player sur Desktop et mobile
-    var playerDesktop = $('.desktop-container .player');
-    playerDesktop.removeClass('invisible');
+    var playerDesktopContainer = $('.desktop-container .player');
+    playerDesktopContainer.removeClass('invisible');
 
     $('.playlistInfo').hide();
 

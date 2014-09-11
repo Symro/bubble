@@ -1,8 +1,5 @@
 $(document).ready(function(){
 
-	isMobile = ($("body").hasClass('mobile')) ? true : false;
-	isDesktop = ($("body").hasClass('desktop')) ? true : false;
-
 	/* --------------------------------------------------------- */
 	//  PARTIE Formulaire inscription Bubble
 	/* --------------------------------------------------------- */
