@@ -85,23 +85,24 @@ module.exports = {
 
 			// récupère les info d'utilisateur qui avait ajouté le morceau
 			discoveries.forEach(function (doc, i){
+                if(doc.song){
+                    User.find({
+                        id : doc.song.user
+                    }).exec( function foundUsersHistoric(err,users){
+                    	if(err) return next(err);
 
-                User.find({
-                    id : doc.song.user
-                }).exec( function foundUsersHistoric(err,users){
-                	if(err) return next(err);
-
-                	// Pour chaque utilisateur on l'ajoute au JSON
-                    fullDiscoveries[i].song.userInfo = users[0];
-                    additionBoucle += i;
-                    // Quand tout est fini, on retourne le JSON final
-                    if(additionBoucle == addition){
-						return res.view('playlistMobile/partials/discovery',{
-							discoveries:fullDiscoveries,
-							layout: null
-						});
-	               	}
-               	});
+                    	// Pour chaque utilisateur on l'ajoute au JSON
+                        fullDiscoveries[i].song.userInfo = users[0];
+                        additionBoucle += i;
+                        // Quand tout est fini, on retourne le JSON final
+                        if(additionBoucle == addition){
+    						return res.view('playlistMobile/partials/discovery',{
+    							discoveries:fullDiscoveries,
+    							layout: null
+    						});
+    	               	}
+                   	});
+                }
 
             });
 

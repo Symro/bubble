@@ -257,9 +257,9 @@ module.exports = {
     },
 
     playerPosition:function(req, res, next){
-        var position           = req.params.all().position;
-        var duration           = req.params.all().duration;
-        var currentPlaylist    = req.params.all().currentPlaylist;
+        var position           = req.param("position");
+        var duration           = req.param("duration");
+        var currentPlaylist    = req.param("currentPlaylist");
         var room               = req.param('url');
 
         sails.sockets.broadcast(room,'message',{
@@ -269,7 +269,7 @@ module.exports = {
             datas:{
                 position:position,
                 duration:duration,
-                currentPlaylist : currentPlaylist
+                currentPlaylist: currentPlaylist
             }
         });
 

@@ -23,7 +23,7 @@
 
 		    <div class="swiper-wrapper">
 			    <div class="swiper-slide ">
-			      	<h1 class="title">Live Bubble</h1>
+			      		<h1 class="title">Live Bubble</h1>
 
 						<% if(typeof(playlist) == "undefined") { %>
 				      	<div class="form-container">
@@ -57,13 +57,14 @@
 						else {
 						%>
 
-						<section class="current-playlist invisible">
+						<!-- <section class="current-playlist invisible"> -->
+						<section class="current-playlist">
 
 							<div class="current-player-wrap">
 								<div id="current-player">
-									<input class="knob" data-width="200" data-fgColor="#fff" data-bgColor="rgba(255,255,255,0.7)" data-skin="tron" data-thickness=".1" data-displayInput="false" data-min="0" data-max="" value="" readOnly="true">
+									<input class="player_circle" data-width="200" data-fgColor="#fff" data-bgColor="rgba(255,255,255,0.7)" data-skin="tron" data-thickness=".1" data-displayInput="false" data-min="0" data-max="" value="" readOnly="true">
 								</div>
-								<div class="timer"></div>
+								<div class="player_timing"></div>
 							</div>
 
 							<div class="current-song">
@@ -83,11 +84,11 @@
 								<%- partial('partials/currentPlaylist')%>
 							<div>
 
-							<% } %>
-
 						</section>
 
-					</div><!-- FIN PREMIER SLIDE -->
+						<% } %>
+
+				</div><!-- FIN PREMIER SLIDE -->
 
 				<div class="swiper-slide decouverte">
 			        <h1 class="title">Discoveries</h1>

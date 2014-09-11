@@ -435,7 +435,7 @@ function updateInDom(message){
         socket.post('/desktop/playlist/'+user.room+'/playerPosition' , {
             position : (info.position) ? (parseFloat(info.position)/1000).toFixed(2) : 0,
             duration : (info.duration) ? (parseFloat(info.duration)/1000).toFixed(2) : 0,
-            currentPlaylist : (info.currentPlaylist) ? info.currentPlaylist : {}
+            currentPlaylist : (currentPlaylist) ? currentPlaylist : {}
           }, function(response){
             console.log("send_player_position SOCKET to room : "+user.room);
             console.log(response);
@@ -526,8 +526,14 @@ function addInDesktopDom(message){
 
     $('.playlistInfo').hide();
 
-    // Lancement musique
-    player(currentPlaylist);
+    // Lancement musique sur le player Desktop
+    if(currentPlaylist.songService == "soundcloud"){
+      var player_desktop = new PlayerDesktop();
+      player_desktop.playSoundCloud(currentPlaylist);
+    }
+    else{
+      console.log("Lecture d'une plateforme différente de Soundcloud.. feature COMING SOON");
+    }
 
     // Supprime la classe "Active" des boutons pour permettre de voter à nouveau
     var $btnLike    = $('#song-like');
@@ -699,53 +705,118 @@ function removeInAllDom(message){
 
 // 'FAKE' PLAYER MOBILE - PROGRESSION
 
-function playerMobile(){
-  this.dom = {
-    player : '.knob',
-    timer  : '.timer',
-    artist : '.current-song strong',
-    song   : '.current-song span'
-  },
-  this.like = {
-    nb : 0,
-    user : {}
-  },
-  this.dislike = {
-    nb : 0,
-    user : {}
-  },
-  this.init = function(){
-    var that = this;
-    console.log("Initialisation du Player Mobile");
 
-    if( $(this.dom.player).length != 0){
-      console.log("Player Mobile existe dans le DOM :)");
-      // Initialisation
-      $(this.dom.player).knob({
-          "release" : function (value) {
-            if(value){
-              var minutes   = Math.floor(value / 60);
-              var secondes  = value - minutes * 60;
-              var zero      = (secondes < 10)? "0" : "";
-              $(that.dom.timer).html(minutes+"’"+zero+secondes);
+  if(isMobile){
+
+    // Bug fix du 11-09-2014
+    // Initialisation du Swiper AVANT de dessiner le cercle 'canvas' du player
+    var mySwiper = new Swiper('.swiper-container', {
+      pagination: '.pagination',
+      loop:true,
+      paginationClickable: true,
+      onSlideChangeStart: function(swiper, direction){
+        var nav = $('.nav-top .right');
+        switch(swiper.activeLoopIndex){
+          case 0:
+            nav.children('a').removeClass('visible').filter(':first-child').addClass("visible");
+            break;
+          case 1:
+            nav.children('a').removeClass('visible').filter(':nth-child(2)').addClass("visible");
+            $.get( "/mobile/discover", {userId:user.id}, function( data ) {
+              //console.dir(data);
+              $('.discoveries').html(data);
+            });
+            
+            break;
+          case 2:
+            nav.children('a').removeClass('visible');
+            $.get( "/mobile/playlist/"+user.room+"/historic", {userId:user.id}, function( data ) {
+              //console.log(data);
+              $('.historic').html(data);
+            });
+
+            break;
+        }
+      }
+    }); 
+
+
+    function PlayerMobile(){
+      var player_circle  = $(".player_circle");
+      var player_timing  = $(".player_timing");
+
+      this.dom = {
+        player : '.player_circle',
+        timer  : '.player_timing',
+        artist : '.current-song strong',
+        song   : '.current-song span'
+      },
+      this.like = {
+        nb : 0,
+        user : {}
+      },
+      this.dislike = {
+        nb : 0,
+        user : {}
+      },
+      this.init = function(){
+        console.log("Initialisation du Player Mobile");
+
+        var that = this;
+        that.initDone = false;
+
+        if( player_circle.length ){
+          console.log("Player Mobile existe dans le DOM :)");
+          // Initialisation
+          player_circle.knob({
+              "release" : function (value) {
+                if(value){
+                  var minutes   = Math.floor(value / 60) || 0;
+                  var secondes  = value - minutes * 60   || 0;
+                  var zero      = (secondes < 10)? "0" : "";
+                  player_timing.html(minutes+"’"+zero+secondes);
+                }
+              }
+          });
+          that.initDone = true;
+
+        }
+
+      },
+      this.update = function(val){
+          console.log("Player Mobile this.update ! =) ");
+          player_circle.trigger(
+              'configure',
+              {
+                "min":0,
+                "max":val
+              }
+          );
+      },
+      this.updatePosition = function(info){
+        // réceptionne un objet content : info.position + info.duration
+        console.log('playerDesktop >> updatePosition');
+        if(!this.initDone){
+          this.init();
+        }
+
+        player_circle.val( parseFloat(info.position) ).trigger('change');
+        player_circle.trigger(
+            'configure',{
+                "min": 0,
+                "max": parseFloat(info.duration).toFixed(2)
             }
-          }
-      });
-    }
+        );
+      }
 
-  },
-  this.update = function(val){
-      console.log("Player Mobile this.update ! =) ");
-      $(this.dom.player).trigger(
-          'configure',
-          {
-            "min":0,
-            "max":val
-          }
-      );
-  }
+    }  
 
-}  
+    window.player_mobile = new PlayerMobile();
+    player_mobile.init();
+
+
+  }  // FIN .isMobile()
+
 
   // var $player = $(".knob");
   // var $timer  = $(".timer");
@@ -793,11 +864,10 @@ function updateInMobileDom(message){
     // Variable globale "currentPlaylist" présente en temps réél sur Mobile
     currentPlaylist = message.datas.currentPlaylist;
 
-    $(player_mobile.dom.player).val(parseInt(message.datas.position)).trigger("change");
-    // $player.val(parseInt(message.datas.position)).trigger("change");
+    player_mobile.updatePosition({position: message.datas.position, duration: message.datas.duration });
 
-    player_mobile.update(message.datas.duration);
-    // setDuration(message.datas.duration);
+    // $(player_mobile.dom.player).val(parseInt(message.datas.position)).trigger("change");
+    // $player.val(parseInt(message.datas.position)).trigger("change");
 
     $(player_mobile.dom.artist).text(message.datas.currentPlaylist.songTrackArtist);
     $(player_mobile.dom.song).text(message.datas.currentPlaylist.songTrackName);
@@ -823,7 +893,7 @@ function updateInMobileDom(message){
     // Affichage du player sur mobile
     $('.current-playlist').removeClass('invisible');
 
-    window.player_mobile = new playerMobile();
+    window.player_mobile = new PlayerMobile();
     player_mobile.init();
     player_mobile.update(10);
 

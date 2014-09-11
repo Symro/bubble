@@ -131,7 +131,7 @@ module.exports = {
 			}
 
 			// Compare passwords
-			bcrypt.compare(req.param('password'),user.password,function(err,valid){
+			bcrypt.compare(req.param('password'), user.password, function(err,valid){
 				if (err) return next(err);
 
 				// If doesn't match
