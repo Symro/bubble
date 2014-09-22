@@ -443,6 +443,17 @@ function updateInDom(message){
 
       }
 
+      // Nombre de like sur le morceau
+      this.like = {
+        nb    : 0,
+        user  : []
+      }
+
+      // Nombre de like sur le morceau
+      this.dislike = {
+        nb    : 0,
+        user  : []
+      }
 
 
     } // Fin playerDesktop()
@@ -470,19 +481,23 @@ function updateInDom(message){
         currentPlaylist = response;
 
         // Remet le compteur de like & dislike à zéro
-        currentLike = 0;
-        currentDislike.count = 0;
-        likeContainer.text(0);
-        dislikeContainer.text(0);
+        player_desktop.like.nb = 0;
+        player_desktop.dislike.nb = 0;
+
+        // currentLike = 0; TODELETE
+        // currentDislike.count = 0; TODELETE
+        likeContainer.text(player_desktop.like.nb);
+        dislikeContainer.text(player_desktop.dislike.nb);
 
         // Lancement musique suivante
-        player(currentPlaylist);
+        // player(currentPlaylist); TODELETE
+        player_desktop.playSoundCloud(currentPlaylist);
 
         }
         else{
           // Pas de son à lire dans la playlist
           console.log(" AUCUN SONG A LIRE ");
-          stop_send_player_position();
+          // stop_send_player_position(); TODELETE
 
             // Masquage du player sur Desktop
             var playerDesktopContainer = $('.desktop-container .player');
@@ -906,9 +921,10 @@ function updateInDesktopDom(message){
 
   if(message.info == "songLiked"){
     // Incremente le nombre de like du morceau en lecture sur Desktop
-    currentLike++;
+    player_desktop.like.nb++;
+
     var likeContainer = $('.player_track_like span');
-    likeContainer.html(currentLike);
+    likeContainer.html(player_desktop.like.nb);
   }
 
   if(message.info == "songDisliked"){
@@ -917,16 +933,18 @@ function updateInDesktopDom(message){
     nbConnected--; // Retire 1 (pour ne pas prendre en compte le Desktop)
 
     // Incremente le nombre de dislike du morceau en lecture sur Desktop
-    currentDislike.count++;
+    player_desktop.dislike.nb++;
+    // currentDislike.count++; TODELETE 
+
     var dislikeContainer = $('.player_track_dislike span');
-    dislikeContainer.html(currentDislike.count);
+    dislikeContainer.html(player_desktop.dislike.nb);
     // On ajoute quelques infos concernant l'utilisateur qui a disliké dans le tableau global currentDislike.user
     currentDislike.users.push({firstname: message.datas.user.firstname, image: message.datas.user.image });
 
-    console.log("Il y en a en tout "+nbConnected+" connectés et "+currentDislike.count+" veulent passer le morceau");
+    console.log("Il y en a en tout "+nbConnected+" connectés et "+player_desktop.dislike.nb+" veulent passer le morceau");
 
     // Si plus de la moitié des gens connectés n'aiment pas le morceau, on passe au suivant
-    if(nbConnected >= 2 && currentDislike.count/nbConnected >= 0.5){
+    if(nbConnected >= 2 && player_desktop.dislike.nb/nbConnected >= 0.5){
 
         var likeContainer    = $('.player_track_like span');
         var dislikeContainer = $('.player_track_dislike span');
@@ -941,14 +959,15 @@ function updateInDesktopDom(message){
               currentPlaylist = response;
 
               // Remet le compteur de like & dislike à zéro
-              currentLike = 0;
-              currentDislike.count = 0;
-              likeContainer.text(0);
-              dislikeContainer.text(0);
+              player_desktop.like.nb = 0;
+              player_desktop.dislike.nb = 0;
+              likeContainer.text(player_desktop.like.nb);
+              dislikeContainer.text(player_desktop.dislike.nb);
 
               // Lancement musique suivante
               console.log(currentPlaylist);
-              player(currentPlaylist);
+              // player(currentPlaylist); TODELETE
+              player_desktop.playSoundCloud(currentPlaylist);
 
               }
               else{

@@ -9,7 +9,7 @@
 		<section class="line">
 			<aside class="mod left w50 txtcenter sidebar">
 				<h3>Bubble code</h3>
-				<h3><%= playlist.url %> ( <%= playlist.name %> )</h3>
+				<h3><%= playlist.url %></h3>
 			</aside>
 			<aside class="mod left w50 txtcenter sidebar">
 				<a href="/desktop/playlist/"><i class="icon-croixclosesuppr"></i>Close bubble</a>
@@ -48,7 +48,9 @@
 	<!-- <section class="w60 player center col-right <% if(typeof(songs) != 'undefined' && songs.length == 0) { %>invisible<% } %>"> -->
 	<section class="w60 player center col-right">
 
+		<p>Playlist : <%= playlist.name %> </p>
 		<button id="test_1">Aller à la fin du morceau</button>
+
 
 
 <!-- 		<div class="ui360 ui360-vis">

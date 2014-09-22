@@ -40,7 +40,7 @@ module.exports = {
 
 		Song.count({url: req.route.params.url}).exec(function countSongs(err, found){
 
-			sails.log(found);
+			console.log("JoinController.js / joined >> Nb de song dans la playlist : "+found);
 			res.json({
 				joined:true,
 		    	success: true,
