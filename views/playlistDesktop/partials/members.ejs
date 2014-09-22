@@ -2,7 +2,7 @@
 	<ul>
 		<% _.each(joinedUsers, function (joined) { %>
 		
-		<li><img src="<%= joined.user.image %>" alt="<%= joined.user.firstname %>"></img></li>
+		<li><img src="<%= joined.user.image %>" alt="<%= joined.user.firstname %>" data-user-id="<%= joined.user.id %>"></img></li>
 
 		<% }) %>
 	</ul>

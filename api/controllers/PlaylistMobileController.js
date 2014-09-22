@@ -67,7 +67,7 @@ module.exports = {
 						    	verb 	: "add",
 						    	device 	: "desktop",
 						    	info 	: "userJoined",
-						    	data 	: { firstname: req.session.User.firstname, image: req.session.User.image }
+						    	data 	: { id:req.session.User.id, firstname: req.session.User.firstname, image: req.session.User.image }
 						    });
 
 						    // Redirection vers l'affichage de la playlist

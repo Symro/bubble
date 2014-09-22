@@ -107,7 +107,8 @@ module.exports = {
                     image:"/"+chemin_img_300
                   },
                   user:{
-                    firstname:user.firstname
+                    id : user.id,
+                    firstname: user.firstname
                   }
                 });
 

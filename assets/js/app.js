@@ -523,7 +523,7 @@ function addInDesktopDom(message){
   if(message.info == "userJoined"){
 
     $('.listeParticipant ul')
-      .append('<li><img alt="'+message.data.firstname+'" src="'+message.data.image+'" /></li>')
+      .append('<li><img alt="'+message.data.firstname+'" src="'+message.data.image+'" data-user-id="'+message.data.id+'" /></li>')
       .parents('.listeParticipant')
       .jcarousel('reload');
 
@@ -992,17 +992,18 @@ function updateInAllDom(message){
 
     var image_precedente = message.datas.previous.image;
     var image_nouvelle   = message.datas.actual.image;
-    var user             = message.datas.user.firstname;
+    var user_firstname   = message.datas.user.firstname;
+    var user_id          = message.datas.user.id;
 
     console.log("On est dans l'update de l'image ! ");
 
-    var image_recherche  = $('img[src^="'+message.datas.previous.image+'"]');
+    var image_recherche  = $('img[src^="'+image_precedente+'"][data-user-id="'+user_id+'"]');
 
     if( image_recherche.length > 0 ){
 
       image_recherche.each(function(i, el){
         image_recherche.attr("src", image_nouvelle+'?'+Math.random());
-        console.log("Mise à jour de "+(i+1)+" images dans le dom ");
+        console.log("Mise à jour de "+(i+1)+" image(s) dans le dom ");
       });
 
     }    

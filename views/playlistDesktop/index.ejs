@@ -3,7 +3,7 @@
 	<section class="w400p left col-left">
 		<div class="topSidebar">
 			<div class="logo"></div>
-			<img class="playlistprofil" src="<%= session.User.image %>" alt="<%= session.User.firstname %>">
+			<img class="playlistprofil" src="<%= session.User.image %>" alt="<%= session.User.firstname %>" data-user-id="<%= session.User.id %>">
 			<h3 class="form-signin-heading txtcenter"><%= session.User.firstname %></h3>
 		</div>
 		<section class="line">
