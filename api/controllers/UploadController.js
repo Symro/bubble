@@ -87,12 +87,13 @@ module.exports = {
               // Stock le chemin de l'ancienne image
               var previous_img = user.image;
 
-              user.image = "/"+chemin_img_300;
+              user.image    = "/"+chemin_img_300;
 
               // Update l'URL de l'image de la session en cours de l'utilisateur
               //req.session.User.id = user.image;
 
-              user.save(function(err) {
+              user.save(function(err, s) {
+                if(err) return next(err);
 
                 // Log des actions
                 sails.controllers.log.info(req, res, next , {action:"UPLOAD", type:"IMAGE_USER", info:"SUCCESS"});
@@ -112,13 +113,15 @@ module.exports = {
                   }
                 });
 
+                // Retour de l'url de l'image pour màj JS dans le DOM
+                return res.json({
+                  path : "/"+chemin_img_300,
+                  old_path : previous_img
+                });
+
               });
 
-              // Retour de l'url de l'image pour màj JS dans le DOM
-              return res.json({
-                path : "/"+chemin_img_300,
-                old_path : previous_img
-              });
+
 
             });
 

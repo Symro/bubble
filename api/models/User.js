@@ -6,6 +6,8 @@
  * @docs		:: http://sailsjs.org/#!documentation/models
  */
 
+var bcrypt = require('bcrypt-nodejs');
+
 module.exports = {
 
 	schema:true,
@@ -50,7 +52,7 @@ module.exports = {
 		if (!values.password || values.password != values.confirmation) {
 			return next({err:["passwords doesn't match"]});
 		}
-		require('bcrypt-nodejs').hash(values.password, null, null, function(err, hash) {
+		bcrypt.hash(values.password, null, null, function(err, hash) {
 			if (err) return next(err);
 			values.password=hash;
 			next();
@@ -58,12 +60,19 @@ module.exports = {
 	},
 
 	beforeUpdate:function(values,next){
+		// vérifie la structure du password
+		// pour éviter que bcrypt hash à nouveau un mdp déjà hashé
 		if (values.password) {
-			require('bcrypt-nodejs').hash(values.password, null, null, function(err, hash) {
-				if (err) return next(err);
-				values.password = hash;
+			if(values.password.substring(0,3) == "$2a" && values.password.length > 30){
 				next();
-			});
+			}
+			else{
+				bcrypt.hash(values.password, null, null, function(err, hash) {
+					if (err) return next(err);
+					values.password = hash;
+					next();
+				});
+			}
 		}
 		else{
 			next();
