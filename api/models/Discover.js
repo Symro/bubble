@@ -7,15 +7,28 @@
 
 module.exports = {
 
-    schema:true,
-
     attributes:{
 
-        user:{
-            model:"user"
-        },
+        // user:{
+        //     model:"user"
+        // },
+
+        // ID de l'utilisateur qui a ajouté aux découvertes
+      	user: {
+		    collection: 'user',
+		    via: 'id',
+		    dominant:true
+		},
+
+        // song:{
+        //     model:"song"
+        // }
+
+        // ID du morceau ajouté aux découvertes
         song:{
-            model:"song"
+            collection: 'song',
+		    via: 'id',
+		    dominant:true
         }
 
     }

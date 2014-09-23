@@ -8,9 +8,10 @@
 module.exports = {
 
 	getDiscovery: function( req, res, next ){
+
 		Discover.find({user:req.session.User.id}).populate('song').exec(function getDiscoveries(err,songs){
-        console.dir(songs);
-    });
+            console.dir(songs);
+        });
 
 	},
 
@@ -38,13 +39,13 @@ module.exports = {
 
             if(err){            
                 // Log des actions
-                sails.controllers.log.info(req, res, next , {action:"ADD", type:"DISCOVER", info:"FAILED"});
+                //sails.controllers.log.info(req, res, next , {action:"ADD", type:"DISCOVER", info:"FAILED"});
 
                 return next(err);
             }
 
             // Log des actions
-            sails.controllers.log.info(req, res, next , {action:"ADD", type:"DISCOVER", info:"SUCCESS"});
+            //sails.controllers.log.info(req, res, next , {action:"ADD", type:"DISCOVER", info:"SUCCESS"});
 
             sails.sockets.broadcast(room,'message',{
                 verb:'update',
@@ -61,50 +62,53 @@ module.exports = {
 
 	showDiscovery: function (req, res, next) {
 
-		Discover.find().where({user:req.session.User.id}).populate('song').exec(function discoveryDisplay(err,discoveries){
+		Discover.find().where({ user:req.session.User.id }).populateAll().exec(function(err,discoveries){
 			if(err) return next(err);
 
-			var fullDiscoveries = discoveries;
+            console.log("showDiscovery");
+            console.dir(discoveries);
 
-			var nbDiscoveries1 = discoveries.length;
-			var nbDiscoveries2 = nbDiscoveries1-1;
+			// var fullDiscoveries = discoveries;
 
-			// Somme du nombre d'itération dans la boucle
-			var addition = (nbDiscoveries1*nbDiscoveries2)/2;
-			var additionBoucle = 0;
+			// var nbDiscoveries1 = discoveries.length;
+			// var nbDiscoveries2 = nbDiscoveries1-1;
 
-			if (err) return next(err);
+			// // Somme du nombre d'itération dans la boucle
+			// var addition = (nbDiscoveries1*nbDiscoveries2)/2;
+			// var additionBoucle = 0;
 
-			if (discoveries.length == 0){
-				return res.view('playlistMobile/partials/discovery',{
-					discoveries:{},
-					layout: null
-				});
-			}
+			// if (err) return next(err);
+
+			// if (discoveries.length == 0){
+			// 	return res.view('playlistMobile/partials/discovery',{
+			// 		discoveries:{},
+			// 		layout: null
+			// 	});
+			// }
 
 
-			// récupère les info d'utilisateur qui avait ajouté le morceau
-			discoveries.forEach(function (doc, i){
-                if(doc.song){
-                    User.find({
-                        id : doc.song.user
-                    }).exec( function foundUsersHistoric(err,users){
-                    	if(err) return next(err);
+			// // récupère les info d'utilisateur qui avait ajouté le morceau
+			// discoveries.forEach(function (doc, i){
+   //              if(doc.song){
+   //                  User.find({
+   //                      id : doc.song.user
+   //                  }).exec( function foundUsersHistoric(err,users){
+   //                  	if(err) return next(err);
 
-                    	// Pour chaque utilisateur on l'ajoute au JSON
-                        fullDiscoveries[i].song.userInfo = users[0];
-                        additionBoucle += i;
-                        // Quand tout est fini, on retourne le JSON final
-                        if(additionBoucle == addition){
-    						return res.view('playlistMobile/partials/discovery',{
-    							discoveries:fullDiscoveries,
-    							layout: null
-    						});
-    	               	}
-                   	});
-                }
+   //                  	// Pour chaque utilisateur on l'ajoute au JSON
+   //                      fullDiscoveries[i].song.userInfo = users[0];
+   //                      additionBoucle += i;
+   //                      // Quand tout est fini, on retourne le JSON final
+   //                      if(additionBoucle == addition){
+   //  						return res.view('playlistMobile/partials/discovery',{
+   //  							discoveries:fullDiscoveries,
+   //  							layout: null
+   //  						});
+   //  	               	}
+   //                 	});
+   //              }
 
-            });
+   //          });
 
 		});
 	},
