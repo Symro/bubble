@@ -43,19 +43,34 @@ module.exports = {
             var songsWithStatusWaiting = _.where(songs, function(chr) {  return chr.songStatus == "waiting";  });
             var songsWithStatusPlayed  = _.where(songs, function(chr) {  return chr.songStatus == "played";   });
 
-
             sails.log.info("Il y a "+ songsWithStatusPlaying.length +" morceau(x) en lecture");
             sails.log.info("Il y a "+ songsWithStatusWaiting.length +" morceau(x) en attente");
             sails.log.info("Il y a "+ songsWithStatusPlayed.length  +" morceau(x) déjà joués");
+
+
             
+            // AUCUN MORCEAU EN LECTURE
             if(songsWithStatusPlaying.length == 0){
                 sails.log.info("Pas de morceau en cours de lecture dans la playlist");
+
+                // VÉRIFICATION DES MORCEAUX EN ATTENTE
+                if(songsWithStatusWaiting.length > 1){
+                    console.log(songsWithStatusWaiting.length+" en attente... on devrait lancer un morceau non..?");
+
+                    sails.controllers.song.waiting2playing(songsWithStatusWaiting, req.route.params.url);
+
+                }
+
+
             }
+
+
+            // 1 MORCEAU EN LECTURE !? on lance/relance le player
             else if(songsWithStatusPlaying.length == 1){
                 sails.log.info("1 morceau en cours de lecture dans la playlist");
 
                 setTimeout(function(){
-                    console.log("SongController.js / checkSongStatus : Reprise de la playlist à l'endroit où elle s'était arrêtée");
+                    console.log("SongController.js / checkSongStatus : Reprise de la playlist à l'endroit où elle s'été arrêtée");
 
                     // affichage player sur desktop + lancement du son (1er son ajouté de toute la playlist)
                     sails.sockets.broadcast(req.route.params.url,'message',{
@@ -68,10 +83,13 @@ module.exports = {
                 }, 2000);
 
             }
+
+
+            // PLUS D'1 MORCEAU EN LECTURE.. Lancement de la réparation
             else if(songsWithStatusPlaying.length > 1){
                 sails.log.warn("SongController.js / checkSongStatus : quelque chose ne va pas !");
                 console.log("APPEL de playing2waiting");
-                sails.controllers.song.playing2waiting(songsWithStatusPlaying);
+                sails.controllers.song.playing2waiting(songsWithStatusPlaying, req.route.params.url);
             }
 
 
@@ -82,7 +100,8 @@ module.exports = {
 
     // Permet de réparer une playlist qui contiendrait plusieurs morceaux en lecture (songStatus à "playing")
     // @songs : OBJECT contenant les morceaux avec toutes les données
-    playing2waiting: function(songs){
+    // @url   : STRING contenant l'url de la playlist
+    playing2waiting: function(songs, url){
 
         if(songs && typeof(songs) == "object"){
             // Extrait le premier élement du tableau (qui doivent être triés par date >> .sort({ createdAt: 'asc'}) )
@@ -101,15 +120,113 @@ module.exports = {
                 // Modifie les morceaux de "playing" à "waiting"
                 Song.update({ id : songToConvert }, { songStatus : "waiting" }).exec(function(err, songsConverted){
                     sails.log.info(songsConverted.length + " morceaux réparées");
+                    
+                    setTimeout(function(){
+                        console.log("SongController.js / playing2waiting : Reprise de la playlist à l'endroit où elle s'été arrêtée");
+
+                        // affichage player sur desktop + lancement du son (1er son ajouté de toute la playlist)
+                        sails.sockets.broadcast(url ,'message',{
+                            verb:'add',
+                            device:'desktop',
+                            info:'startPlaying',
+                            datas:songToPlay[0]
+                        });
+                    },2000);
+
                 });
 
             }
         }
         else{
-            sails.log.warn("SongController.js / playing2waiting : paramètre vide ou invalide (!= object) ");
+            sails.log.warn("SongController.js / playing2waiting : paramètres vides ou invalides (!= object && string) ");
         }
 
     },
+
+
+    // Permet de passer au morceau suivant
+    // @songs : OBJECT contenant les morceaux en attente (triés du plus ancien au plus récent)
+    // @url   : STRING contenant l'url de la playlist
+    waiting2playing: function(songs, url){
+
+        if(songs && typeof(songs) == "object"){
+            // Extrait le premier élement du tableau (qui doivent être triés par date >> .sort({ createdAt: 'asc'}) )
+            songToPlay = songs.shift(); 
+
+            if(songToPlay){
+                // Modifie les morceaux de "waiting" à "playing"
+                Song.update({ id : songToPlay.id }, { songStatus : "playing" }).exec(function(err, song2Play){
+                    
+                    console.log("Morceau à jouer : ");
+                    console.dir(song2Play);
+                    return {
+                        error  : false,
+                        status : "converted",
+                        song   : song2Play
+                    }
+
+                });
+
+            }
+            else{
+                return { 
+                    error  : true, 
+                    status : "converting",  
+                    song  : songToPlay  
+                }
+            }
+        }
+        else{
+            sails.log.warn("SongController.js / waiting2playing : paramètres vides ou invalides (!= object && string) ");
+            
+            return {
+                error  : true,
+                status : "converting",
+                song   : undefined
+            }
+        }
+
+    },
+
+    // Permet de passer un morceau au status "joué"
+    // @songs : OBJECT contenant l'ID du morceau en lecture
+    // @url   : STRING contenant l'url de la playlist
+    playing2played: function(song, url){
+
+        if(song && typeof(song) == "object"){
+
+            // Modifie les morceaux de "playing" à "played"
+            Song.update({ id : song.id }, { songStatus : "played" }).exec(function(err, songPlayed){
+                if(err) return next(err);
+                
+                console.log("Morceau qui a été joué : ");
+                console.dir(songPlayed);
+
+                return {
+                    error  : false,
+                    status : "converted",
+                    song   : songPlayed
+                }
+
+            });
+
+        }
+        else{
+            sails.log.warn("SongController.js / playing2played : paramètres vides ou invalides (!= object && string) ");
+
+            return {
+                error  : true,
+                status : "converting",
+                song   : undefined
+            }
+
+        }
+
+    },
+
+
+
+
 
     add:function(req, res, next, songFromBubble){
         // Log son à ajouter
@@ -292,15 +409,20 @@ module.exports = {
 
         if(typeof(songId) != "undefined"){
 
+            // Passe le morceau du status Playing à Played
             Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId, url: room}).exec(function statusUpdated(err, song){
                 if(err) return next(err);
-                console.log("SONG UPDATE playing > played where songId & room : "+song);
+                console.log("SongController.js / nextSong : UPDATE playing > played");
+
+
+                //console.log("APPEL checkSongStatus");
+                //sails.controllers.song.checkSongStatus(req, res, next);
+
 
                 Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').exec(function(err, song2) {
-                    // Error handling
                     if (err) return next(err);
 
-                    console.log("SONG FINDONE > played where songId & room : "+song2);
+                    console.log("SongController.js / nextSong : SONG FINDONE");
 
                     // S'il y a un morceau suivant à lire en BDD, on retourne le json qui lancera la lecture
                     if(typeof(song2) != "undefined"){
@@ -324,8 +446,6 @@ module.exports = {
                         var song2 = {songStatus:"undefined"};
                         return res.json(song2);
                     }
-
-
 
                 });
 
