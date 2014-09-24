@@ -93,7 +93,7 @@ module.exports = {
 
     	if(playlistUrl){
 	        // Affichage de la playlist
-				PlaylistDesktop.findOneByUrl(playlistUrl,function foundPlaylistDesktop(err,playlist){
+				PlaylistDesktop.findOneByUrl(playlistUrl).exec(function(err,playlist){
 					if (err) return next(err);
 					if (!playlist){
 						req.session.flash={

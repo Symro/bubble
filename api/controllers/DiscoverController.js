@@ -15,27 +15,20 @@ module.exports = {
 
 	},
 
-	addDiscovery: function (req, res, next) { //Alex
-        var room = req.param('room');
-        var ajout = {};
-        ajout.song = req.param('song');
-        ajout.user = req.session.User.id;
+	addDiscovery: function (req, res, next) {
+        var songId          = req.param('song');
+        var roomId          = req.param('room');
+        var songInitialUser = req.param('songInitialUser');
+        var userId          = req.session.User.id;
 
-        // Discover.create(ajout).exec(function discoveryAdded(err, song){
-        // 	if(err) return res.json({error:true, message:err});
+        // Préparation des champs à ajouter en BDD
+        var ajout = {
+          song            : songId,
+          user            : userId,
+          songInitialUser : songInitialUser
+        }
 
-        //     sails.sockets.broadcast(room,'message',{
-        //         verb:'update',
-        //         device:'desktop',
-        //         info:'songLiked',
-        //         datas:{}
-        //     });
-
-        // 	return res.json({error:false, message:"ok"});
-
-        // });
-
-        Discover.findOrCreate({user:req.session.User.id,song:req.param('song')},ajout).exec(function discoveryAdded(err, song){
+        Discover.create(ajout).exec(function discoveryAdded(err, song){
 
             if(err){            
                 // Log des actions
@@ -45,9 +38,9 @@ module.exports = {
             }
 
             // Log des actions
-            //sails.controllers.log.info(req, res, next , {action:"ADD", type:"DISCOVER", info:"SUCCESS"});
+            sails.controllers.log.info(req, res, next , {action:"ADD", type:"DISCOVER", info:"SUCCESS"});
 
-            sails.sockets.broadcast(room,'message',{
+            sails.sockets.broadcast(roomId,'message',{
                 verb:'update',
                 device:'desktop',
                 info:'songLiked',
@@ -62,55 +55,19 @@ module.exports = {
 
 	showDiscovery: function (req, res, next) {
 
-		Discover.find().where({ user:req.session.User.id }).populateAll().exec(function(err,discoveries){
+		Discover.find().where({ user: req.session.User.id }).populateAll().exec(function(err,discoveries){
 			if(err) return next(err);
 
-            console.log("showDiscovery");
-            console.dir(discoveries);
+            // console.log("showDiscovery");
+            // console.dir(discoveries);
 
-			// var fullDiscoveries = discoveries;
-
-			// var nbDiscoveries1 = discoveries.length;
-			// var nbDiscoveries2 = nbDiscoveries1-1;
-
-			// // Somme du nombre d'itération dans la boucle
-			// var addition = (nbDiscoveries1*nbDiscoveries2)/2;
-			// var additionBoucle = 0;
-
-			// if (err) return next(err);
-
-			// if (discoveries.length == 0){
-			// 	return res.view('playlistMobile/partials/discovery',{
-			// 		discoveries:{},
-			// 		layout: null
-			// 	});
-			// }
-
-
-			// // récupère les info d'utilisateur qui avait ajouté le morceau
-			// discoveries.forEach(function (doc, i){
-   //              if(doc.song){
-   //                  User.find({
-   //                      id : doc.song.user
-   //                  }).exec( function foundUsersHistoric(err,users){
-   //                  	if(err) return next(err);
-
-   //                  	// Pour chaque utilisateur on l'ajoute au JSON
-   //                      fullDiscoveries[i].song.userInfo = users[0];
-   //                      additionBoucle += i;
-   //                      // Quand tout est fini, on retourne le JSON final
-   //                      if(additionBoucle == addition){
-   //  						return res.view('playlistMobile/partials/discovery',{
-   //  							discoveries:fullDiscoveries,
-   //  							layout: null
-   //  						});
-   //  	               	}
-   //                 	});
-   //              }
-
-   //          });
+            return res.view('playlistMobile/partials/discovery',{
+              discoveries:discoveries,
+              layout: null
+            });
 
 		});
+    
 	},
 
 	deleteDiscovery: function (req,res,next){

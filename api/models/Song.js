@@ -7,8 +7,6 @@
 
 module.exports = {
 
-    schema:true,
-
     attributes:{
 
         songService:{

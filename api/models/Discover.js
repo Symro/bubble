@@ -13,7 +13,7 @@ module.exports = {
         //     model:"user"
         // },
 
-        // ID de l'utilisateur qui a ajouté aux découvertes
+        // ID de l'utilisateur qui a ajouté aux découvertes (like)
       	user: {
 		    collection: 'user',
 		    via: 'id',
@@ -29,6 +29,11 @@ module.exports = {
             collection: 'song',
 		    via: 'id',
 		    dominant:true
+        },
+
+        // ID de l'utilisateur qui à l'origine du morceau liké
+        songInitialUser:{
+            model:"user"
         }
 
     }
