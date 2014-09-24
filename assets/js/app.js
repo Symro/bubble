@@ -386,8 +386,23 @@ function updateInDom(message){
             alert('The sound '+this.id+' finished playing.');
             playerDesktop.destruct();
             next_song();
+          },
+          onload: function() {
+            if (this.readyState == 2) {
+              // TODO
+              alert("Désolé, ce morceau est introuvable sur le serveur");
+              playerDesktop.destruct();
+              next_song();
+            }
           }
+
         });
+
+        soundManager.ontimeout(function(status){
+            alert('SM2 failed to start. Flash missing, blocked or security error?');
+            alert('The status is ' + status.success + ', the error type is ' + status.error.type);
+        });
+
 
         // Pause du lecteur
         $('.player_play_pause').on("click", function(){
@@ -810,7 +825,7 @@ function removeInAllDom(message){
       },
       this.updatePosition = function(info){
         // réceptionne un objet content : info.position + info.duration
-        console.log('playerDesktop >> updatePosition');
+        //console.log('playerDesktop >> updatePosition');
         if(!this.initDone){
           this.init();
         }
@@ -869,12 +884,12 @@ function removeInAllDom(message){
 
 
 function updateInMobileDom(message){
-  console.log("updateInMobileDom, message :  ");
-  console.dir(message);
+  // console.log("updateInMobileDom, message :  ");
+  // console.dir(message);
 
   if(message.info == "playerPosition"){
-    console.log("updateInMobileDom - playerPosition");
-    console.dir(message.datas);
+    // console.log("updateInMobileDom - playerPosition");
+    // console.dir(message.datas);
 
     // Variable globale "currentPlaylist" présente en temps réél sur Mobile
     currentPlaylist = message.datas.currentPlaylist;

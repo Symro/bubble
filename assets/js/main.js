@@ -372,86 +372,104 @@ $(document).ready(function(){
 	// }
 
 	// Ajout d'un son à une playlist
-	$('.search').on('click', '.results li', function(e){
-		e.preventDefault();
-		var event = e;
-		var $this = $(this);
+	$('.search').off().on('click', '.results li', function(e){
+		e.stopPropagation();
+		var eventItem 	= e;
+		var $this 		= $(this);
+		var modal 		= $('.confirmSongModal');
+		var results 	= $(".search .results li");
 
-		$('.confirmSongModal').addClass('visible');
-
-		$('.confirmSongModal').on('click','div a:first-child()',function(e){
-			e.preventDefault();
-			e.stopPropagation();
-			$('.confirmSongModal').removeClass('visible');
-		});
-		$('.confirmSongModal').on('click','div a:last-child()',function(e){
-			e.preventDefault();
-			e.stopPropagation();
-			$('.confirmSongModal').removeClass('visible');
-			designInteraction($this, event);
-		});
+		if(modal.hasClass("visible")){
+			hideModal();
+		}
+		else{
+			showModal($this, eventItem);
+		}
 
 	});
 
+	function showModal(that, eventItem){
+		var modal 		= $('.confirmSongModal');
 
-	function designInteraction( $this, $e ){
-		// Design d'interaction
+		modal.addClass('visible');
+		that.addClass('selected').attr("data-top", eventItem.currentTarget.offsetTop);
+	}
+
+	function hideModal(){
+		var modal 		= $('.confirmSongModal');
+		var results 	= $(".search .results li");
+
+		modal.removeClass('visible');
+		results.removeClass('selected').attr("data-top", "");
+	}
+
+
+	$('.confirmSongModal').on('click','div a[data-confirm="false"]',function(e){
+		e.preventDefault();
+		hideModal();
+	});
+
+	$('.confirmSongModal').on('click','div a[data-confirm="true"]',function(e){
+		e.preventDefault();
+		var results 	= $(".search .results li");
+		var that 		= results.filter(".selected");
+
+		designInteraction(that);
+		hideModal();
+	});
+
+	// Design d'interaction
+	function designInteraction( $this ){
 
 		$('#sent').empty();
  		var $img 	= $this.children('img');
  		var $left 	= $img.offset().left;
- 		var $top 	= $e.currentTarget.offsetTop+10;
+ 		var $top 	= parseInt($this.data("top")) + 10;
 
 		// Récupération des datas
-			$datas = {
-				songTrackId: 		$this.data("songid"),
-				songTrackName: 		$this.data("song"),
-				songService: 		$this.data("songservice"),
-				songTrackArtist: 	$this.data("songartist"),
-				songTrackDuration: 	$this.data("songduration"),
-				songPermalinkUrl: 	$this.data("permalink"),
-				songSongUrl: 		$this.data("songurl")
-			}
+		$datas = {
+			songTrackId 		: 	$this.data("songid"),
+			songTrackName		: 	$this.data("song"),
+			songService 		: 	$this.data("songservice"),
+			songTrackArtist 	: 	$this.data("songartist"),
+			songTrackDuration 	: 	$this.data("songduration"),
+			songPermalinkUrl 	: 	$this.data("permalink"),
+			songSongUrl 		: 	$this.data("songurl")
+		}
 
-			console.dir($datas);
+		// Animation de la pochette d'album
+		$img
+			.addClass('invisible')
+			.clone()
+			.appendTo('#sent')
+			.toggleClass('invisible rond')
+			.css({
+				'position':'absolute',
+				'left': $left,
+				'top':  $top,
+				'display':'block'
+			})
+			.animate({
+				'left':'50%',
+				'margin-left':"-"+$img.width()/2
+			}, 1000, function(){
+				$this.slideUp();
+				$(this).animate({
+					'top':$top-$(window).height()
+				}, 200, function(){
+					// $(this).remove();
+					$(this).hide();
 
-			// Envoi des datas au controller
-			// socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas,img:$img.attr('src')} ,function( datas ) {
- 		// 		console.log(datas);
-			// });
+					// Envoie des datas au controller
+					socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas,img:$img.attr('src')} ,function( datas ) {
+		 				console.log(datas);
+					});
 
-			$img
- 				.addClass('invisible')
- 				.clone()
- 				.appendTo('#sent')
- 				.toggleClass('invisible rond')
- 				.css({
- 					'position':'absolute',
- 					'left': $left,
- 					'top':  $top,
- 					'display':'block'
- 				})
- 				.animate({
- 					'left':'45vw'
- 				}, 1000, function(){
- 					$this.slideUp();
- 					$(this).animate({
- 						'top':$e.currentTarget.offsetTop-$(window).height()
- 					}, 200, function(){
-
- 						// $(this).remove();
- 						// Envoi des datas au controller
- 						$(this).hide();
-
-						socket.post( "/mobile/playlist/"+user.room+"/add",{song:$datas,img:$img.attr('src')} ,function( datas ) {
-			 				console.log(datas);
-						});
-
- 					});
- 				});
+				});
+			});
 	}
 
-	// Supression d'un son ajouté par sois-même
+	// Supression d'un son ajouté par soi-même
 	$('body').on('click','.current-playlist .song .delete',function(event){
 		event.stopPropagation();
 		$songId=$(this).parent().data("id");

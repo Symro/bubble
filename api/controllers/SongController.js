@@ -72,6 +72,7 @@ module.exports = {
                 setTimeout(function(){
                     console.log("SongController.js / checkSongStatus : Reprise de la playlist à l'endroit où elle s'été arrêtée");
 
+                    console.dir(songsWithStatusPlaying);
                     // affichage player sur desktop + lancement du son (1er son ajouté de toute la playlist)
                     sails.sockets.broadcast(req.route.params.url,'message',{
                         verb:'add',
