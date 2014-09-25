@@ -55,10 +55,13 @@ module.exports = {
 								// On compte le nombre de morceaux présents dans la playlist qu'on vient de rejoindre
 								// (en cas d'url direct)
 					       		Song.find().populate('url').where({url:playlistUrl}).populate('user').exec(function countSongs(err, songs){
+									if (err) return next(err);
+
 									console.log("Nb de song dans la playlist : "+songs);
 									// S'il n'y a aucun morceau, on informe le desktop que songs est null
 									console.log(typeof(songs));
 
+									// On check l'host de la playlist
 									sails.controllers.song.checkHostPlaylist(req, res, next);
 
 							    	return res.view('playlistDesktop/index',{
@@ -87,10 +90,13 @@ module.exports = {
 							// On compte le nombre de morceaux présents dans la playlist qu'on vient de rejoindre
 							// (en cas d'url direct)
 					        Song.find().populate('url').where({url:playlistUrl}).populate('user').exec(function countSongs(err, songs){
+								if (err) return next(err);
+
 								console.log("Nb de song dans la playlist : "+songs);
 								// S'il n'y a aucun morceau, on informe le desktop que songs est null
 								console.log(typeof(songs));
 
+								// On check l'host de la playlist
 								sails.controllers.song.checkHostPlaylist(req, res, next);
 
 							    return res.view('playlistDesktop/index',{

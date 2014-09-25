@@ -78,6 +78,14 @@ window.isDesktop = ($("body").hasClass('desktop')) ? true : false;
       
     });
 
+    // Rejoindre la room avec son socket ID
+    if(typeof(user) != "undefined" && user.room != "false"){
+      var device = (isDesktop === true) ? "desktop" : "mobile";
+      socket.get('/desktop/playlist/'+user.room+'/joined', { device:device }, function(response) {
+        console.log(response);
+      });
+    }
+
 
     ///////////////////////////////////////////////////////////
     // Here's where you'll want to add any custom logic for
@@ -431,7 +439,7 @@ function updateInDom(message){
 
       this.updatePosition = function(info){
         // réceptionne un objet content : info.position + info.duration
-        console.log('playerDesktop >> updatePosition');
+        // console.log('playerDesktop >> updatePosition');
 
         player_circle.val( (parseFloat(info.position)/1000).toFixed(2) ).trigger('change');
         player_circle.trigger(
@@ -446,7 +454,7 @@ function updateInDom(message){
 
       this.sendPosition = function(info){
         // Envoie la position du player via socket pour le mobile
-        console.log('playerDesktop >> sendPosition');
+        // console.log('playerDesktop >> sendPosition');
         socket.post('/desktop/playlist/'+user.room+'/playerPosition' , {
             position : (info.position) ? (parseFloat(info.position)/1000).toFixed(2) : 0,
             duration : (info.duration) ? (parseFloat(info.duration)/1000).toFixed(2) : 0,

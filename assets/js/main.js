@@ -37,14 +37,6 @@ $(document).ready(function(){
 		socket.get('/desktop/playlist/'+user.room+'/joinedUsers', function(data){
 //			//console.log(data);
 
-
-		});
-
-		// L'utilisateur vient d'arriver, il demande informe les autres participants
-		socket.get('/desktop/playlist/'+user.room+'/joined', function(response) {
-		  // do something
-		  //console.log(response);
-
 		});
 
 		// Initialisation jCarousel
@@ -62,13 +54,13 @@ $(document).ready(function(){
 
 
 	// L'utilisateur vient d'arriver, il informe les autres participants et rejoint sa room
-	socket.get('/desktop/playlist/'+user.room+'/joined', function(response) {
+	// socket.get('/desktop/playlist/'+user.room+'/joined', function(response) {
 
-		if (response.count != 0 ){
-		  	$('section.current-playlist').removeClass('invisible');
-		}
+	// 	if (response.count != 0 ){
+	// 	  	$('section.current-playlist').removeClass('invisible');
+	// 	}
 
-	});
+	// });
 
 
 	/* --------------------------------------------------------- */
