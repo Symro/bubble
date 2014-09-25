@@ -140,9 +140,9 @@ module.exports.routes = {
     controller:'Song',
     action:'add'
   },
-  'post /mobile/playlist/:url/addFromBubble':{
+  'post /mobile/playlist/:url/addFromDiscoveries':{
     controller:'Song',
-    action:'addFromBubble'
+    action:'addFromDiscoveries'
   },
   'post /mobile/playlist/:url/remove':{
     controller:'Song',

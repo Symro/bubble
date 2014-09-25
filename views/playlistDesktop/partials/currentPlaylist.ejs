@@ -4,7 +4,7 @@
 
 		<% _.each(songs, function (song){ %>
 			
-			<li data-id="<%= song.songTrackId %>" data-db-id="<%= song.id %>">
+			<li data-id="<%= song.songTrackId %>" data-db-id="<%= song.id %>" class="<%= (song.songStatus == "played") ? "played" : "" %>" >
 				<div data-songService="<%= song.songService %>" data-songId="<%= song.songTrackId %>">
 
 					<strong><%= song.songTrackName %></strong>

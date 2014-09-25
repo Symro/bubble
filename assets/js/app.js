@@ -375,7 +375,10 @@ function updateInDom(message){
           url: "http://api.soundcloud.com/tracks/"+track.songTrackId+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb",
 
           whileplaying: function(){
-            console.log(this);
+            //console.log(this);
+
+            player_track_artist.text(track.songTrackArtist);
+            player_track_name.text(track.songTrackName);
 
             that.updatePosition({
               position: this.position, 
@@ -396,6 +399,7 @@ function updateInDom(message){
             next_song();
           },
           onload: function() {
+
             if (this.readyState == 2) {
               // TODO
               alert("Désolé, ce morceau est introuvable sur le serveur");
@@ -405,12 +409,6 @@ function updateInDom(message){
           }
 
         });
-
-        soundManager.ontimeout(function(status){
-            alert('SM2 failed to start. Flash missing, blocked or security error?');
-            alert('The status is ' + status.success + ', the error type is ' + status.error.type);
-        });
-
 
         // Pause du lecteur
         $('.player_play_pause').on("click", function(){
@@ -423,17 +421,9 @@ function updateInDom(message){
           playerDesktop.setPosition(playerDesktop.duration-2000);
         });
 
-      }
+        // Permet de griser les morceaux déjà écoutés
+        $('li[data-db-id="'+track.id+'"]').prevAll("li").addClass('played');
 
-
-      this.updateInfo = function(track){
-        console.log('playerDesktop >> updateInfo');
-        console.dir(track);
-
-        // player_track_name.html(track.songTrackName);
-        // player_track_artist.html(track.songTrackArtist);
-
-        // TODO
 
       }
 
@@ -495,37 +485,38 @@ function updateInDom(message){
 
     var likeContainer    = $('.player_track_like span');
     var dislikeContainer = $('.player_track_dislike span');
+    var player_track_name   = $(".player_track_name");
+    var player_track_artist = $(".player_track_artist");
 
     console.log("Envoie socket.put avec id = "+currentPlaylist.id);
     socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
       console.log("Reponse : ");
       console.dir(response);
       if(response.songStatus != "undefined"){
-        currentPlaylist = response;
+          currentPlaylist = response;
 
-        // Remet le compteur de like & dislike à zéro
-        player_desktop.like.nb = 0;
-        player_desktop.dislike.nb = 0;
+          // Remet le compteur de like & dislike à zéro
+          player_desktop.like.nb = 0;
+          player_desktop.dislike.nb = 0;
 
-        // currentLike = 0; TODELETE
-        // currentDislike.count = 0; TODELETE
-        likeContainer.text(player_desktop.like.nb);
-        dislikeContainer.text(player_desktop.dislike.nb);
+          // Lancement de la musique
+          player_desktop.playSoundCloud(currentPlaylist);
 
-        // Lancement musique suivante
-        // player(currentPlaylist); TODELETE
-        player_desktop.playSoundCloud(currentPlaylist);
+          // currentLike = 0; TODELETE
+          // currentDislike.count = 0; TODELETE
+          likeContainer.text(player_desktop.like.nb);
+          dislikeContainer.text(player_desktop.dislike.nb);
 
-        }
-        else{
+      }
+      else{
           // Pas de son à lire dans la playlist
           console.log(" AUCUN SONG A LIRE ");
           // stop_send_player_position(); TODELETE
 
-            // Masquage du player sur Desktop
-            var playerDesktopContainer = $('.desktop-container .player');
-            playerDesktopContainer.addClass('invisible');
-        }
+          // Masquage du player sur Desktop
+          var playerDesktopContainer = $('.desktop-container .player');
+          playerDesktopContainer.addClass('invisible');
+      }
 
     });
 
@@ -588,7 +579,7 @@ function addInDesktopDom(message){
     //currentPlaylist.push(message.datas.song);
 
     // affichage DOM
-    $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.song.songTrackId+'"><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><img src="'+message.datas.userImg+'" alt=""></div></li>');
+    $('#playlistencours ul').append('<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"><div data-songService="'+message.datas.song.songService+'" data-songId="'+message.datas.song.songTrackId+'"><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><img src="'+message.datas.userImg+'" alt="" data-user-id="'+message.datas.song.user+'"></div></li>');
     // console.log('j"affiche '+message.datas.song.songTrackName);
 
     // cache de variable

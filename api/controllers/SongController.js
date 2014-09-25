@@ -536,7 +536,7 @@ module.exports = {
 
     addFromBubble:function(req,res,next){
         console.log('add from historic');
-        var songId=req.param('song');
+        var songId = req.param('song');
         console.log("___addFromBubble songId : "+songId);
 
         Song.findOneBySongTrackId(songId).exec(function(err,song){
