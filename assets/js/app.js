@@ -359,20 +359,31 @@ function updateInDom(message){
         }
       }
 
-      this.playSoundCloud = function(track){
-        console.log('playerDesktop >> playSoundCloud');
+      this.playSound = function(track){
+        console.log('playerDesktop >> playSound');
         var that = this;
+        var url;
 
         // On check si le cercle Knob est initialisé.
         if(!this.initDone){
           this.init();
         }
 
+
+        if(track.songService == "soundcloud"){
+          url = "http://api.soundcloud.com/tracks/"+track.songTrackId+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb";
+        }
+        else{
+          url = track.songSongUrl;
+        }
+
+        console.log(url);
+
         window.playerDesktop = soundManager.createSound({
           id: 'bubble_player',
           autoLoad: true,
           // useful for URLs without obvious filetype extensions
-          url: "http://api.soundcloud.com/tracks/"+track.songTrackId+"/stream?client_id=933d179a29049bde6dd6f1c2db106eeb",
+          url: url,
 
           whileplaying: function(){
             //console.log(this);
@@ -500,7 +511,7 @@ function updateInDom(message){
           player_desktop.dislike.nb = 0;
 
           // Lancement de la musique
-          player_desktop.playSoundCloud(currentPlaylist);
+          player_desktop.playSound(currentPlaylist);
 
           // currentLike = 0; TODELETE
           // currentDislike.count = 0; TODELETE
@@ -556,13 +567,13 @@ function addInDesktopDom(message){
     $('.playlistInfo').hide();
 
     // Lancement musique sur le player Desktop
-    if(currentPlaylist.songService == "soundcloud"){
+    //if(currentPlaylist.songService == "soundcloud"){
       var player_desktop = new PlayerDesktop();
-      player_desktop.playSoundCloud(currentPlaylist);
-    }
-    else{
-      console.log("Lecture d'une plateforme différente de Soundcloud.. feature COMING SOON");
-    }
+      player_desktop.playSound(currentPlaylist);
+    //}
+    //else{
+    //  console.log("Lecture d'une plateforme différente de Soundcloud.. feature COMING SOON");
+    //}
 
     // Supprime la classe "Active" des boutons pour permettre de voter à nouveau
     var $btnLike    = $('#song-like');
@@ -972,7 +983,7 @@ function updateInDesktopDom(message){
               // Lancement musique suivante
               console.log(currentPlaylist);
               // player(currentPlaylist); TODELETE
-              player_desktop.playSoundCloud(currentPlaylist);
+              player_desktop.playSound(currentPlaylist);
 
               }
               else{
