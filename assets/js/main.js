@@ -475,57 +475,39 @@ $(document).ready(function(){
 	});
 
 
-	$('body').on('click','.deleteDiscovery' ,function(event){ //Alex
-		event.preventDefault();
-		var $this = $(this);
-		var id = $(this).next().data("id");
-		console.log("id : "+id);
-
-		socket.post( "/mobile/discovery/"+id ,function( datas ) {
-			console.log(datas);
-			console.log("on va delete");
-
-			$this.parent().slideUp(300, function(){
-				console.log('ca delete !');
-				$this.remove();
-			});
-
-		});
-
-	});
-
-	// Suppression secondaire des découvertes
-	$('body').on('click','.deleteSecondDiscovery',function(e){
+	// Suppression des découvertes
+	$('body').on('click','.deleteDiscovery, .deleteSecondDiscovery', function(e){
 		e.preventDefault();
+		var $this = $(this);
+		var li = $this.parents("li[data-discover-id]");
+		var id = li.data("discover-id");
 
-		$this=$(this);
-		$id=$(this).parent().data('id');
+		socket.post( "/mobile/discovery/"+id, function(response) {
 
-		socket.post( "/mobile/discovery/"+$id ,function( datas ) {
-			// console.log(datas);
-			console.log("on va delete");
-			console.log($this.parents('.discoveryAction').prev());
-			$this.parents('li').slideUp(300, function(){
-				console.log('ca delete !');
-				// $this.remove();
-			});
-			$this.parents('.discoveryAction').prev().slideUp(300, function(){
-				console.log('ca delete !');
-				// $this.remove();
-			});
+			if(response){
+				if(response.status == "ok"){
+					li.slideUp(300, function(){
+						li.remove();
+					});
+				}
+				else{
+					alert("Erreur : la découverte n'a pas été supprimée");
+				}
+			}
 
 		});
 
 	});
+
 
 
 	// Ajout aux découvertes depuis historique
 	$('.historic').on('click','.historicToDiscoveries',function(e){
 
-		$song=$(this).parent().data('track-id');
-		console.log($song);
+		var song = $(this).parent().data('track-id');
+		console.log(song);
 
-		socket.post( "/mobile/discovery",{song:$song, room:user.room} ,function(datas){
+		socket.post( "/mobile/discovery",{song:song, room:user.room} ,function(datas){
 
 			// console.log(datas);
 
@@ -536,26 +518,27 @@ $(document).ready(function(){
 	// Ajout à la playlist en cours depuis l'historique
 	$('.historic').on('click','.historicToPlaylist',function(e){
 
-		var song = $(this).parent().data('track-id');
+		//var song = $(this).parent().data('track-id');
 
-		socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:song} ,function(datas){
+		//socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:song} ,function(datas){
 
 			// console.log(datas);
 
-		});
+		//});
 
 	});
 
-	// Ajout à la playlist en cours depuis desicoveries
+	// Ajout à la playlist en cours depuis les découvertes
 	$('.discoveries').on('click','.discoveriesToPlaylist',function(e){
 
-		var song = $(this).parent().data('track-id');
+		// Récupère l'ID unique du morceau
+		var song = $(this).parents("li[data-song-id]").data('song-id');
 
-		socket.post( "/mobile/playlist/"+user.room+"/addFromBubble",{song:song} ,function(datas){
-
-			// console.log(datas);
-
-		});
+		if(typeof(user) != "undefined" && user.room != "false"){
+			socket.post( "/mobile/playlist/"+user.room+"/addFromDiscoveries",{song:song} ,function(datas){
+				// console.log(datas);
+			});
+		}
 
 	});
 

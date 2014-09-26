@@ -254,11 +254,17 @@ module.exports = {
             }
 
             if (songFromBubble != undefined) {
-                console.log('ajout par histo');
+                console.log('SongController.js / add : Ajout par historic ou discoveries');
+                // Assigne les propriétés du morceau à la variable song
                 var song    = songFromBubble;
+                // Supprimer la propriété ID qui doit être générée par MongoDB
+                delete song['id'];
+                // Assigne une image par défaut
                 var img     = '/images/icon_music.png';
-                // console.dir(songFromBubble);
-            }else{
+
+                console.dir(songFromBubble);
+            }
+            else{
                 console.log('ajout normal');
                 var song    = req.param('song');
                 var img     = req.param('img');
@@ -534,15 +540,17 @@ module.exports = {
 
     },
 
-    addFromBubble:function(req,res,next){
-        console.log('add from historic');
+    addFromDiscoveries:function(req,res,next){
         var songId = req.param('song');
-        console.log("___addFromBubble songId : "+songId);
 
-        Song.findOneBySongTrackId(songId).exec(function(err,song){
+        console.log('SongController.js / addFromDiscoveries '+ songId);
+
+        Song.findOne(songId).exec(function(err,song){
             if(err) return next(err);
+
             console.dir(song);
             sails.controllers.song.add(req,res,next,song);
+            
         });
 
     }

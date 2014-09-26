@@ -707,17 +707,8 @@ function removeInMobileDom(message){
     });
   }
 
-  // Suppression d'une découverte
-  if(message.info == 'discoveryRemoved') {
 
-      var deleteDiscovery = $('.discoveries ul > li div').filter('[data-id='+message.datas.discoveryId+']');
-      var li = deleteDiscovery.parent();
 
-      li.slideUp(function(){
-        li.remove();
-      });
-
-  }
 
 }
 

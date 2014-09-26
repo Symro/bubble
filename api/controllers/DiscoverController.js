@@ -58,8 +58,8 @@ module.exports = {
 		Discover.find().where({ user: req.session.User.id }).populateAll().exec(function(err,discoveries){
 			if(err) return next(err);
 
-            // console.log("showDiscovery");
-            // console.dir(discoveries);
+            //console.log("showDiscovery");
+            //console.dir(discoveries);
 
             return res.view('playlistMobile/partials/discovery',{
               discoveries:discoveries,
@@ -71,26 +71,28 @@ module.exports = {
 	},
 
 	deleteDiscovery: function (req,res,next){
-		console.log("on est ds deleteDiscovery");
 		var discoveryId = req.param('id');
+
+        console.log("DiscoverController.js / deleteDiscovery : Suppression de "+discoveryId);
 
 		Discover.destroy({ id:discoveryId }).exec(function discoveryDestroyed(err,song) {
         	if (err){
                 // Log des actions
                 sails.controllers.log.info(req, res, next , {action:"REMOVE", type:"DISCOVER", info:"FAILED"});
-                return next(err);
+                // Retourne une erreur
+                return res.json({
+                    status:"error",
+                    id:discoveryId
+                });
             }
-        	console.log("suppression de : " );
-        	console.dir(song);
 
             // Log des actions
             sails.controllers.log.info(req, res, next , {action:"REMOVE", type:"DISCOVER", info:"SUCCESS"});
 
-        	sails.sockets.broadcast(req.route.params.url,'message',{
-                verb:'delete',
-                device:'mobile',
-                info:'discoveryRemoved',
-                datas:{discoveryId:discoveryId}
+            // Retourne un succès + id découverte à supprimer
+            return res.json({
+                status:"ok",
+                id:discoveryId
             });
 
         });
