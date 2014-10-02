@@ -1,8 +1,8 @@
-<% if(joinedUsers.lenght != 0){ %>
+<% if(joinedUsers.length > 1){ %>
 	<ul>
 		<% _.each(joinedUsers, function (joined) { %>
 		
-		<li><img src="<%= joined.user.image %>" alt="<%= joined.user.firstname %>" data-user-id="<%= joined.user.id %>"></img></li>
+		<li><img src="<%= joined.image %>" alt="<%= joined.firstname %>" data-user-id="<%= joined.id %>"></img></li>
 
 		<% }) %>
 	</ul>

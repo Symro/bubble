@@ -32,25 +32,56 @@ module.exports = {
 		    }
 
 			// Ajoute l'utilisateur à la collection (table) JOIN
-			// (s'il n'est pas déjà présent)
-			CheckJoined = Join.findOneByPlaylistUrl(playlistUrl);
-			CheckJoined.where({'user':req.session.User.id});
-			CheckJoined.exec(function callback(err,results){
+			Join.findOrCreate({ playlist:playlistUrl }, { playlist:playlistUrl } ).exec(function callback(err,results){
 				if(err) return next(err);
-				if(!results){
-					Join.create({
-						user:req.session.User.id,
-						playlistUrl:playlistUrl,
-						playlist:playlistUrl
-					}).exec(function cb(err,created){
-						if(err) return next(err);
-					  	console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
+				if(results){
 
-						// Récupère la liste des participants à la room pour transmettre à la vue
-					  	Join.findByPlaylistUrl( playlistUrl ).populate('user').exec(function foundJoinedUsers(err, users){
-							if (err) return next(err);
-							if (!users){ joinedUsers = {}	}
-							else{ joinedUsers = users;		}
+					Join.find({ where : { playlist: playlistUrl} }).populate("user").exec(function(err, joined){
+						// Ajout des utilisateurs dans la variable destinée au template
+						joinedUsers = joined[0].user;
+
+						var userAlreadyExists = _.where(joinedUsers, function(chr) {  return chr.id == req.session.User.id;   });
+						sails.log.info("PlaylistDesktopController / index : userAlreadyExists length : "+userAlreadyExists.length);
+
+						if(userAlreadyExists.length != 0){
+							sails.log.info("PlaylistDesktopController / index : userAlreadyExists log : ");
+							console.dir(userAlreadyExists[0]);
+
+							// On compte le nombre de morceaux présents dans la playlist qu'on vient de rejoindre
+							// (en cas d'url direct)
+				       		Song.find().populate('url').where({url:playlistUrl}).populate('user').exec(function countSongs(err, songs){
+								if (err) return next(err);
+
+								console.log("Nb de song dans la playlist : "+songs);
+								// S'il n'y a aucun morceau, on informe le desktop que songs est null
+								console.log(typeof(songs));
+
+								// On check l'host de la playlist
+								sails.controllers.song.checkHostPlaylist(req, res, next);
+
+								sails.log.info("PlaylistDesktopController / index : joinedUsers log : ");
+								console.dir(joinedUsers);
+
+						    	return res.view('playlistDesktop/index',{
+									playlist 	: playlist,
+									joinedUsers : joinedUsers,
+									room 		: playlistUrl,
+									songs 		: songs
+								});
+
+							});
+						}
+						else{
+							sails.log.warn("PlaylistDesktopController / index : userDoesn't exist !");
+							sails.log.info("PlaylistDesktopController / index : ajout dans table JOIN !");
+
+							results.user.add(req.session.User.id);
+							results.save(function(err, s){
+								if(err) return next(err);
+								
+								joinedUsers = s.user;
+
+								console.dir(joinedUsers);
 
 								// On compte le nombre de morceaux présents dans la playlist qu'on vient de rejoindre
 								// (en cas d'url direct)
@@ -75,41 +106,81 @@ module.exports = {
 
 							});
 
-					});
-				}
 
+						}	
+
+					});
+
+
+
+
+					// results.user.add(req.session.User.id);
+					// results.save(function(err, s){
+					// 	if(err) return next(err);
+						
+					// 	joinedUsers = s.user;
+
+					// 	console.dir(joinedUsers);
+
+					// 	// On compte le nombre de morceaux présents dans la playlist qu'on vient de rejoindre
+					// 	// (en cas d'url direct)
+			  //      		Song.find().populate('url').where({url:playlistUrl}).populate('user').exec(function countSongs(err, songs){
+					// 		if (err) return next(err);
+
+					// 		console.log("Nb de song dans la playlist : "+songs);
+					// 		// S'il n'y a aucun morceau, on informe le desktop que songs est null
+					// 		console.log(typeof(songs));
+
+					// 		// On check l'host de la playlist
+					// 		sails.controllers.song.checkHostPlaylist(req, res, next);
+
+					//     	return res.view('playlistDesktop/index',{
+					// 			playlist 	: playlist,
+					// 			joinedUsers : joinedUsers,
+					// 			room 		: playlistUrl,
+					// 			songs 		: songs
+					// 		});
+
+					// 	});
+
+					// });
+
+
+				}
 				else{
+
+					console.log("ELSE !! ..........");
 
 					// Récupère la liste des participants à la room pour transmettre à la vue
 					// ... bon ok ici on se répète..
-				  	Join.findByPlaylistUrl( playlistUrl ).populate('user').exec(function foundJoinedUsers(err, users){
-						if (err) return next(err);
-						if (!users){ joinedUsers = {}	}
-						else{ joinedUsers = users;		}
+				 //  	Join.findByPlaylistUrl( playlistUrl ).populate('user').exec(function foundJoinedUsers(err, users){
+					// 	if (err) return next(err);
+					// 	if (!users){ joinedUsers = {}	}
+					// 	else{ joinedUsers = users;		}
 
-							// On compte le nombre de morceaux présents dans la playlist qu'on vient de rejoindre
-							// (en cas d'url direct)
-					        Song.find().populate('url').where({url:playlistUrl}).populate('user').exec(function countSongs(err, songs){
-								if (err) return next(err);
+					// 		// On compte le nombre de morceaux présents dans la playlist qu'on vient de rejoindre
+					// 		// (en cas d'url direct)
+					//         Song.find().populate('url').where({url:playlistUrl}).populate('user').exec(function countSongs(err, songs){
+					// 			if (err) return next(err);
 
-								console.log("Nb de song dans la playlist : "+songs);
-								// S'il n'y a aucun morceau, on informe le desktop que songs est null
-								console.log(typeof(songs));
+					// 			console.log("Nb de song dans la playlist : "+songs);
+					// 			// S'il n'y a aucun morceau, on informe le desktop que songs est null
+					// 			console.log(typeof(songs));
 
-								// On check l'host de la playlist
-								sails.controllers.song.checkHostPlaylist(req, res, next);
+					// 			// On check l'host de la playlist
+					// 			sails.controllers.song.checkHostPlaylist(req, res, next);
 
-							    return res.view('playlistDesktop/index',{
-									playlist 	: playlist,
-									joinedUsers : joinedUsers,
-									room 		: playlistUrl,
-									songs 		: songs
-								});
+					// 		    return res.view('playlistDesktop/index',{
+					// 				playlist 	: playlist,
+					// 				joinedUsers : joinedUsers,
+					// 				room 		: playlistUrl,
+					// 				songs 		: songs
+					// 			});
 
 
-							});
+					// 		});
 
-					});
+					// });
 
 				}
 			}); // FIN -- CheckJoined.exec

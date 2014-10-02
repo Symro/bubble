@@ -116,7 +116,7 @@ module.exports.routes = {
     action: 'show'
   },
 
-  'get /mobile/discover':{
+  'get /mobile/discovery':{
     controller:'Discover',
     action: 'showDiscovery'
   },
@@ -131,7 +131,7 @@ module.exports.routes = {
     action:'deleteDiscovery'
   },
 
-  'get /mobile/playlist/:url/historic':{
+  'get /mobile/historic':{
     controller:'Historic',
     action: 'getHistoric'
   },

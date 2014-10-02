@@ -55,7 +55,7 @@ module.exports = {
 
 	showDiscovery: function (req, res, next) {
 
-		Discover.find().where({ user: req.session.User.id }).populateAll().exec(function(err,discoveries){
+		Discover.find({ where: { user: req.session.User.id } }).populateAll().exec(function(err,discoveries){
 			if(err) return next(err);
 
             //console.log("showDiscovery");

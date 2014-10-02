@@ -11,12 +11,20 @@ module.exports = {
 
     attributes:{
 
+        // user:{
+        //     model:'user'
+        // },
+        // playlistUrl:{
+        //     type:'string',
+        //     required:true
+        // },
+        // playlist:{
+        //     model:'playlistDesktop'
+        // }
+
         user:{
-            model:'user'
-        },
-        playlistUrl:{
-            type:'string',
-            required:true
+            collection: 'user',
+            via: 'id'
         },
         playlist:{
             model:'playlistDesktop'

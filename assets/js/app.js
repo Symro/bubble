@@ -753,7 +753,7 @@ function removeInAllDom(message){
             break;
           case 1:
             nav.children('a').removeClass('visible').filter(':nth-child(2)').addClass("visible");
-            $.get( "/mobile/discover", {userId:user.id}, function( data ) {
+            $.get( "/mobile/discovery", function( data ) {
               //console.dir(data);
               $('.discoveries').html(data);
             });
@@ -761,14 +761,23 @@ function removeInAllDom(message){
             break;
           case 2:
             nav.children('a').removeClass('visible');
-            $.get( "/mobile/playlist/"+user.room+"/historic", {userId:user.id}, function( data ) {
-              //console.log(data);
-              $('.historic').html(data);
-            });
+
 
             break;
         }
+      },
+      onFirstInit: function(swiper){
+
+
+
+      },
+      onSwiperCreated: function(swiper){
+        $.get( "/mobile/historic", function( data ) {
+          //console.log(data);
+          $('.historic').html(data);
+        });
       }
+
     }); 
 
 

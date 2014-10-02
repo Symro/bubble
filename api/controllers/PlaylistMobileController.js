@@ -47,20 +47,19 @@ module.exports = {
 	    	else{
 
 		    	// Ajoute l'utilisateur à la collection (table) JOIN
-				// S'il n'est pas déjà présent
-				CheckJoined = Join.findOneByPlaylistUrl(playlistUrl);
-				CheckJoined.where({'user':req.session.User.id});
-				CheckJoined.exec(function callback(err,results){
+				Join.find({ where: {playlist: playlistUrl} }).populate('user').exec(function callback(err,results){
 					if(err) return next(err);
-					if(!results){
-						Join.create({
-							user:req.session.User.id,
-							playlistUrl:playlistUrl,
-							playlist:playlistUrl
-						}).exec(function cb(err,created){
-						  	console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
+					if(results){
+						sails.log.info("results Join.find().populate('playlist',{playlist:playlistUrl})");
+						console.dir(results);
 
-						  	// Log des actions
+						results[0].user.add(req.session.User.id);
+						results[0].save(function(err, s){
+							if(err) return next(err);
+							sails.log.info("results save : ");
+							console.dir(s);
+
+							// Log des actions
 							sails.controllers.log.info(req, res, next , {action:"JOIN", type:"PLAYLIST", info:playlistUrl});
 
 						  	sails.sockets.broadcast(playlistUrl, 'message' , {
@@ -72,11 +71,13 @@ module.exports = {
 
 						    // Redirection vers l'affichage de la playlist
 		       				res.redirect('/mobile/playlist/'+playlistUrl);
+
 						});
+
 					}
 					else{
-						console.log('User : '+req.session.User.id+' ( '+req.session.User.firstname+' ) --> Joined : '+playlistUrl);
-						res.redirect('/mobile/playlist/'+playlistUrl);
+						console.log('PlaylistMobileController.js / join : pas de result');
+						//res.redirect('/mobile/playlist/'+playlistUrl);
 					}
 				});
 
