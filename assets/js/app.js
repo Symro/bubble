@@ -547,10 +547,20 @@ function addInDesktopDom(message){
 
   if(message.info == "userJoined"){
 
-    $('.listeParticipant ul')
-      .append('<li><img alt="'+message.data.firstname+'" src="'+message.data.image+'" data-user-id="'+message.data.id+'" /></li>')
-      .parents('.listeParticipant')
-      .jcarousel('reload');
+    var ul = $('.listeParticipant ul');
+    var id = message.data.id;
+    var userAlreadyJoin = ul.find("img[data-user-id='"+id+"']");
+
+    if(userAlreadyJoin.length === 0){
+      ul.append('<li><img alt="'+message.data.firstname+'" src="'+message.data.image+'" data-user-id="'+id+'" /></li>')
+        .parents('.listeParticipant')
+        .jcarousel('reload');
+    }
+    else{
+      console.log(message.data.firstname+" participe déjà à la playlist");
+    }
+
+
 
   }
   else if(message.info == "startPlaying"){

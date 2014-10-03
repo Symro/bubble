@@ -50,29 +50,49 @@ module.exports = {
 				Join.find({ where: {playlist: playlistUrl} }).populate('user').exec(function callback(err,results){
 					if(err) return next(err);
 					if(results){
-						//sails.log.info("results Join.find().populate('playlist',{playlist:playlistUrl})");
-						//console.dir(results);
+						// sails.log.info("PlaylistMobileController.js / join : results Join.find().populate ");
+						// console.dir(results);
 
-						results[0].user.add(req.session.User.id);
-						results[0].save(function(err, s){
-							if(err) return next(err);
-							sails.log.info("results save : ");
-							console.dir(s);
+						// On regarde si l'ID de l'utilisateur est déjà présent dans la table JOIN
+						var userAlreadyExists = _.where(results[0].user, function(chr) {  return chr.id == req.session.User.id;   });
 
-							// Log des actions
-							sails.controllers.log.info(req, res, next , {action:"JOIN", type:"PLAYLIST", info:playlistUrl});
+						if(userAlreadyExists.length != 0){
+								// Log des actions
+								sails.controllers.log.info(req, res, next , {action:"JOIN", type:"PLAYLIST", info:playlistUrl});
 
-						  	sails.sockets.broadcast(playlistUrl, 'message' , {
-						    	verb 	: "add",
-						    	device 	: "desktop",
-						    	info 	: "userJoined",
-						    	data 	: { id:req.session.User.id, firstname: req.session.User.firstname, image: req.session.User.image }
-						    });
+							  	sails.sockets.broadcast(playlistUrl, 'message' , {
+							    	verb 	: "add",
+							    	device 	: "desktop",
+							    	info 	: "userJoined",
+							    	data 	: { id:req.session.User.id, firstname: req.session.User.firstname, image: req.session.User.image }
+							    });
 
-						    // Redirection vers l'affichage de la playlist
-		       				res.redirect('/mobile/playlist/'+playlistUrl);
+							    // Redirection vers l'affichage de la playlist
+			       				res.redirect('/mobile/playlist/'+playlistUrl);
+						}
+						// L'utilisateur n'a jamais rejoint cette playlist : Enregistrement en BDD
+						else{
+							results[0].user.add(req.session.User.id);
+							results[0].save(function(err, s){
+								if(err) return next(err);
+								sails.log.info("results save : ");
+								console.dir(s);
 
-						});
+								// Log des actions
+								sails.controllers.log.info(req, res, next , {action:"JOIN", type:"PLAYLIST", info:playlistUrl});
+
+							  	sails.sockets.broadcast(playlistUrl, 'message' , {
+							    	verb 	: "add",
+							    	device 	: "desktop",
+							    	info 	: "userJoined",
+							    	data 	: { id:req.session.User.id, firstname: req.session.User.firstname, image: req.session.User.image }
+							    });
+
+							    // Redirection vers l'affichage de la playlist
+			       				res.redirect('/mobile/playlist/'+playlistUrl);
+
+							});
+						}
 
 					}
 					else{

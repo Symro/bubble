@@ -22,7 +22,7 @@ module.exports = {
 
 			// On recherche tous les playlists que l'utilisateur a rejoint, avec toutes les infos qui vont
 			// bien grâce au populateAll()
-			Join.find({ playlist: userJoinedPlaylistId }).populateAll().sort({ createdAt: 'desc'}).exec(function(err, infoPlaylist){
+			Join.find({ playlist: userJoinedPlaylistId }).populateAll().sort({ createdAt: 'desc'}).limit(10).exec(function(err, infoPlaylist){
 
 				return res.view('playlistMobile/partials/historic',{
 					moment   : moment,
