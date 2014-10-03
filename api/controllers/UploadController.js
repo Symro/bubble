@@ -86,12 +86,11 @@ module.exports = {
 
               // Stock le chemin de l'ancienne image
               var previous_img = user.image;
+              // Stock le chemin de la nouvelle image
+              var new_img      = "/"+chemin_img_300;
 
-              user.image    = "/"+chemin_img_300;
-
-              // Update l'URL de l'image de la session en cours de l'utilisateur
-              //req.session.User.id = user.image;
-
+              user.image  = new_img;
+              
               user.save(function(err, s) {
                 if(err) return next(err);
 
@@ -105,7 +104,7 @@ module.exports = {
                     image:previous_img
                   },
                   actual:{
-                    image:"/"+chemin_img_300
+                    image:new_img
                   },
                   user:{
                     id : user.id,
@@ -113,9 +112,12 @@ module.exports = {
                   }
                 });
 
+                // Update l'URL de l'image de la session en cours de l'utilisateur
+                req.session.User.image = new_img;
+
                 // Retour de l'url de l'image pour màj JS dans le DOM
                 return res.json({
-                  path : "/"+chemin_img_300,
+                  path : new_img,
                   old_path : previous_img
                 });
 

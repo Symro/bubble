@@ -124,7 +124,7 @@
 			<figure id="uploadPicture">
 				<!--<?php require('partials/upload.html'); ?>-->
 
-				<img src="<%= session.User.image %>" alt="<%= session.User.firstname %>" />
+				<img src="<%= session.User.image %>?<%= Math.random() %>" alt="<%= session.User.firstname %>" />
 				<figcaption><%= session.User.firstname %></figcaption>
 				<div class="error"></div>
 			</figure>

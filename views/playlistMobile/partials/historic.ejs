@@ -14,7 +14,7 @@
 						<ul>
 							<% _.each(histo.user, function (user) { %>
 								<li class="">
-									<img class="userImg" src="<%= user.image %>" alt="<%= user.firstname %>">
+									<img class="userImg" src="<%= user.image %>" data-user-id="<%= user.id %>" alt="<%= user.firstname %>">
 								</li>
 							<% }); %>
 						</ul>

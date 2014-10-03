@@ -50,8 +50,8 @@ module.exports = {
 				Join.find({ where: {playlist: playlistUrl} }).populate('user').exec(function callback(err,results){
 					if(err) return next(err);
 					if(results){
-						sails.log.info("results Join.find().populate('playlist',{playlist:playlistUrl})");
-						console.dir(results);
+						//sails.log.info("results Join.find().populate('playlist',{playlist:playlistUrl})");
+						//console.dir(results);
 
 						results[0].user.add(req.session.User.id);
 						results[0].save(function(err, s){
