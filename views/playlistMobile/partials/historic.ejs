@@ -6,25 +6,16 @@
 
 			<li class="playlistHist" data-historic-url="<%= histo.playlist.url %>">
 				<h4><a href="<%= histo.playlist.url %>"><%= histo.playlist.name %></a></h4>
-				<%
-					var playlistDate = dateFormat(histo.playlist.createdAt);
-
-					function dateFormat(date) {
-					    var d = date.getDate();
-					    var m = date.getMonth() + 1;
-					    var y = date.getFullYear();
-					    return (d <= 9 ? '0' + d : d) + '/' + (m<=9 ? '0' + m : m) + '/' + y;
-					}
-
-				%>
-				<span><%= playlistDate %></span>
+				<span><%= moment(histo.playlist.createdAt).format('DD/MM/YYYY') %></span>
 				<img src="<%= histo.playlist.image %>" alt="<%= histo.playlist.name %>" class="playlistImg">
 				<div class="wrapperUsers">
 					<i class="icon-flecheg listeUsers-backward"></i>
 					<div class="listeUsers">
 						<ul>
-							<% _.each(histo.users, function (users) { %>
-								<li class=""><img class="userImg" src="<%= users.user.image %>" alt="<%= users.user.firstname %>"><div class="error"></div></li>
+							<% _.each(histo.user, function (user) { %>
+								<li class="">
+									<img class="userImg" src="<%= user.image %>" alt="<%= user.firstname %>">
+								</li>
 							<% }); %>
 						</ul>
 					</div>

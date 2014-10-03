@@ -9,17 +9,23 @@ module.exports = {
 
 	// Retourne la liste des participants à une playlist Bubble
 	joinedUsers: function(req, res, next){
+		var url = req.param('url');
 
-		Join.findByPlaylistUrl( req.param('url') ).populate('user').exec(function foundJoinedUsers(err, users){
+		if(url){
 
-			if (err) return next(err);
-			if (!users) return next();
+			Join.find({ playlist: req.param('url') }).populate('user').exec(function foundJoinedUsers(err, users){
 
-			console.log('on est là : JoinController.js > joinedUsers >> *findByUrl*  ');
+				if (err) return next(err);
+				if (!users) return next();
+
+				console.log('on est là : JoinController.js > joinedUsers >> *findByUrl*  ');
+				console.dir(users);
 
 				return res.json({joinedUsers:users});
 
-		});
+			});
+
+		}
 
 	},
 
