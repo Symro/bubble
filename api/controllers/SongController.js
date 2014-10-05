@@ -349,7 +349,7 @@ module.exports = {
     					verb:'add',
     					device:'mobile',
     					info:'songAdded',
-    					datas:{song:song, userImg:user.image}
+    					datas:{song:song, id:added.id, userImg:user.image}
     				});
 
     				// Ajout DOM desktop
@@ -371,17 +371,19 @@ module.exports = {
 
     remove:function(req,res,next){
 
+        sails.log('suppression son');
+
         // Récupération id song
         var songId  = String(req.param('song'));
-        var service = req.param('service');
+        sails.log(songId);
 
-        Song.findOneBySongTrackId(songId).exec(function FindSong (err, song) {
+        Song.findOne({where:{id:songId}}).exec(function FindSong (err, song) {
             if (err) return next(err);
             // Can delete only waiting songs
             if (song.songStatus === 'waiting') {
 
                 // Suprresion du son ciblé
-                Song.destroy({songTrackId:songId, songService:service ,url:req.route.params.url}).exec(function getSong(err,song){
+                Song.destroy({id:songId, url:req.route.params.url}).exec(function getSong(err,song){
                     console.log("song supprimé !");
                     // console.dir(song);
 
