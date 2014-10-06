@@ -371,21 +371,18 @@ module.exports = {
 
     remove:function(req,res,next){
 
-        sails.log('suppression son');
-
         // Récupération id song
         var songId  = String(req.param('song'));
-        sails.log(songId);
 
+        // On recherche le son ciblé en bdd
         Song.findOne({where:{id:songId}}).exec(function FindSong (err, song) {
             if (err) return next(err);
-            // Can delete only waiting songs
+
+            // Vérifiation pour ne pas supprimer un son en cours de lecture ou déjà passé
             if (song.songStatus === 'waiting') {
 
                 // Suprresion du son ciblé
                 Song.destroy({id:songId, url:req.route.params.url}).exec(function getSong(err,song){
-                    console.log("song supprimé !");
-                    // console.dir(song);
 
                     // Suppression DOM mobile
                     sails.sockets.broadcast(req.route.params.url,'message',{
