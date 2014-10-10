@@ -93,6 +93,7 @@ $(document).ready(function(){
 
 				socket.post( "/mobile/playlist/"+user.room+"/dislike",{ song: currentPlaylist.id, room: user.room } ,function( datas ) {
 					console.log("Morceau Disliké !");
+					console.dir(datas);
 
 					if(!datas.error){
 						$btn.addClass('active');

@@ -40,6 +40,11 @@ module.exports = {
             type:"integer",
             defaultsTo: '0'
         },
+        songDislike:{
+            collection: 'user',
+            via: 'id',
+            dominant:true
+        },
         songStatus:{
             type:"string",
             defaultsTo: "waiting",

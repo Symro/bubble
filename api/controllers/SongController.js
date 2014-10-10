@@ -508,33 +508,71 @@ module.exports = {
 
     dislikeSong:function(req, res, next){
 
-        var room  = req.param('url');
-        var song  = req.param('song'); // BDD id ! et pas songTrackId
+        var room    = req.param('url');
+        var songId  = req.param('song'); // BDD id ! et pas songTrackId
 
-        Song.findOne({ where:{ id:song } }).exec(function(err, song) {
+        Song.findOne({ where:{ id:songId } }).populate("songDislike").exec(function(err, song) {
 
-            song.songCounter = parseInt(song.songCounter)+1;
-            song.save(function(err) {
-                if(err) return next(err);
+            // Stock les utilisateurs ayant disliké
+            var dislikeUsers = song.songDislike;
+            // Recherche si l'utilisateur connecté en fait parti
+            var userAlreadyDislike = _.where(dislikeUsers, function(chr) {  return chr.id == req.session.User.id;   });
+
+            // L'utilisateur a déjà voté !
+            if(userAlreadyDislike.length != 0){
+                console.log("SongController.js / dislikeSong : Tu as déjà voté !");
+                return res.json({
+                    "error": true,
+                    "info" : "AlreadyDislike"
+                });
+            }
+            // Ajoute le dislike au morceau en cours
+            else{
+
+                song.songDislike.add(req.session.User.id);
+                song.save(function(err, s){
+                    if(err) return next(err);
+
+                    // Récupère la liste à jour des utilisateurs ayant disliké
+                    Song.findOne({ where:{ id:songId } }).populate("songDislike").exec(function(err, songAfterSaved) {
+
+                        // Envoie d'une socket de dislike
+                        sails.sockets.broadcast(req.route.params.url,'message',{
+                            verb:'update',
+                            device:'desktop',
+                            info:'songDisliked',
+                            datas:{
+                                subscribers: sails.sockets.subscribers(room),
+                                user:{
+                                    firstname:req.session.User.firstname,
+                                    image:req.session.User.image
+                                }
+                            }
+                        });
+
+                        /* TO DO */
+                        /*
+                        retourner que les infos utiles 
+                        (firstname, id, image) rien de plus ! */
 
 
-                sails.sockets.broadcast(req.route.params.url,'message',{
-                    verb:'update',
-                    device:'desktop',
-                    info:'songDisliked',
-                    datas:{
-                        subscribers: sails.sockets.subscribers(room),
-                        user:{
-                            firstname:req.session.User.firstname,
-                            image:req.session.User.image
-                        }
-                    }
+                        console.log("SongController.js / dislikeSong : song");
+                        console.dir(songAfterSaved.songDislike);
+
+                        return res.json({
+                            "error": false,
+                            "info" : "OK",
+                            "datas": songAfterSaved.songDislike
+                        });
+
+                    });
+
                 });
 
-                return res.json(song);
+            }
 
 
-            });
+
 
         });
 
