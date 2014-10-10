@@ -536,28 +536,25 @@ module.exports = {
                     // Récupère la liste à jour des utilisateurs ayant disliké
                     Song.findOne({ where:{ id:songId } }).populate("songDislike").exec(function(err, songAfterSaved) {
 
+                        // Retourne que les infos utiles (firstname, id, image) rien de plus ! */
+                        _.forEach(songAfterSaved.songDislike, function(el){
+                            delete el.password;
+                            delete el.grade;
+                            delete el.status;
+                            delete el.createdAt;
+                            delete el.updatedAt;
+                        });
+
                         // Envoie d'une socket de dislike
                         sails.sockets.broadcast(req.route.params.url,'message',{
                             verb:'update',
                             device:'desktop',
                             info:'songDisliked',
                             datas:{
-                                subscribers: sails.sockets.subscribers(room),
-                                user:{
-                                    firstname:req.session.User.firstname,
-                                    image:req.session.User.image
-                                }
+                                subscribers : sails.sockets.subscribers(room),
+                                users       : songAfterSaved.songDislike
                             }
                         });
-
-                        /* TO DO */
-                        /*
-                        retourner que les infos utiles 
-                        (firstname, id, image) rien de plus ! */
-
-
-                        console.log("SongController.js / dislikeSong : song");
-                        console.dir(songAfterSaved.songDislike);
 
                         return res.json({
                             "error": false,
@@ -578,7 +575,25 @@ module.exports = {
 
     },
 
-    addFromDiscoveries:function(req,res,next){
+    checkDislikeSong: function(req, res, next){
+
+        var songId  = req.param('song');
+
+        Song.findOne({ where:{ id:songId } }).populate("songDislike").exec(function(err, song) {
+            // Stock les utilisateurs ayant disliké
+            var dislikeUsers = song.songDislike;
+            // Recherche si l'utilisateur connecté en fait parti
+            var userAlreadyDislike = _.where(dislikeUsers, function(chr) {  return chr.id == req.session.User.id;   });
+
+            // Retourne un json avec la variable dislike a TRUE ou FALSE
+            return (userAlreadyDislike.length != 0) ? res.json({"dislike" : true }) : res.json({"dislike" : false })
+
+        });
+
+
+    },
+
+    addFromDiscoveries:function(req, res, next){
         var songId = req.param('song');
 
         console.log('SongController.js / addFromDiscoveries '+ songId);

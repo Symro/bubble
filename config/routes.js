@@ -149,6 +149,10 @@ module.exports.routes = {
     action:'remove'
   },
 
+  'get /mobile/playlist/:url/dislike':{
+    controller:'Song',
+    action:'checkDislikeSong'
+  },
   'post /mobile/playlist/:url/dislike':{
     controller:'Song',
     action:'dislikeSong'

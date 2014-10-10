@@ -81,9 +81,11 @@ window.isDesktop = ($("body").hasClass('desktop')) ? true : false;
     // Rejoindre la room avec son socket ID
     if(typeof(user) != "undefined" && user.room != "false"){
       var device = (isDesktop === true) ? "desktop" : "mobile";
+
       socket.get('/desktop/playlist/'+user.room+'/joined', { device:device }, function(response) {
-        console.log(response);
+        console.dir(response);
       });
+
     }
 
 
@@ -409,8 +411,7 @@ function updateInDom(message){
             playerDesktop.destruct();
             next_song();
           },
-          onload: function() {
-
+          onload: function() {          
             if (this.readyState == 2) {
               // TODO
               alert("Désolé, ce morceau est introuvable sur le serveur");
@@ -794,7 +795,7 @@ function removeInAllDom(message){
     function PlayerMobile(){
       var player_circle  = $(".player_circle");
       var player_timing  = $(".player_timing");
-
+      
       this.dom = {
         player : '.player_circle',
         timer  : '.player_timing',
@@ -809,6 +810,8 @@ function removeInAllDom(message){
         nb : 0,
         user : {}
       },
+      this.initDislike = false,
+
       this.init = function(){
         console.log("Initialisation du Player Mobile");
 
@@ -857,6 +860,21 @@ function removeInAllDom(message){
                 "max": parseFloat(info.duration).toFixed(2)
             }
         );
+      },
+
+      this.checkDislike = function(){
+        var that = this;
+        // Ce code ne sera executé qu'une fois
+        if(that.initDislike != true){
+          // Vérifie si l'utilisateur n'a pas déjà voté
+          socket.get('/mobile/playlist/'+user.room+'/dislike', {song: currentPlaylist.id}, function(response){
+            that.initDislike = true;
+            // Si c'est le cas, on applique la classe active au bouton
+            if(response.dislike == true){
+                $('#song-dislike').addClass('active');
+            }
+          });
+        }
       }
 
     }  
@@ -915,6 +933,7 @@ function updateInMobileDom(message){
     currentPlaylist = message.datas.currentPlaylist;
 
     player_mobile.updatePosition({position: message.datas.position, duration: message.datas.duration });
+    player_mobile.checkDislike();
 
     // $(player_mobile.dom.player).val(parseInt(message.datas.position)).trigger("change");
     // $player.val(parseInt(message.datas.position)).trigger("change");
@@ -967,14 +986,13 @@ function updateInDesktopDom(message){
     var nbConnected = parseInt(message.datas.subscribers.length);
     nbConnected--; // Retire 1 (pour ne pas prendre en compte le Desktop)
 
-    // Incremente le nombre de dislike du morceau en lecture sur Desktop
-    player_desktop.dislike.nb++;
-    // currentDislike.count++; TODELETE 
+    // Ajuste le nombre de dislike du morceau en lecture sur Desktop
+    player_desktop.dislike.nb   = message.datas.users.length;
+    // On ajoute les infos concernant les utilisateurs qui ont disliké
+    player_desktop.dislike.user = message.datas.users;
 
     var dislikeContainer = $('.player_track_dislike span');
     dislikeContainer.html(player_desktop.dislike.nb);
-    // On ajoute quelques infos concernant l'utilisateur qui a disliké dans le tableau global currentDislike.user
-    currentDislike.users.push({firstname: message.datas.user.firstname, image: message.datas.user.image });
 
     console.log("Il y en a en tout "+nbConnected+" connectés et "+player_desktop.dislike.nb+" veulent passer le morceau");
 

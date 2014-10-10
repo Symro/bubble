@@ -91,7 +91,7 @@ $(document).ready(function(){
 
 			if($btn.hasClass('active') == false){
 
-				socket.post( "/mobile/playlist/"+user.room+"/dislike",{ song: currentPlaylist.id, room: user.room } ,function( datas ) {
+				socket.post( "/mobile/playlist/"+user.room+"/dislike", { song: currentPlaylist.id }, function( datas ) {
 					console.log("Morceau Disliké !");
 					console.dir(datas);
 
@@ -556,7 +556,7 @@ $(document).ready(function(){
 		var ul = $('.player_carousel_like_dislike_container ul');
 		ul.empty();
 
-		$.each( currentDislike.users , function( key, value ) {
+		$.each( player_desktop.dislike.user, function( key, value ) {
 			ul.append('<li><img src="'+value.image+'" alt="'+value.firstname+'"/></li>');
 		});
 
@@ -570,7 +570,7 @@ $(document).ready(function(){
         $('.player_carousel_like_dislike_backward').jcarouselControl({ target: '-=1',carousel: carousel });
 
 
-		(currentDislike.users.length > 3) ? carousel_forward.add(carousel_backward).removeClass('invisible') : carousel_forward.add(carousel_backward).addClass('invisible')
+		(player_desktop.dislike.user.length > 3) ? carousel_forward.add(carousel_backward).removeClass('invisible') : carousel_forward.add(carousel_backward).addClass('invisible')
 
 
 	});

@@ -128,16 +128,15 @@ module.exports = {
 
 				    PlaylistDesktop.find({url:playlist.url}).populate('songs').exec(function getSongs(err,songs){
 
-			    		// console.dir(songs);
-
-			    		// return res.json({playlist:songs});
 			    		sails.log(songs);
+
 			    		res.view({
-								playlist: playlist,
-								songs:songs,
-								room:playlistUrl,
-								layout: "layout_mobile"
-							});
+							playlist: playlist,
+							songs 	: songs,
+							room 	: playlistUrl,
+							layout 	: "layout_mobile"
+						});
+
 				    });
 
 				    // console.dir(playlist);
