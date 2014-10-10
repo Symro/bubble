@@ -54,7 +54,7 @@ module.exports = {
                 sails.log.info("Pas de morceau en cours de lecture dans la playlist");
 
                 // VÉRIFICATION DES MORCEAUX EN ATTENTE
-                if(songsWithStatusWaiting.length > 1){
+                if(songsWithStatusWaiting.length >= 1){
                     console.log(songsWithStatusWaiting.length+" en attente... on devrait lancer un morceau non..?");
 
                     sails.controllers.song.waiting2playing(songsWithStatusWaiting, req.route.params.url);
@@ -160,6 +160,14 @@ module.exports = {
                     
                     console.log("Morceau à jouer : ");
                     console.dir(song2Play);
+
+                    sails.sockets.broadcast(url,'message',{
+                        verb:'update',
+                        device:'desktop',
+                        info:'playNextSong',
+                        datas:song2Play
+                    });
+
                     return {
                         error  : false,
                         status : "converted",
@@ -409,52 +417,51 @@ module.exports = {
 
 
     nextSong:function(req, res, next){
-
         var songId = req.param('id');
         var room   = req.param('url');
+
         console.log("SongId : "+songId+" room : "+room);
 
         if(typeof(songId) != "undefined"){
 
             // Passe le morceau du status Playing à Played
-            Song.update({songStatus:"playing"},{songStatus:"played"}).where({id: songId, url: room}).exec(function statusUpdated(err, song){
+            Song.update({songStatus:"playing"},{songStatus:"played"}).where({ id: songId }).exec(function statusUpdated(err, song){
                 if(err) return next(err);
                 console.log("SongController.js / nextSong : UPDATE playing > played");
 
 
-                //console.log("APPEL checkSongStatus");
-                //sails.controllers.song.checkSongStatus(req, res, next);
+                console.log("APPEL checkSongStatus");
+                sails.controllers.song.checkSongStatus(req, res, next);
 
+                // Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').exec(function(err, song2) {
+                //     if (err) return next(err);
 
-                Song.findOne({ where:{ url:room, songStatus:"waiting" } }).sort('createdAt ASC').exec(function(err, song2) {
-                    if (err) return next(err);
+                //     console.log("SongController.js / nextSong : SONG FINDONE");
 
-                    console.log("SongController.js / nextSong : SONG FINDONE");
+                //     // S'il y a un morceau suivant à lire en BDD, on retourne le json qui lancera la lecture
+                //     if(typeof(song2) != "undefined"){
 
-                    // S'il y a un morceau suivant à lire en BDD, on retourne le json qui lancera la lecture
-                    if(typeof(song2) != "undefined"){
+                //         song2.songStatus = "playing";
+                //         song2.save(function(err) {
+                //             if(err) return next(err);
 
-                        song2.songStatus = "playing";
-                        song2.save(function(err) {
-                            if(err) return next(err);
+                //             sails.sockets.broadcast(req.route.params.url,'message',{
+                //                 verb:'update',
+                //                 device:'mobile',
+                //                 info:'resetLikeDislike',
+                //                 datas:song2
+                //             });
 
-                            sails.sockets.broadcast(req.route.params.url,'message',{
-                                verb:'update',
-                                device:'mobile',
-                                info:'resetLikeDislike',
-                                datas:song2
-                            });
+                //             return res.json(song2);
+                //         });
 
-                            return res.json(song2);
-                        });
+                //     }
+                //     else{
+                //         var song2 = {songStatus:"undefined"};
+                //         return res.json(song2);
+                //     }
 
-                    }
-                    else{
-                        var song2 = {songStatus:"undefined"};
-                        return res.json(song2);
-                    }
-
-                });
+                // });
 
             });
 
@@ -507,86 +514,90 @@ module.exports = {
     },
 
     dislikeSong:function(req, res, next){
-
         var room    = req.param('url');
         var songId  = req.param('song'); // BDD id ! et pas songTrackId
 
         Song.findOne({ where:{ id:songId } }).populate("songDislike").exec(function(err, song) {
+            if(err) return next(err);
 
-            // Stock les utilisateurs ayant disliké
-            var dislikeUsers = song.songDislike;
-            // Recherche si l'utilisateur connecté en fait parti
-            var userAlreadyDislike = _.where(dislikeUsers, function(chr) {  return chr.id == req.session.User.id;   });
+            if(song){
+                // Stock les utilisateurs ayant disliké
+                var dislikeUsers = song.songDislike;
+                // Recherche si l'utilisateur connecté en fait parti
+                var userAlreadyDislike = _.where(dislikeUsers, function(chr) {  return chr.id == req.session.User.id;   });
 
-            // L'utilisateur a déjà voté !
-            if(userAlreadyDislike.length != 0){
-                console.log("SongController.js / dislikeSong : Tu as déjà voté !");
-                return res.json({
-                    "error": true,
-                    "info" : "AlreadyDislike"
-                });
-            }
-            // Ajoute le dislike au morceau en cours
-            else{
+                // L'utilisateur a déjà voté !
+                if(userAlreadyDislike.length != 0){
+                    console.log("SongController.js / dislikeSong : Tu as déjà voté !");
+                    return res.json({
+                        "error": true,
+                        "info" : "AlreadyDislike"
+                    });
+                }
+                // Ajoute le dislike au morceau en cours
+                else{
 
-                song.songDislike.add(req.session.User.id);
-                song.save(function(err, s){
-                    if(err) return next(err);
+                    song.songDislike.add(req.session.User.id);
+                    song.save(function(err, s){
+                        if(err) return next(err);
 
-                    // Récupère la liste à jour des utilisateurs ayant disliké
-                    Song.findOne({ where:{ id:songId } }).populate("songDislike").exec(function(err, songAfterSaved) {
+                        // Récupère la liste à jour des utilisateurs ayant disliké
+                        Song.findOne({ where:{ id:songId } }).populate("songDislike").exec(function(err, songAfterSaved) {
 
-                        // Retourne que les infos utiles (firstname, id, image) rien de plus ! */
-                        _.forEach(songAfterSaved.songDislike, function(el){
-                            delete el.password;
-                            delete el.grade;
-                            delete el.status;
-                            delete el.createdAt;
-                            delete el.updatedAt;
-                        });
+                            // Retourne que les infos utiles (firstname, id, image) rien de plus ! */
+                            _.forEach(songAfterSaved.songDislike, function(el){
+                                delete el.password;
+                                delete el.grade;
+                                delete el.status;
+                                delete el.createdAt;
+                                delete el.updatedAt;
+                            });
 
-                        // Envoie d'une socket de dislike
-                        sails.sockets.broadcast(req.route.params.url,'message',{
-                            verb:'update',
-                            device:'desktop',
-                            info:'songDisliked',
-                            datas:{
-                                subscribers : sails.sockets.subscribers(room),
-                                users       : songAfterSaved.songDislike
-                            }
-                        });
+                            // Envoie d'une socket de dislike
+                            sails.sockets.broadcast(req.route.params.url,'message',{
+                                verb:'update',
+                                device:'desktop',
+                                info:'songDisliked',
+                                datas:{
+                                    subscribers : sails.sockets.subscribers(room),
+                                    users       : songAfterSaved.songDislike
+                                }
+                            });
 
-                        return res.json({
-                            "error": false,
-                            "info" : "OK",
-                            "datas": songAfterSaved.songDislike
+                            return res.json({
+                                "error": false,
+                                "info" : "OK",
+                                "datas": songAfterSaved.songDislike
+                            });
+
                         });
 
                     });
 
-                });
+                }
+
 
             }
-
-
-
 
         });
 
     },
 
     checkDislikeSong: function(req, res, next){
-
         var songId  = req.param('song');
 
         Song.findOne({ where:{ id:songId } }).populate("songDislike").exec(function(err, song) {
-            // Stock les utilisateurs ayant disliké
-            var dislikeUsers = song.songDislike;
-            // Recherche si l'utilisateur connecté en fait parti
-            var userAlreadyDislike = _.where(dislikeUsers, function(chr) {  return chr.id == req.session.User.id;   });
+            if(err) return next(err);
 
-            // Retourne un json avec la variable dislike a TRUE ou FALSE
-            return (userAlreadyDislike.length != 0) ? res.json({"dislike" : true }) : res.json({"dislike" : false })
+            if(song){
+                // Stock les utilisateurs ayant disliké
+                var dislikeUsers = song.songDislike;
+                // Recherche si l'utilisateur connecté en fait parti
+                var userAlreadyDislike = _.where(dislikeUsers, function(chr) {  return chr.id == req.session.User.id;   });
+
+                // Retourne un json avec la variable dislike a TRUE ou FALSE
+                return (userAlreadyDislike.length != 0) ? res.json({"dislike" : true }) : res.json({"dislike" : false })
+            }
 
         });
 

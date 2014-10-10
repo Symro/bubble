@@ -190,7 +190,7 @@ module.exports.routes = {
     action: 'joined'
   },
 
-  'put /desktop/playlist/:url':{
+  'post /desktop/playlist/:url/nextSong':{
     controller:'SongController',
     action: 'nextSong'
   },

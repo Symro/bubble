@@ -334,10 +334,12 @@ function updateInDom(message){
 
     /* GESTION PLAYER SOUNDMANAGER - DESKTOP */
     function PlayerDesktop(new_track){
-      var player_circle       = $(".player_circle");
-      var player_timing       = $(".player_timing");
-      var player_track_name   = $(".player_track_name");
-      var player_track_artist = $(".player_track_artist");
+      var player_circle             = $(".player_circle");
+      var player_timing             = $(".player_timing");
+      var player_track_name         = $(".player_track_name");
+      var player_track_artist       = $(".player_track_artist");
+      var player_like_container     = $('.player_track_like span');
+      var player_dislike_container  = $('.player_track_dislike span');     
 
       this.init = function(){
         var that = this;
@@ -478,6 +480,13 @@ function updateInDom(message){
       this.dislike = {
         nb    : 0,
         user  : []
+      }
+
+      this.resetLikeDislike = function(){
+        player_desktop.like.nb = 0;
+        player_desktop.dislike.nb = 0;
+        player_like_container.text(player_desktop.like.nb);
+        player_dislike_container.text(player_desktop.dislike.nb);
       }
 
 
@@ -1003,7 +1012,7 @@ function updateInDesktopDom(message){
         var dislikeContainer = $('.player_track_dislike span');
 
         // Socket au contrôleur songController.js
-        socket.put('/desktop/playlist/'+user.room , { id: currentPlaylist.id }, function (response) {
+        socket.post('/desktop/playlist/'+user.room+"/nextSong", { id: currentPlaylist.id }, function (response) {
 
             console.log('App.js > socket pour passer au morceau suivant');
             console.log(response);
@@ -1033,6 +1042,18 @@ function updateInDesktopDom(message){
         });
 
     }
+
+  }
+  if(message.info == "playNextSong"){
+    console.dir(message.datas);
+
+    currentPlaylist = message.datas;
+
+    // Remet le compteur de like & dislike à zéro
+    player_desktop.resetLikeDislike();
+
+    // Lance le nouveau morceau
+    player_desktop.playSound(currentPlaylist);
 
   }
 
