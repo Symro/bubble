@@ -67,7 +67,7 @@ $(document).ready(function(){
 	//  PARTIE DECOUVERTES
 	/* --------------------------------------------------------- */
 
-	action = {
+	var action = {
 
 		addToDiscovery:function(){
 			var $btn = $('#song-like');
@@ -102,7 +102,15 @@ $(document).ready(function(){
 				});
 			}
 
-		}
+		},
+
+        removeSongFromPlaylist:function($this){
+
+            // Récupération de l'id pour suppression
+            var $songId = $this.parent().data("db-id");
+            socket.post( "/mobile/playlist/"+user.room+"/remove",{song: $songId});
+
+        }
 
 	};
 
@@ -463,15 +471,10 @@ $(document).ready(function(){
 	}
 
 	// Supression d'un son ajouté par soi-même
-	$('body').on('click','.current-playlist .song .delete',function(event){
-		event.stopPropagation();
-		$songId=$(this).parent().data("id");
-		$songService=$(this).parent().data("songservice");
-		// $playlist=$(".wrapper").data('playlist-url');
+	$('body').on('click','.current-playlist .song .delete',function(e){
 
-		socket.post( "/mobile/playlist/"+user.room+"/remove",{song:$songId, service:$songService} ,function( datas ) {
-			// console.log(datas);
-		});
+		e.stopPropagation();
+		action.removeSongFromPlaylist($(this));
 
 	});
 

@@ -672,9 +672,9 @@ function addInMobileDom(message){
     var eltm = $('.song ul li').length;
 
     if (eltm == 0)
-      var insert = '<li data-id="'+message.datas.song.songTrackId+'" data-songService="'+message.datas.song.songService+'"><div class="action delete"></div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+duree+'</span><img src="'+message.datas.userImg+'"></div></li>'
+      var insert = '<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"data-songService="'+message.datas.song.songService+'"><div class="action delete"></div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+duree+'</span><img src="'+message.datas.userImg+'"></div></li>'
     else
-      var insert = '<li data-id="'+message.datas.song.songTrackId+'" data-songService="'+message.datas.song.songService+'"><div class="action delete">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+duree+'</span><img src="'+message.datas.userImg+'"></div></li>'
+      var insert = '<li data-id="'+message.datas.song.songTrackId+'"data-db-id="'+message.datas.id+'"data-songService="'+message.datas.song.songService+'"><div class="action delete">'+$i+'</div><div><strong>'+message.datas.song.songTrackName+'</strong><span>'+message.datas.song.songTrackArtist+'</span></div><div><span>'+duree+'</span><img src="'+message.datas.userImg+'"></div></li>'
 
 
     // affichage DOM
@@ -698,7 +698,7 @@ function removeInDesktopDom(message){
   if (message.info=='songRemoved') {
 
     // cible la musique à supprimer
-    var deleteSong = $('#playlistencours ul > li').filter('[data-id='+message.datas.songTrackId+']');
+    var deleteSong = $('#playlistencours ul > li').filter('[data-db-id='+message.datas.songTrackId+']');
 
     //console.log(deleteSong);
 
@@ -724,7 +724,7 @@ function removeInMobileDom(message){
   if (message.info == 'songRemoved') {
 
     // cible la musique à supprimer
-    var deleteSong = $('.current-playlist .song ul > li').filter('[data-id='+message.datas.songTrackId+']');
+    var deleteSong = $('.current-playlist .song ul > li').filter('[data-db-id='+message.datas.songTrackId+']');
 
     //console.log(deleteSong);
 

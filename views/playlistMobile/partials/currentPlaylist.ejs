@@ -1,14 +1,13 @@
 <% if(typeof(songs) != "undefined") { %>
 
 	<ul>
-
 	<% if(songs.length > 0) { %>
 
 		<% _.each(songs, function (playlist) { %>
 
 			<% _.each(playlist.songs, function (song) { %>
 
-			<li data-id="<%= song.songTrackId %>" data-songService="<%= song.songService %>">
+			<li data-id="<%= song.songTrackId %>" data-db-id="<%= song.id %>" data-songService="<%= song.songService %>">
 
 				<div class="action delete">
 					<% if (session.User.id == song.user && song.songStatus == 'waiting') { %>
