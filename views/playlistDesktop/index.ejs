@@ -1,15 +1,21 @@
-<div class="desktop-container">
 
+<div class="desktop-container">
 	<section class="w400p left col-left">
-		<div class="topSidebar">
+		<div class="accountLogIn">
+			<i class="icon-deezer active"></i>
+			<i class="icon-spotify"></i>
+		</div>
+		<div class="topSidebar txtcenter">
 			<div class="logo"></div>
 			<img class="playlistprofil" src="<%= session.User.image %>" alt="<%= session.User.firstname %>" data-user-id="<%= session.User.id %>">
-			<h3 class="form-signin-heading txtcenter"><%= session.User.firstname %></h3>
+			<h3 class="form-signin-heading "><%= session.User.firstname %></h3>
+			<a href=""><i class="icon-menu"></i></a>
+			<a class="topSidebarLogOut" href="">Log out</a>
 		</div>
 		<section class="line">
 			<aside class="mod left w50 txtcenter sidebar">
 				<h3>Bubble code</h3>
-				<h3><%= playlist.url %></h3>
+				<h3 class="bubbleCode"><%= playlist.url %></h3>
 			</aside>
 			<aside class="mod left w50 txtcenter sidebar">
 				<a href="/desktop/playlist/"><i class="icon-croixclosesuppr"></i>Close bubble</a>

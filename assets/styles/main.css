@@ -51,6 +51,10 @@ body {
   line-height: 1.5; /* adapt to your design */
 }
 
+button:hover{
+  cursor: pointer;
+}
+
 /* font-sizing for content */
 /* preserves vertical-rythm, thanks to http://soqr.fr/vertical-rhythm/ */
 p,
@@ -994,6 +998,7 @@ header {
 .form-signin{
   position:relative;
   margin-bottom:20px;
+
 }
 
 .form-signin-heading{
@@ -1002,6 +1007,7 @@ header {
   font-size: 1.5em;
   margin-bottom: 10px;
   line-height:1;
+  font-weight: normal;
 }
 .form-signin a:last-child{
   display:inline-block;
@@ -1205,9 +1211,9 @@ header {
 
 .confirmSongModal{
   -webkit-transform: scale(0,0);
--moz-transform: scale(0,0);
--ms-transform: scale(0,0);
-transform: scale(0,0);
+  -moz-transform: scale(0,0);
+  -ms-transform: scale(0,0);
+  transform: scale(0,0);
   position:fixed;
   width:80%; 
   left:10%;
@@ -1228,11 +1234,11 @@ transform: scale(0,0);
   margin: 0 auto;
 
 }
-.confirmSongModal div{
+.confirmSongModal div {
   border-top: solid 1px #b8b7b7;
   padding-top: 10px;
 }
-.confirmSongModal a{
+.confirmSongModal a {
   color:black;
   font-size: 20px;
   text-transform:uppercase;
@@ -1290,7 +1296,6 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
   color: rgba(255,255,255,0.8);
   font-family: 'SourceSansPro', sans-serif;
   font-size: 1.6em;
-
   background-color: transparent;
   border:none;
   border-radius:0;
@@ -1317,7 +1322,6 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
 .btn:hover{
   background-color: rgba(255,255,255,0.3);
 }
-
 
 .search button{
   width:100%;
@@ -1377,8 +1381,12 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
 
 /*********** DESKTOP - COL LEFT ***********/
 .col-left{
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0,0,0,0.6);
   min-height: 100%;
+  -moz-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.6);
+  -webkit-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.6);
+  -o-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.6);
+  box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.6);
 }
 .col-left h4{
   margin:10px 0 10px 0;
@@ -1386,6 +1394,8 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
 
 .col-left h4:nth-child(1){
   margin:20px 0 20px 0;
+  font-weight: normal;
+  letter-spacing: 1px;
 }
 
 .topSidebar{
@@ -1398,12 +1408,24 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
   margin-top: 20px;
   width:50%;
 }
+
 .topSidebar h3{
-  margin: 0 0 30px 0;
+  display: inline-block;
 }
 
 .topSidebar h5{
   margin-top: 20px;
+}
+
+.topSidebar i:before{
+  font-size: 12px;
+  color: rgba(255,255,255,.6);
+}
+
+.topSidebarLogOut{
+  display:block;
+    margin: 0 0 30px 0;
+  color: rgba(255,255,255,.6);
 }
 
 .playlistprofil{
@@ -1412,11 +1434,10 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
   height:55px;
   width:55px;
   border-radius:50%;
-  border:2px solid rgba(255,255,255,0.8);
 }
 
 .sidebar{
-  border: solid 1px rgba(238,226,226,0.5);
+  border: solid 1px #353e3f;
   border-left:none;
   height:80px;
   vertical-align:middle;
@@ -1432,12 +1453,21 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
   color:rgba(255,255,255,.85);
 }
 .sidebar h3:first-child{
+  padding-top: 10px;
   line-height:2em;
-  text-transform:uppercase;
+  font-weight: normal;
+  font-size: 14px;
 }
 .sidebar h3+h3{
   margin:0;
-  line-height:0.4em;
+  line-height:1em;
+}
+.sidebar .bubbleCode{
+  font-size: 24px;
+  letter-spacing: 3px;
+  font-weight: normal;
+  text-transform: uppercase;
+
 }
 .sidebar i:before{
   font-size:1em;
@@ -1446,8 +1476,6 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
   border-top:solid 1px rgba(238,226,226,0.5);
   position:absolute;
   bottom: 0;
-/*  padding:0 5% 0 0 ;*/
-  /*height:37%;*/
   height:47%;
   width:100%;
   overflow:auto;
@@ -1471,20 +1499,14 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
 }
 
 /********  Participant Slidebar Desktop *******/
-.participantSidebar{
-  height:150px;
-}
 .wrapperParticipants{
   overflow: hidden;
-  width: 350px;
-  margin:0 auto;
-  margin: 25px 0 0 40px;
+  width: 100%;
 }
 .wrapperParticipants .listeParticipant{
   overflow:hidden;
   position: relative;
-  width: 220px;
-  margin-right:10px;
+  width: 295px;
   float:left;
 }
 
@@ -1502,23 +1524,17 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
 }
 
 .wrapperParticipants ul li img{
-
   border-radius: 50px;
-  border:2px solid rgba(255,255,255,0.8);;
 }
 .wrapperParticipants ul li:last-child{
   margin:0 15px 0 15px;
 }
 .wrapperParticipants i{
   float:left;
-  margin-top: 10px;
+  margin-top: 22px;
   color:rgba(255,255,255,0.8);
+  cursor:  pointer;
 }
-
-.wrapperParticipants i{
-cursor:  pointer;
-}
-
 .wrapperParticipants i:before{
   font-size:2.65em;
 }
@@ -1549,22 +1565,15 @@ cursor:  pointer;
 .playlistContent li div:nth-of-type(1){
   line-height:1.1;
   text-align:left;
-  text-transform:uppercase;
+  font-size: 16px;
   -webkit-flex: 1;
-  flex: 1;
-}
-.playlistContent li div:nth-of-type(1) strong{
-  display:block;
-  width:100%;
-  font-size:18px;
-}
+  flex: 1;}
 .playlistContent li div:nth-of-type(1) span{
   display:block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
-  font-size:16px;
 }
 .playlistContent li div:nth-of-type(2) {
   width:50px;
@@ -1573,7 +1582,6 @@ cursor:  pointer;
 }
 .playlistContent li div:nth-of-type(2) img{
   border-radius:50%;
-  border:2px solid rgba(255, 255, 255, 0.8);
 }
 .playlistContent li div:nth-of-type(3) {
   width:40px;
@@ -1590,6 +1598,20 @@ cursor:  pointer;
 .playlistContent ul{
   width: 370px;
 }
+
+.playlistContent .songTrackName{
+  font-size: 18px;
+  text-transform: uppercase;
+  padding-bottom: 5px;
+}
+
+
+.playlistContent .songArtistName{
+  font-size: 16px;
+  color: rgba(255,255,255,.7);
+
+}
+
 
 footer{
   background-color: #222;
@@ -2701,6 +2723,29 @@ body.ajax .loader-overlay{
   overflow-y:hidden;
 }
 
+.accountLogIn{
+  position: absolute;
+  width: 72px;
+  height: 110px;
+  right: -72px;
+  top:90px;
+  background-color: #f48e5c;
+  -webkit-box-shadow: inset 5px 0px 10px 0px rgba(0,0,0,0.6);
+     -moz-box-shadow: inset 5px 0px 10px 0px rgba(0,0,0,0.6);
+       -o-box-shadow: inset 5px 0px 10px 0px rgba(0,0,0,0.6);
+          box-shadow: inset 5px 0px 10px 0px rgba(0,0,0,0.6);
+}
+
+.accountLogIn i:before{
+  padding:15px 0 0 13px;
+}
+.accountLogIn i:hover{
+  cursor: pointer;
+}
+
+.accountLogIn i.active{
+  color: rgba(255, 255, 255, 0.4);
+}
 .desktop .col-left.w400p{
   flex:none;
   -webkit-flex:none;

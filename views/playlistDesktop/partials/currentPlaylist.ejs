@@ -7,8 +7,8 @@
 			<li data-id="<%= song.songTrackId %>" data-db-id="<%= song.id %>" class="<%= (song.songStatus == "played") ? "played" : "" %>" >
 				<div data-songService="<%= song.songService %>" data-songId="<%= song.songTrackId %>">
 
-					<strong><%= song.songTrackName %></strong>
-					<span><%= song.songTrackArtist %></span>
+					<span class="songTrackName"><%= song.songTrackName %></span>
+					<span class="songArtistName"><%= song.songTrackArtist %></span>
 				</div>
 				<div>
 					<img src="<%= song.user.image %>" alt="<%= song.user.firstname %>" data-user-id="<%= song.user.id %>">
