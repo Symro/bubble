@@ -1391,7 +1391,11 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
 .col-left h4{
   margin:10px 0 10px 0;
 }
-
+.col-left h4:nth-child(2){
+  margin:20px 0 20px 0;
+  font-weight: normal;
+  letter-spacing: 1px;
+}
 .col-left h4:nth-child(1){
   margin:20px 0 20px 0;
   font-weight: normal;
@@ -1442,6 +1446,11 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
   height:80px;
   vertical-align:middle;
   display:inline-block;
+  margin-bottom: 20px;
+}
+.sidebar:nth-child(2){
+  border-right:none;
+
 }
 
 .sidebar a{
@@ -1474,7 +1483,6 @@ input[name="mail"], [name="firstname"], [name="user_firstname"],[name="password"
 }
 .playlistContent{
   border-top:solid 1px rgba(238,226,226,0.5);
-  position:absolute;
   bottom: 0;
   height:47%;
   width:100%;
@@ -2521,23 +2529,25 @@ body.ajax .loader-overlay{
 .player_bubble_container{
   position:relative;
   display:table;
-  width:500px;
+  width:400px;
   height:100%;
   margin:0 auto;
+  text-align: center;
 }
 
 .player_bubble{
   display:table-cell;
   vertical-align:middle;
-  width:500px;
-  height:500px;
+  width:220px;
+  height:220px;
 }
 
 
 .player_bubble .player_timing{
   position:absolute;
-  left:0; right:0;
-  top:calc( 50% - 1em );
+  left:0; 
+  right:0;
+  top:calc( 40% - 1em );
   text-align:center;
   font-size:2.3em;
   font-weight:bold;
@@ -2551,14 +2561,14 @@ body.ajax .loader-overlay{
 }
 .player_bubble .player_track_artist{
   font-weight:bold;
-  top:36%;
+  top:120%;
   font-size:2.1em;
   line-height:0.8em;
   padding:0 13%;
-  width:100%;
+  width:400px;
 }
 .player_bubble .player_track_name{
-  top:41%;
+  top:140%;
   font-size:1.2em;
   line-height:1.1em;
   width:100%;
@@ -2570,22 +2580,33 @@ body.ajax .loader-overlay{
 
 .player_bubble .player_track_dislike,
 .player_bubble .player_track_like{
-  position:absolute;
-  border: 3px solid #FFFFFF;
+  position: absolute;
+  background-color: rgba(255,255,255,.2);
   border-radius: 50%;
-  height: 70px;
-  line-height: 60px;
-  width: 70px;
-  text-align:center;
-  z-index:10;
-  left:31%;
-  top:57%;
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  text-align: center;
+  z-index: 10;
+  left: 65%;
+  top: 155%;
+}
+.player_bubble .icon-coeuralone,
+.player_bubble .icon-thumbalone{
+  position: absolute;
+  top: 16px;
+  left: -30px;
 }
 .player_bubble .player_track_dislike{
-  left:55%;
+  left:35%;
 }
 .player_bubble .player_track_dislike{
   
+}
+
+.block{
+  height: 100%;
+  display: block;
 }
 .player_bubble .player_track_dislike:hover,
 .player_bubble .player_track_like:hover{
@@ -2593,18 +2614,15 @@ body.ajax .loader-overlay{
 }
 .player_bubble .player_track_dislike i:before,
 .player_bubble .player_track_like i:before{
-  font-size:1.5em;
-}
-.player_bubble .player_track_dislike i:before{
-  font-size:1.3em;
+  font-size:2.5em;
 }
 .player_bubble .player_track_dislike i,
 .player_bubble .player_track_like i{
-  vertical-align:-5px;
+  vertical-align:15px;
 }
 .player_bubble .player_track_dislike span,
 .player_bubble .player_track_like span{
-  font-size:1.8em;
+  font-size:1.3em;
 }
 .player_bubble .player_carousel_like_dislike_container{
   position:absolute;
@@ -2682,7 +2700,7 @@ body.ajax .loader-overlay{
 .player_bubble .player_play_pause{
   position:absolute;
   left:calc( 50% - 22px );
-  top:25%;
+  top:50%;
   width:44px;
   height:46px;
   background:transparent url(../../images/player_sprite.png) no-repeat -0px 1px;

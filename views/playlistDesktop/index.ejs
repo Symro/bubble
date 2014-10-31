@@ -10,9 +10,9 @@
 			<img class="playlistprofil" src="<%= session.User.image %>" alt="<%= session.User.firstname %>" data-user-id="<%= session.User.id %>">
 			<h3 class="form-signin-heading "><%= session.User.firstname %></h3>
 			<a href=""><i class="icon-menu"></i></a>
-			<a class="topSidebarLogOut" href="">Log out</a>
+			<a class="topSidebarLogOut" href="/logout" title="Se deconnecter">Log out</a>
 		</div>
-		<section class="line">
+		<section class="twoBlocks">
 			<aside class="mod left w50 txtcenter sidebar">
 				<h3>Bubble code</h3>
 				<h3 class="bubbleCode"><%= playlist.url %></h3>
@@ -63,17 +63,17 @@
 			<a type="audio/mp3" href=""></a>
 			
 		</div> -->
+		<div class="block">
 
 		<div class="player_bubble_container">
 			<div class="player_bubble">
-				<input class="player_circle" data-height="500" data-width="500" data-fgColor="#fff" data-bgColor="rgba(255,255,255,0.7)" data-skin="tron" data-thickness=".05" data-displayInput="false" data-min="0" data-max="" value="" readOnly="true">
+				<input class="player_circle" data-height="220" data-width="220" data-fgColor="#fff" data-bgColor="rgba(255,255,255,0.7)" data-skin="tron" data-thickness=".05" data-displayInput="false" data-min="0" data-max="" value="" readOnly="true">
 				<div class="player_timing"></div>
 
 				<div class="player_track_artist"></div>
 				<div class="player_track_name"></div>
 				<div class="player_play_pause"></div>
-				<div class="player_track_like"><span>0</span><i class="icon-coeuralone"></i></div>
-				<div class="player_track_dislike"><span>0</span><i class="icon-thumbalone"></i></div>
+				<div class="player_track_dislike"><span>0</span><i class="icon-thumbalone"></i></div><div class="player_track_like"><span>0</span><i class="icon-coeuralone"></i></div>
 				<div class="player_carousel_like_dislike_container invisible">
 					<i class="icon-flecheg player_carousel_like_dislike_backward invisible"></i>
 					<div class="player_carousel_like_dislike">
@@ -84,6 +84,7 @@
 					<i class="icon-fleched player_carousel_like_dislike_forward invisible"></i>
 				</div>
 			</div>
+		</div>
 		</div>
 
 	</section>
