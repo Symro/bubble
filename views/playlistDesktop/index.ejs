@@ -1,4 +1,63 @@
 
+<div class="credits">
+	<section class="creditBox">
+		<section class="creditleft">
+			<h2>Crédits</h2>
+			<div class="creditLink">
+				<h3>METRIZE ICONS</h3>
+				<a href="www.alessioatzeni.com/metrize-icons">www.alessioatzeni.com/metrize-icons</a>
+				<h3>MFG Labs</h3>
+				<a href="www.mfglabs.com">www.mfglabs.com</a>
+			</div>
+
+			<div class="creditTeam">
+				<h3>THE TEAM</h3>
+				<p>
+					<a href="">Audrey Turquand :</a> Project manager / Designer</br>
+					<a href="">Claire Fénart : </a>Designer</br>
+					<a href="">Alexandre Guerard :</a> Front-end developer</br>
+					<a href="">Florent Grandval :</a> Back-end developer</br>
+					<a href="">Sylvain Mroczko :</a> Back-end developer</br>
+				</p>
+			</div>
+
+
+			<a class="creditWebsite" href="wwww.bubbleapp.fr">wwww.bubbleapp.fr</a>
+		</section>
+		<section class="creditright">
+			<h2>Contact</h2>
+			<p>You want to report a bug or just to send us love ?</br>
+Drop us a line here !</p>
+
+			<form action="" method="post" class="creditForm">
+			    <label>
+			        <input id="name" type="text" name="name" placeholder="Your Name" />
+			    </label>
+			    
+			    <label>
+			        <input id="email" type="email" name="email" placeholder="Object" />
+			    </label>
+			    
+			    <label>
+			        <textarea id="message" name="message" placeholder="Your message"></textarea>
+			    </label> 
+			    <label class="phoneNumber">
+			    	<p>+33 6 80 77 76 63</p>
+			    </label>   
+			    <label>
+			        <span>&nbsp;</span> 
+			        <input type="button" class="button" value="Send" /> 
+			    </label>    
+			</form>
+			
+		</section>
+		<div class="closeCredits">
+			<i class="icon-croixclosesuppr"></i>
+		</div>
+	</section>
+</div>
+
+
 <div class="desktop-container">
 	<section class="w400p left col-left">
 		<div class="accountLogIn">
@@ -43,7 +102,7 @@
 
 		<footer>
 			<ul>
-				<li>Crédits/Contact</li>
+				<li class="creditsButton">Crédits/Contact</li>
 				<li>Twitter</li>
 			</ul>
 
@@ -94,6 +153,8 @@
 	<div id="reception">
 	</div>
 
+
+
 	<script>
 		var user = {
 			id : "<%= session.User.id %>",
@@ -104,4 +165,5 @@
 	</script>
 
 </div>
+
 

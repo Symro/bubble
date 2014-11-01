@@ -578,6 +578,14 @@ $(document).ready(function(){
 
 	});
 
+		$('.creditsButton').on("click", function(){
+			$('.credits').toggleClass("creditsOpen");
+		});
+		$('.closeCredits').on("click", function(){
+			$('.credits').toggleClass("creditsOpen");
+		});
+
+
 
 
 

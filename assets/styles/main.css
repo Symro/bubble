@@ -360,7 +360,7 @@ input:-moz-placeholder { color:rgba(255,255,255,0.8); }
 
 
 body{
-  overflow:none;
+  overflow:hidden;
   background-image: url(../../images/bg_desktop_1080.jpg);
   background-size:cover;
   background-repeat: no-repeat;
@@ -2785,6 +2785,169 @@ body.ajax .loader-overlay{
 
 
 
+
+/* PARTIE CREDIT */
+.credits{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 100%;
+  background-color: rgba(0, 0,0,.9);
+  z-index: 20;
+  -webkit-transition: all .5s ease;
+     -moz-transition: all .5s ease;
+      -ms-transition: all .5s ease;
+       -o-transition: all .5s ease;
+          transition: all .5s ease;
+
+
+}
+
+.credits.creditsOpen{
+  top:0;
+  z-index: 20;
+  -webkit-transition: all .5s ease;
+     -moz-transition: all .5s ease;
+      -ms-transition: all .5s ease;
+       -o-transition: all .5s ease;
+          transition: all .5s ease;
+}
+
+.creditleft,
+.creditright{
+  float: left;
+  z-index: 22;
+  display: inline-block;
+  margin-top: 50px;
+  width: 50%;
+}
+
+.creditBox{
+  margin: 0 auto;
+  width: 70%;
+}
+
+.creditBox a{
+  color:#868585;
+}
+.creditBox p{
+  color:#d7d5d5;
+}
+.creditBox h2{
+  color:#fff;
+  font-size: 20px;
+  font-weight: normal;
+  text-transform: uppercase;
+  padding-bottom: 70px;
+}
+.creditBox h3{
+  font-size: 16px;
+  font-family: 'Source Sans Pro', sans-serif;
+  color:#d7d5d5;
+  font-weight: normal;
+}
+
+
+.creditLink{
+  margin: 30px 0;
+}
+.creditLink h3:last-of-type{
+  padding-top: 40px;
+}
+.creditTeam a{
+  color:#d7d5d5;
+}
+.creditTeam p{
+  color:#868585;
+}
+.creditWebsite{
+  display: block;
+  color:#585656;
+  font-size: 20px;
+  font-weight: normal;
+  padding-top: 60px;
+}
+
+.creditForm label{
+  display: block;
+  width: 100%;
+
+}
+.creditForm input,
+.creditForm textarea{
+  display: block;
+  width: 100%;
+  height: 45px;
+  color: #d7d5d5;
+  background-color: rgba(88,88,86,.3);
+  border:none;
+  border-radius:10px;
+  padding-left: 15px;
+
+}
+.creditForm textarea{
+  height: 220px;
+}
+.creditForm label:last-of-type{
+  display: inline;
+}
+.creditForm label:nth-of-type(4){
+  display: block;
+}
+.creditForm label:nth-of-type(4) p{
+  color: #5c5b5b;
+}
+.creditForm .button{
+  display: block;
+  float: right; 
+  width: 110px;
+  font-size: 16px;
+  margin-top: -18px;
+  color: #434343;
+  text-transform: uppercase;
+  background-color: #a2a09f;
+
+}
+
+.creditForm .button:hover{
+  cursor: pointer;
+  background-color: #929292;
+
+}
+
+.creditForm ::-webkit-input-placeholder { font-size: 16px; }
+.creditForm ::-moz-placeholder { font-size: 16px; } /* firefox 19+ */
+.creditForm :-ms-input-placeholder { font-size: 16px; } /* ie */
+.creditForm input:-moz-placeholder { font-size: 16px; }
+
+input:focus,
+textarea:focus { 
+    border:none;
+    outline: none;
+}
+
+.creditsButton:hover{
+  cursor: pointer;
+}
+.closeCredits{
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  -webkit-transition: all .2s ease;
+     -moz-transition: all .2s ease;
+      -ms-transition: all .2s ease;
+       -o-transition: all .2s ease;
+          transition: all .2s ease;
+}
+.closeCredits:hover{
+  cursor: pointer;
+  color:#5c5b5b;
+  -webkit-transition: all .2s ease;
+     -moz-transition: all .2s ease;
+      -ms-transition: all .2s ease;
+       -o-transition: all .2s ease;
+          transition: all .2s ease;
+}
 
 /* PARTIE ADMIN BUBBLE */
 
