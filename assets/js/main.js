@@ -129,19 +129,7 @@ $(document).ready(function(){
 	});
 
 	$('body').on('click', '.dropDown', function(){
-		var $currentLi = $(this).closest( "li" );
-		var $li = $('.discoveries ul li');
-
-		if(!$currentLi.hasClass('active') === true){
-			$li.removeClass('active').find('.discoveryAction').slideUp();
-			$currentLi.addClass('active')
-			$(this).parents('.headDiscovery').next().slideToggle();
-			$('ul.discoveries li a').removeClass('active');
-		}else{
-			$li.removeClass('active')
-			$(this).parents('.headDiscovery').next().slideToggle();
-		}
-
+		$(this).parent().siblings(".discovery").toggleClass('discoveryActionOpen');
 	});
 
 

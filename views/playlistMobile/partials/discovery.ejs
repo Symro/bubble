@@ -7,24 +7,26 @@
 
 				<% if(discover.song.length > 0){ %>
 					<li data-song-id="<%= discover.song[0].id %>" data-discover-id="<%= discover.id %>">
-						<div class="headDiscovery">
-							<a class="action deleteDiscovery" title="Delete" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
-
-							<div>
-								<strong><%= discover.song[0].songTrackArtist %></strong>
-								<span><%= discover.song[0].songTrackName %></span>
-							</div>
-							<div>
-								<img src="<%= discover.songInitialUser.image %>" alt="<%= discover.songInitialUser.firstname %>"/>
-							</div>
-							<div >
-								<a class="dropDown"  href="javascript:void(0)" title="Discovery Action"><i class="icon-chevron"></i></a>
-							</div>
+						<div class="menuDiscoveries">
+							<a class="dropDown"  href="javascript:void(0)" title="Discovery Action"><i class="icon-chevron"></i></a>
 						</div>
-						<div class="discoveryAction">
-							<a class="action discoveriesToPlaylist" title="Add the track to the playslist"><i class="icon-playlist"></i></a>
-							<a href="<%= discover.song[0].songPermalinkUrl %>" target="_blank" title="<%= discover.song[0].songTrackName %>"><i class="icon-<%= discover.song[0].songService %>ecouter"></i></a>
-							<a class="action deleteSecondDiscovery" title="Delete" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
+						<div class="discovery">
+							<div class="headDiscovery">
+								<a class="action deleteDiscovery" title="Delete" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
+
+								<div>
+									<strong><%= discover.song[0].songTrackArtist %></strong>
+									<span><%= discover.song[0].songTrackName %></span>
+								</div>
+								<div>
+									<img src="<%= discover.songInitialUser.image %>" alt="<%= discover.songInitialUser.firstname %>"/>
+								</div>
+							</div>
+							<div class="discoveryAction">
+								<a class="action discoveriesToPlaylist" title="Add the track to the playslist"><i class="icon-playlist"></i></a>
+								<a href="<%= discover.song[0].songPermalinkUrl %>" target="_blank" title="<%= discover.song[0].songTrackName %>"><i class="icon-<%= discover.song[0].songService %>ecouter"></i></a>
+								<a class="action deleteSecondDiscovery" title="Delete" href="javascript:void(0)"><i class="icon-croixclosesuppr"></i></a>
+							</div>
 						</div>
 
 					</li>
